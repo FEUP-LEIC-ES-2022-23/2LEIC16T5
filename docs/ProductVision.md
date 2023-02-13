@@ -3,7 +3,7 @@
 
 ### Vision Statement
 
-Start by defining a clear and concise vision for your module, to help members of the team, contributors, and users into focusing their often disparate views into a concise, visual, and short textual form. It provides a "high concept" of the product for marketers, developers, and managers.
+Start by defining a clear and concise vision for your app, to help members of the team, contributors, and users into focusing their often disparate views into a concise, visual, and short textual form. It provides a "high concept" of the product for marketers, developers, and managers.
 
 A product vision describes the essential of the product and sets the direction to where a product is headed, and what the product will deliver in the future. 
 

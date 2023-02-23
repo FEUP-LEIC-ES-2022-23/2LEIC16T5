@@ -6,7 +6,7 @@
 
   - Register Expenses - Keep track of your expenses
   - Budgeting - Set a monthly/yearly budget for spending/saving in certain categories
-  - Personal Statistics - Graphical interface for showing expenses by category
+  - Personal Statistics - Graphical interface for showing expenses by category and time period
   - National Comparison - Compare your anual spendings with the average Portuguese citizen
   - Photo recognition - Allow to take a photo of the recipt, instead of manually inserting the expense
 

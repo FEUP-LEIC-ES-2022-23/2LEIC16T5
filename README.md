@@ -1,4 +1,4 @@
-_[your product name]_ Development Report
+**FORTUNEKO** Development Report
 
 Welcome to the documentation pages of the _[your product name]_!
 
@@ -26,7 +26,17 @@ Please contact us!
 
 Thank you!
 
-*team members names*
+Team Members:
+
+* Athos Freitas - 202108792
+
+* Haochang Fu - 202108730
+
+* João Figueiredo - 202108873
+
+* Pedro Barbeira - 201303693
+
+* Sofia Pinto - 202108682
 
 ---
 

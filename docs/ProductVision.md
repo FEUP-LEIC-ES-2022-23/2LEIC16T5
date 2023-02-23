@@ -1,32 +1,15 @@
-
-## Product Vision
-
 ### Vision Statement
 
-Start by defining a clear and concise vision for your app, to help members of the team, contributors, and users into focusing their often disparate views into a concise, visual, and short textual form. It provides a "high concept" of the product for marketers, developers, and managers.
+ Saving doesn’t need to be boring. With **Fortuneko** we intend to help people save money by tracking expenses and planning future investments. It’s time to become financially aware, through our app’s intuitive features.
 
-A product vision describes the essential of the product and sets the direction to where a product is headed, and what the product will deliver in the future. 
+ ### Main Features
 
-**We favor a catchy and concise statement, ideally one sentence.**
+  - Register Expenses - Keep track of your expenses
+  - Budgeting - Set a monthly/yearly budget for spending/saving in certain categories
+  - Personal Statistics - Graphical interface for showing expenses by category
+  - National Comparison - Compare your anual spendings with the average Portuguese citizen
+  - Photo recognition - Allow to take a photo of the recipt, instead of manually inserting the expense
 
-We suggest you use the product vision template described in the following link:
-* [How To Create A Convincing Product Vision To Guide Your Team, by uxstudioteam.com](https://uxstudioteam.com/ux-blog/product-vision/)
-
-To learn more about how to write a good product vision, please see also:
-* [Product Management: Product Vision, by ProductPlan](https://www.productplan.com/glossary/product-vision/)
-* [Vision, by scrumbook.org](http://scrumbook.org/value-stream/vision.html)
-* [How to write a vision, by dummies.com](https://www.dummies.com/business/marketing/branding/how-to-write-vision-and-mission-statements-for-your-brand/)
-* [20 Inspiring Vision Statement Examples (2019 Updated), by lifehack.org](https://www.lifehack.org/articles/work/20-sample-vision-statement-for-the-new-startup.html)
-
-
-### Main Features
-Indicate an  initial/tentative list of high-level features - high-level capabilities or desired services of the system that are necessary to deliver benefits to the users (cf. RUP).
- - Feature 1 - Short description
- - Feature 2 - Short description
-...
-
-### Assumptions and dependencies
-Indicate an  initial/tentative list of assumptions and dependencies 
-
-- Student timetable from sigarra
-- 
+ ### Assumptions and dependencies
+ 
+  - [PORDATA database](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela)

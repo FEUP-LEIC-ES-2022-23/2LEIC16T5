@@ -12,4 +12,6 @@
 
  ### Assumptions and dependencies
  
+  - [Firebase](https://firebase.google.com)
   - [PORDATA database](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela)
+  - [Google Maps API](https://developers.google.com/maps)

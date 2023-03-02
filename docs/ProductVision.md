@@ -4,11 +4,14 @@
 
  ### Main Features
 
+  - Login - Access your data in multiple devices
   - Register Expenses - Keep track of your expenses
+  - Photo recognition - Allow to take a photo of the recipt, instead of manually inserting the expense
   - Budgeting - Set a monthly/yearly budget for spending/saving in certain categories
   - Personal Statistics - Graphical interface for showing expenses by category and time period
   - National Comparison - Compare your anual spendings with the average Portuguese citizen
-  - Photo recognition - Allow to take a photo of the recipt, instead of manually inserting the expense
+  - Ranking - Compare your budgeting skills with other users of the app
+  - Settings - Allow to modify some presets such as default currency and dark mode
 
  ### Assumptions and dependencies
  

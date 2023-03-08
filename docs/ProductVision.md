@@ -11,7 +11,6 @@
   - Budgeting - Set a monthly/yearly budget for spending/saving in certain categories
   - Personal Statistics - Graphical interface for showing expenses by category and time period
   - National Comparison - Compare your anual spendings with the average Portuguese citizen
-  - Ranking - Compare your budgeting skills with other users of the app
   - Settings - Allow to modify some presets such as default currency and dark mode
 
  ### Assumptions and dependencies

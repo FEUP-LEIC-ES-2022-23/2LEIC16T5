@@ -1,6 +1,6 @@
 **FORTUNEKO** Development Report
 
-Welcome to the documentation pages of the _[your product name]_!
+Welcome to the documentation pages of **Fortuneko**!
 
 You can find here details about the product (or mini-app or module), from a high-level vision to low-level implementation decisions, a kind of Software Development Report, organized by discipline (as of Rational Unified Process): 
 
@@ -29,14 +29,7 @@ Thank you!
 Team Members:
 
 * Athos Freitas - 202108792
-
 * Haochang Fu - 202108730
-
 * João Figueiredo - 202108873
-
 * Pedro Barbeira - 201303693
-
 * Sofia Pinto - 202108682
-
----
-

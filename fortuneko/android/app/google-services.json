@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "236988136407",
+    "project_id": "fortuneko-65ee1",
+    "storage_bucket": "fortuneko-65ee1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236988136407:android:4b8b49dbbebe60c1b82992",
+        "android_client_info": {
+          "package_name": "com.example.fortuneko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236988136407-q6qssk58b66p4536dq6lov6iq9r3damm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwfwnUTU033TVy8GJIKg9PXoTlR0avi_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236988136407-q6qssk58b66p4536dq6lov6iq9r3damm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "236988136407-omcled2k8ipdhh2kt3if5qvvj43m78oa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fortuneko"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236988136407:android:eb991713d81d2d0eb82992",
+        "android_client_info": {
+          "package_name": "com.feup.leic.esof.fortuneko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236988136407-q6qssk58b66p4536dq6lov6iq9r3damm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwfwnUTU033TVy8GJIKg9PXoTlR0avi_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236988136407-q6qssk58b66p4536dq6lov6iq9r3damm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "236988136407-omcled2k8ipdhh2kt3if5qvvj43m78oa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fortuneko"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

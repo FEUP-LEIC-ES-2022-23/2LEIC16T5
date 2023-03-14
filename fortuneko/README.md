@@ -1,4 +1,4 @@
-# fortuneko2
+# fortuneko
 
 A new Flutter project.
 

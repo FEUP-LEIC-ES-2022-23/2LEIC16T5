@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.fortuneko2">
+    package="com.example.fortuneko">
    <application
-        android:label="fortuneko2"
+        android:label="fortuneko"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

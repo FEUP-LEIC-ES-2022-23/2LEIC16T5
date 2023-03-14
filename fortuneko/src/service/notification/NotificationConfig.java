@@ -12,6 +12,7 @@ public class NotificationConfig {
         notificationMap = new HashMap<>();
         for (String config : configs.keySet()) {
             NotificationText notificationText = new NotificationText(Objects.requireNonNull(configs.get(config)));
+            notificationMap.put(config, notificationText);
         }
     }
 

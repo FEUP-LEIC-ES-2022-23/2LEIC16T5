@@ -60,7 +60,7 @@ At the end, it is good to add a rough indication of the value of the user story 
 
 
 
-### Domain model
+### Domain Model
 
 Here we present you our Domain Model, as well as a short description of each class:
 

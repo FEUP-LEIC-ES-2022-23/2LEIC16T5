@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fortuneko" "\0"
+            VALUE "FileDescription", "es" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fortuneko" "\0"
+            VALUE "InternalName", "es" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fortuneko.exe" "\0"
-            VALUE "ProductName", "fortuneko" "\0"
+            VALUE "OriginalFilename", "es.exe" "\0"
+            VALUE "ProductName", "es" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

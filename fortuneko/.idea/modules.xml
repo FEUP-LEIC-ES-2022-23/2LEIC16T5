@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/fortuneko.iml" filepath="$PROJECT_DIR$/fortuneko.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fortuneko2.iml" filepath="$PROJECT_DIR$/fortuneko2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/fortuneko2_android.iml" filepath="$PROJECT_DIR$/android/fortuneko2_android.iml" />
     </modules>
   </component>
 </project>

@@ -4,7 +4,6 @@
 
  ### Main Features
 
-  - Login - Access your data in multiple devices
   - Register Income - Keep track of your income
   - Register Expenses - Keep track of your expenses. You may include notes, your location and much more
   - Expenses Map - Check were you've spent more money, with our geographical chart

@@ -7,7 +7,7 @@ You can find here details about the product (or mini-app or module), from a high
 * Business modeling 
   * [Product Vision](docs/ProductVision.md)
 * Requirements
-  * [Domain Model](docs/requirements.md/#Domain-Model)
+  * [Domain Model](docs/Requirements.md/#Domain-Model)
 * [Architecture and Design](docs/ArchitectureAndDesign.md)
   * [Logical architecture](docs/ArchitectureAndDesign.md#Logical-Architecture)
   * [Physical architecture](docs/ArchitectureAndDesign.md#Physical-Architecture)

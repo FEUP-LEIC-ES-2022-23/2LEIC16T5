@@ -2,9 +2,10 @@ import 'package:es/Viewer/MainMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quickalert/quickalert.dart';
 import '../Controller/LoginScreenController.dart';
 import 'settings.dart';
-//import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,13 +17,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  void showErrorAlert() {
+    QuickAlert.show(
+        context: context,
+        text: "Login failed, please check your credentials again",
+        type: QuickAlertType.error);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomInset: true,
       backgroundColor: Color.fromARGB(255, 210, 212, 230),
-      body: SafeArea(
+      body: Form(
+        key: _key,
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -50,8 +60,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 23),
-                      child: TextField(
+                      child: TextFormField(
                         controller: usernameController,
+                        validator: loginScreenController().validateEmail,
                         decoration: InputDecoration(
                           labelText: 'Username',
                           border: InputBorder.none,
@@ -60,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+
                 SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -71,9 +83,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 23),
-                      child: TextField(
+                      child: TextFormField(
                         controller: passwordController,
                         obscureText: true,
+                        validator: loginScreenController().validatePassword,
                         decoration: InputDecoration(
                           labelText: 'Password',
                           border: InputBorder.none,
@@ -88,10 +101,10 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainMenu()));
+                        if (_key.currentState!.validate()) {
+                          loginScreenController()
+                              .signIn(usernameController, passwordController);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

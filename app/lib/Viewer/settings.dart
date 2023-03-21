@@ -1,5 +1,12 @@
+import 'package:es/Controller/LoginScreenController.dart';
+import 'package:es/Viewer/LoginPage.dart';
+import 'package:es/Viewer/WelcomeMenu.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:es/Viewer/MainMenu.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SettingsDemo extends StatefulWidget {
   const SettingsDemo({super.key, required this.title});
@@ -90,32 +97,50 @@ class _SettingsDemoState extends State<SettingsDemo> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: const [
-                                Text("All your data will be deleted"),
+                                Text("You are about to sign out"),
                                 SizedBox(height: 5),
-                                Text("This action is irreversible"),
-                                SizedBox(height: 5),
+                                //Text("This action is irreversible"),
+                                //SizedBox(height: 5),
                                 Text("Do you wish to continue?")
                               ],
                             ),
                             actions: [
                               TextButton(
                                   onPressed: () {
+                                    loginScreenController().signOut();
                                     Navigator.of(context).pop();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                WelcomePage()));
+                                    QuickAlert.show(
+                                        context: context,
+                                        text: "Sucessfully logged out!",
+                                        type: QuickAlertType.success);
                                   },
                                   child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: const [
                                         Text("YES"),
-                                        Text("NO")
-                                      ]))
+                                      ])),
+                              TextButton(
+                                onPressed: () {},
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: const [
+                                      Text("NO"),
+                                    ]),
+                              ),
                             ],
                           );
                         });
                   },
                   child: const Text(
-                    "RESET DATA",
-                    style: TextStyle(fontSize: 40, color: Colors.white),
+                    "Sign Out",
+                    style: TextStyle(fontSize: 40, color: Colors.red),
                   ),
                 ),
               )

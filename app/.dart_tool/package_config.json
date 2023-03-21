@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "_flutterfire_internals",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "async",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/async-2.10.0",
       "packageUri": "lib/",
@@ -24,6 +30,18 @@
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/clock-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "cloud_firestore_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-5.7.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "cloud_firestore_web",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore_web-2.8.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
     },
     {
       "name": "collection",
@@ -62,6 +80,42 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "firebase_auth",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_auth-3.11.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_auth_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_auth_platform_interface-6.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_auth_web",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_auth_web-4.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_core",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_core-1.24.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_core_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_core_platform_interface-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_core_web",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/firebase_core_web-1.7.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -76,6 +130,12 @@
     {
       "name": "flutter_test",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -99,7 +159,7 @@
     },
     {
       "name": "intl",
-      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/intl-0.18.0",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -194,6 +254,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "quickalert",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/quickalert-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -266,7 +332,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-03-14T16:10:12.482772Z",
+  "generated": "2023-03-21T18:35:27.746387Z",
   "generator": "pub",
   "generatorVersion": "2.19.2"
 }

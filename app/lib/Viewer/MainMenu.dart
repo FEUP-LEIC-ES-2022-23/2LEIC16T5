@@ -1,6 +1,6 @@
 import 'package:es/Viewer/settings.dart';
 import 'package:flutter/material.dart';
-import 'transactions_menu.dart';
+import 'TransactionsMenu.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MainMenu extends StatelessWidget {
@@ -43,7 +43,7 @@ class MainMenu extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => TransactionMenu()),
+                          builder: (context) => TransactionsMenu()),
                     );
                   },
                   child: Text('Transactions', style: TextStyle(fontSize: 20))),

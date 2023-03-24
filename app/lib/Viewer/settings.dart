@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'ButtonActions.dart';
+import 'package:es/Viewer/MainMenu.dart';
 
 class SettingsDemo extends StatefulWidget {
   const SettingsDemo({super.key, required this.title});
@@ -34,15 +36,19 @@ class _SettingsDemoState extends State<SettingsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 210, 212, 230),
+        backgroundColor: Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
+          backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
               style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);}
+              },
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -75,44 +81,13 @@ class _SettingsDemoState extends State<SettingsDemo> {
               Center(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("WARNING"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text("All your data will be deleted"),
-                                SizedBox(height: 5),
-                                Text("This action is irreversible"),
-                                SizedBox(height: 5),
-                                Text("Do you wish to continue?")
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: const [
-                                        Text("YES"),
-                                        Text("NO")
-                                      ]))
-                            ],
-                          );
-                        });
-                  },
+                  onPressed: () {ButtonActions().resetData(context);},
                   child: const Text(
                     "RESET DATA",
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -133,7 +108,7 @@ class _SettingsDemoState extends State<SettingsDemo> {
           children: [
             Text(title,
                 style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: DropdownButton(
@@ -163,11 +138,11 @@ class _SettingsDemoState extends State<SettingsDemo> {
           children: [
             Text(title,
                 style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(
-                activeColor: Colors.blue,
+                activeColor: Colors.lightBlue,
                 trackColor: Colors.grey,
                 value: value,
                 onChanged: (bool newValue) {

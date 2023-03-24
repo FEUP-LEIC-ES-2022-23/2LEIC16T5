@@ -1,14 +1,37 @@
 class Transaction {
+  int? id_transaction;
   String name;
-  double total;
-  DateTime date;
-  String notes;
-  DateTime repeat;
+  num total;
+  //DateTime? date;
+  String? notes;
 
   Transaction(
-      {required this.name,
+      {this.id_transaction,
+      required this.name,
       required this.total,
-      required this.date,
-      required this.notes,
-      required this.repeat});
+      //this.date,
+      this.notes});
+
+  factory Transaction.fromMap(Map<String, dynamic> json) => Transaction(
+        id_transaction: json['id_transaction'],
+        name: json['name'],
+        total: json['total'],
+        //date: json['date'],
+        notes: json['notes'],
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id_transaction': id_transaction,
+      'name': name,
+      'total': total,
+      //'date': date,
+      'notes': notes,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Transaction{id_transaction: $id_transaction, name: $name, total: $total}';
+  }
 }

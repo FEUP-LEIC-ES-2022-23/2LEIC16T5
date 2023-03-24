@@ -1,14 +1,22 @@
+import 'package:es/Viewer/TransactionsMenu.dart';
 import 'package:flutter/material.dart';
+import 'package:es/database/LocalDBHelper.dart';
+import 'package:es/model/transaction.dart' as t_model;
 
 class ButtonActions {
-  final _textcontrollerAMOUNT = TextEditingController();
-  final _textcontrollerITEM = TextEditingController();
+  static final textcontrollerAMOUNT = TextEditingController();
+  static final textcontrollerNAME = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
 
   //Transactions
   void _enterTransaction() {
-    return;
+    t_model.Transaction transaction = t_model.Transaction(
+        name: textcontrollerNAME.text,
+        total: num.parse(textcontrollerAMOUNT.text));
+
+    LocalDBHelper.instance.add_transaction(transaction);
+    
   }
 
   void newTransaction(BuildContext context) {
@@ -22,24 +30,28 @@ class ButtonActions {
               return AlertDialog(
                 titlePadding: EdgeInsets.all(0),
                 title: Container(
-                  color: Colors.lightBlue,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          if (Navigator.canPop(context)) {
-                            Navigator.pop(context);}
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
+                    color: Colors.lightBlue,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      Text('NEW  TRANSACTION', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                    ],
-                  )
-                ),
+                        Text(
+                          'NEW  TRANSACTION',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )),
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -71,13 +83,15 @@ class ButtonActions {
                                   border: OutlineInputBorder(),
                                   hintText: 'Amount?',
                                 ),
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true),
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
                                     return 'Enter an amount';
                                   }
                                   return null;
                                 },
-                                controller: _textcontrollerAMOUNT,
+                                controller: textcontrollerAMOUNT,
                               ),
                             ),
                           ),
@@ -94,7 +108,7 @@ class ButtonActions {
                                 border: OutlineInputBorder(),
                                 hintText: 'For what?',
                               ),
-                              controller: _textcontrollerITEM,
+                              controller: textcontrollerNAME,
                             ),
                           ),
                         ],
@@ -143,12 +157,8 @@ class ButtonActions {
                     Navigator.of(context).pop();
                   },
                   child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        Text("YES"),
-                        Text("NO")
-                      ]))
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [Text("YES"), Text("NO")]))
             ],
           );
         });

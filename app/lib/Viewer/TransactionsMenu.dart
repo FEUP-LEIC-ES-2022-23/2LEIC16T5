@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'ButtonActions.dart';
-import 'package:es/model/transaction.dart' as t_model;
+import '../Controller/PopUpController.dart';
+import 'package:es/model/TransactionsModel.dart' as t_model;
 import 'package:es/database/LocalDBHelper.dart';
 
 class TransactionsMenu extends StatefulWidget {
-  const TransactionsMenu({Key? key}) : super(key: key);
+  const TransactionsMenu({Key? key, required this.title}) : super(key: key);
+  final String title;
 
   @override
   State<TransactionsMenu> createState() => _TransactionsMenuState();
@@ -15,12 +16,14 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
   @override
   Widget build(BuildContext context) {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-    final nameController = TextEditingController();
-    final totalController = TextEditingController();
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Transactions'),
+          title: Text(widget.title,
+              style: const TextStyle(
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(
@@ -41,53 +44,50 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<t_model.Transaction>> snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: Text('Loading...'));
+                    return const Center(child: Text('Loading...', style: TextStyle(fontSize: 20)));
                   }
-                  return ListView(
+                  return snapshot.data!.isEmpty
+                    ? const Center( child: Text("Nothing to show", style: TextStyle(fontSize: 20),),)
+                      : ListView(
                     shrinkWrap: true,
                     children: snapshot.data!.map((transac) {
                       return Center(
-                        child: ListTile(
-                          title: Text(transac.name),
-                          trailing: Text(euro.format(transac.total)),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Colors.black26))),
+                          child: ListTile(
+                            horizontalTitleGap: 0.5,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12))),
+                            leading: (transac.expense == 1)? const Icon(Icons.money_off) : const Icon(Icons.wallet),
+                            title: Text(transac.name, style: const TextStyle(fontSize: 20),),
+                            trailing: (transac.expense == 1)? Text("- ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)) : Text("+ ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)),
+                            onLongPress: () {
+                              setState(() {
+                                LocalDBHelper.instance.removeTransaction(transac.id_transaction!);
+                              });
+                            },
+                          ),
                         ),
                       );
                     }).toList(),
                   );
                 }),
-
-            /*ListView.separated(
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  leading: const Icon(Icons.wallet),
-                  title: Text(_textcontrollerAMOUNT.text),
-                  trailing: Text(euro.format(transactions[index].total)),
-                );
-              },
-              padding: const EdgeInsets.all(20),
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(
-                  color: Colors.grey,
-                  thickness: 1.0,
-                  height: 1.0,
-                );
-              },
-              itemCount: transactions.length,
-            ),*/
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: FloatingActionButton(
-                      onPressed: () {}, child: const Icon(Icons.filter_alt)),
+                      heroTag: "Reload",
+                      onPressed: () {setState(() {});},
+                      child: const Icon(Icons.refresh)),
                 )),
             Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: FloatingActionButton(
+                      heroTag: "Add",
                       onPressed: () {
                         ButtonActions().newTransaction(context);
                       },

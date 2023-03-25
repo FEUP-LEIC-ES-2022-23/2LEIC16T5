@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'ButtonActions.dart';
+import '../Controller/PopUpController.dart';
 import 'package:es/Viewer/MainMenu.dart';
 
-class SettingsDemo extends StatefulWidget {
-  const SettingsDemo({super.key, required this.title});
+class SettingsMenu extends StatefulWidget {
+  const SettingsMenu({super.key, required this.title});
   final String title;
   @override
-  State<SettingsDemo> createState() => _SettingsDemoState();
+  State<SettingsMenu> createState() => _SettingsMenuState();
 }
 
-class _SettingsDemoState extends State<SettingsDemo> {
+class _SettingsMenuState extends State<SettingsMenu> {
   List listItems = ["€", "\$", "£"];
   String valCurrency = "€";
   bool valMode = true;
@@ -41,9 +41,10 @@ class _SettingsDemoState extends State<SettingsDemo> {
           backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
               style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
+          centerTitle: true,
           leading: IconButton(
             onPressed: () {
               if (Navigator.canPop(context)) {
@@ -110,9 +111,10 @@ class _SettingsDemoState extends State<SettingsDemo> {
                 style:
                     const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
-              scale: 1,
+              scale: 1.3,
               child: DropdownButton(
                 value: value,
+                iconEnabledColor: Colors.white,
                 onChanged: (newValue) {
                   setState(() {
                     changeValue(newValue);
@@ -121,7 +123,7 @@ class _SettingsDemoState extends State<SettingsDemo> {
                 items: listItems.map((valueItem) {
                   return DropdownMenuItem(
                     value: valueItem,
-                    child: Text(valueItem),
+                    child: valueItem == value? Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.black),),
                   );
                 }).toList(),
               ),

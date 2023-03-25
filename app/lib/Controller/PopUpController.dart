@@ -1,34 +1,44 @@
 import 'package:es/Viewer/TransactionsMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:es/database/LocalDBHelper.dart';
-import 'package:es/model/transaction.dart' as t_model;
+import 'package:es/model/TransactionsModel.dart' as t_model;
+import 'package:sqflite/sqflite.dart';
 
 class ButtonActions {
-  static final textcontrollerAMOUNT = TextEditingController();
   static final textcontrollerNAME = TextEditingController();
+  static final textcontrollerTOTAL = TextEditingController();
+  static final textcontrollerDATE = TextEditingController();
+  static final textcontrollerNOTES = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
 
   //Transactions
   void _enterTransaction() {
     t_model.Transaction transaction = t_model.Transaction(
-        name: textcontrollerNAME.text,
-        total: num.parse(textcontrollerAMOUNT.text));
+        name: textcontrollerNAME.text.isEmpty? "Transaction" : textcontrollerNAME.text,
+        expense: _isIncome? 0 : 1,
+        total: num.parse(textcontrollerTOTAL.text),
+        notes: textcontrollerNOTES.text
+    );
 
-    LocalDBHelper.instance.add_transaction(transaction);
-    
+    LocalDBHelper.instance.addTransaction(transaction);
+
+    textcontrollerNAME.clear();
+    textcontrollerTOTAL.clear();
+    textcontrollerDATE.clear();
+    textcontrollerNOTES.clear();
   }
 
   void newTransaction(BuildContext context) {
     showDialog(
         barrierDismissible: true,
-        barrierColor: Color.fromRGBO(20, 25, 46, 0.5),
+        barrierColor: const Color.fromRGBO(20, 25, 46, 0.5),
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
-                titlePadding: EdgeInsets.all(0),
+                titlePadding: const EdgeInsets.all(0),
                 title: Container(
                     color: Colors.lightBlue,
                     child: Row(
@@ -45,7 +55,7 @@ class ButtonActions {
                             color: Colors.white,
                           ),
                         ),
-                        Text(
+                        const Text(
                           'NEW  TRANSACTION',
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
@@ -58,7 +68,7 @@ class ButtonActions {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text('Expense'),
+                          const Text('Expense'),
                           Switch(
                             value: _isIncome,
                             onChanged: (newValue) {
@@ -67,10 +77,26 @@ class ButtonActions {
                               });
                             },
                           ),
-                          Text('Income'),
+                          const Text('Income'),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.shopping_bag_rounded),
+                                labelText: 'Name',
+                              ),
+                              controller: textcontrollerNAME,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -79,39 +105,61 @@ class ButtonActions {
                             child: Form(
                               key: _formKey,
                               child: TextFormField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Amount?',
+                                decoration: const InputDecoration(
+                                  icon: Icon(Icons.attach_money_rounded),
+                                  labelText: 'Total',
                                 ),
-                                keyboardType: TextInputType.numberWithOptions(
+                                keyboardType: const TextInputType.numberWithOptions(
                                     decimal: true),
                                 validator: (text) {
                                   if (text == null || text.isEmpty) {
                                     return 'Enter an amount';
                                   }
+                                  else if (int.tryParse(text)! < 0){
+                                    return 'Enter a positive amount';
+                                  }
                                   return null;
                                 },
-                                controller: textcontrollerAMOUNT,
+                                controller: textcontrollerTOTAL,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: TextField(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: 'For what?',
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.calendar_today),
+                                labelText: 'Date',
                               ),
-                              controller: textcontrollerNAME,
+                              controller: textcontrollerDATE,
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'Notes',
+                              ),
+                              controller: textcontrollerNOTES,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
                       ),
                     ],
                   ),
@@ -119,7 +167,7 @@ class ButtonActions {
                 actions: <Widget>[
                   MaterialButton(
                     color: Colors.lightBlue,
-                    child: Text('Add', style: TextStyle(color: Colors.white)),
+                    child: const Text('Add', style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _enterTransaction();
@@ -156,11 +204,37 @@ class ButtonActions {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [Text("YES"), Text("NO")]))
+                  child: const Text("NO", style: TextStyle(color: Colors.lightBlue))),
+              TextButton(
+                  onPressed: () {
+                      LocalDBHelper.instance.deleteLocalDB();
+                      Navigator.of(context).pop();
+                      deletdData(context);
+                  },
+                  child: const Text("YES", style: TextStyle(color: Colors.lightBlue),))
             ],
           );
         });
   }
+
+  void deletdData(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text("Your data has been successfully deleted", textAlign: TextAlign.center)
+          );
+        });
+  }
+
+  void noData(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+              title: Text("No data has been inserted into the app", textAlign: TextAlign.center)
+          );
+        });
+  }
+
 }

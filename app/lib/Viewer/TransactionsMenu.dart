@@ -18,6 +18,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
     return Scaffold(
+        backgroundColor: Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           title: Text(widget.title,
               style: const TextStyle(
@@ -44,21 +45,20 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<t_model.Transaction>> snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(child: Text('Loading...', style: TextStyle(fontSize: 20)));
+                    return const Center(child: Text('Loading...', style: TextStyle(fontSize: 20, color: Colors.white)));
                   }
                   return snapshot.data!.isEmpty
-                    ? const Center( child: Text("Nothing to show", style: TextStyle(fontSize: 20),),)
+                    ? const Center( child: Text("Nothing to show", style: TextStyle(fontSize: 20, color: Colors.white)),)
                       : ListView(
                     shrinkWrap: true,
                     children: snapshot.data!.map((transac) {
                       return Center(
                         child: Container(
                           decoration: const BoxDecoration(
-                              border: Border(bottom: BorderSide(color: Colors.black26))),
+                              border: Border(bottom: BorderSide(color: Colors.white24))),
                           child: ListTile(
-                            horizontalTitleGap: 0.5,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(12))),
+                            textColor: Colors.white,
+                            iconColor: Colors.white,
                             leading: (transac.expense == 1)? const Icon(Icons.money_off) : const Icon(Icons.wallet),
                             title: Text(transac.name, style: const TextStyle(fontSize: 20),),
                             trailing: (transac.expense == 1)? Text("- ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)) : Text("+ ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)),

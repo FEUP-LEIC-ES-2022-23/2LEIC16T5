@@ -112,10 +112,10 @@ class ButtonActions {
                                 keyboardType: const TextInputType.numberWithOptions(
                                     decimal: true),
                                 validator: (text) {
-                                  if (text == null || text.isEmpty) {
+                                  if (text == null || text.isEmpty || num.tryParse(text) == null) {
                                     return 'Enter an amount';
                                   }
-                                  else if (int.tryParse(text)! < 0){
+                                  else if (num.tryParse(text)!.isNegative){
                                     return 'Enter a positive amount';
                                   }
                                   return null;

@@ -5,6 +5,7 @@ import 'package:es/Viewer/MainMenu.dart';
 import 'package:flutter/rendering.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'EvaluateLoginState.dart';
 
 class loginScreenController extends StatelessWidget {
   bool rememberMeChecked = false;
@@ -25,8 +26,10 @@ class loginScreenController extends StatelessWidget {
   }
 
   toMainMenu(BuildContext context) {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => MainMenu()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => loginScreenController()),
+        (route) => false);
   }
 
   Future signIn(TextEditingController email, TextEditingController password,
@@ -45,6 +48,11 @@ class loginScreenController extends StatelessWidget {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
+
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: 'Your account was created successfully!');
     } on FirebaseAuthException catch (e) {
       QuickAlert.show(
           context: context, type: QuickAlertType.error, text: e.message!);
@@ -56,8 +64,10 @@ class loginScreenController extends StatelessWidget {
   }
 
   toLogInScreen(BuildContext context) {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => loginScreenController()),
+        (route) => false);
   }
 
   String? validateEmail(String? email) {

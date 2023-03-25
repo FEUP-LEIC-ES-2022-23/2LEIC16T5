@@ -28,6 +28,7 @@ class InputElements {
           onTap: () {
             if (_key.currentState!.validate()) {
               f(usernameController, passwordController, context);
+              loginController.toMainMenu(context);
             }
           },
           child: Container(
@@ -57,10 +58,12 @@ class InputElements {
       TextEditingController confirmPasswordController,
       BuildContext context,
       f) {
+    bool error;
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: GestureDetector(
           onTap: () {
+            error = false;
             if (_key.currentState!.validate()) {
               if (passwordController.text != confirmPasswordController.text) {
                 QuickAlert.show(
@@ -69,10 +72,6 @@ class InputElements {
                     text: 'Passwords do not match!');
               } else {
                 f(usernameController, passwordController, context);
-                QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    text: 'Your account was created!');
               }
             }
           },

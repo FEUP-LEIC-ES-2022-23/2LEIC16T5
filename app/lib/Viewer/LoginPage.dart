@@ -27,30 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   InputElements inputElements = InputElements();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  Widget inputBox(String? text, TextEditingController textController,
-      loginScreenController loginControl) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 23),
-          child: TextFormField(
-            controller: textController,
-            validator: loginControl.validateEmail,
-            decoration: InputDecoration(
-              labelText: text,
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   String errorMessage = '';
   void showErrorAlert() {
@@ -193,7 +169,7 @@ class _signUpState extends State<LoginPage> {
                               size: 20,
                               backStrokeWidth: 6,
                               progressStrokeWidth: 6,
-                              animationDuration: 0,
+                              animationDuration: 1,
                               progressColors: [
                                 Colors.red,
                                 Colors.orange,

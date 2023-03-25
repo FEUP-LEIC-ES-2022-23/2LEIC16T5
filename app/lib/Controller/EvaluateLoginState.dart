@@ -9,8 +9,8 @@ import '../Viewer/settings.dart';
 
 //import 'package:firebase_core/firebase_core.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+class EvaluateLogin extends StatelessWidget {
+  const EvaluateLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:es/database/LocalDBHelper.dart';
 import 'package:es/model/TransactionsModel.dart' as t_model;
 import 'package:sqflite/sqflite.dart';
+import 'package:intl/intl.dart';
 
 class ButtonActions {
   static final textcontrollerNAME = TextEditingController();
@@ -18,6 +19,7 @@ class ButtonActions {
         name: textcontrollerNAME.text.isEmpty? "Transaction" : textcontrollerNAME.text,
         expense: _isIncome? 0 : 1,
         total: num.parse(textcontrollerTOTAL.text),
+        //date:  DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         notes: textcontrollerNOTES.text
     );
 
@@ -32,7 +34,6 @@ class ButtonActions {
   void newTransaction(BuildContext context) {
     showDialog(
         barrierDismissible: true,
-        barrierColor: const Color.fromRGBO(20, 25, 46, 0.5),
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
@@ -138,6 +139,28 @@ class ButtonActions {
                                 labelText: 'Date',
                               ),
                               controller: textcontrollerDATE,
+                              onTap: () async {
+                                DateTime? pickeddate = await showDatePicker(
+                                    context: context,
+                                    builder: (context, child) {
+                                      return Theme(
+                                    data: Theme.of(context).copyWith(
+                                        colorScheme: const ColorScheme.light(
+                                          primary: Colors.lightBlue, // header background color
+                                          onPrimary: Colors.white, // header text color
+                                          onSurface: Colors.black, // body text color
+                                        ),),
+                                        child: child!,);},
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime (2000),
+                                    lastDate: DateTime (2101));
+
+                                if (pickeddate != null){
+                                  setState(() {
+                                    textcontrollerDATE.text = DateFormat('dd-MM-yyyy').format(pickeddate);
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],
@@ -180,6 +203,10 @@ class ButtonActions {
             },
           );
         });
+  }
+
+  void showTransaction(BuildContext context){
+    /*TO BE DONE*/
   }
 
   //Settings

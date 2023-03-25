@@ -18,7 +18,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
     return Scaffold(
-        backgroundColor: Color.fromRGBO(20, 25, 46, 1.0),
+        backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           title: Text(widget.title,
               style: const TextStyle(
@@ -62,9 +62,14 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                             leading: (transac.expense == 1)? const Icon(Icons.money_off) : const Icon(Icons.wallet),
                             title: Text(transac.name, style: const TextStyle(fontSize: 20),),
                             trailing: (transac.expense == 1)? Text("- ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)) : Text("+ ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)),
+                            onTap: () {
+                              setState(() {
+                                ButtonActions().showTransaction(context);
+                              });
+                            },
                             onLongPress: () {
                               setState(() {
-                                LocalDBHelper.instance.removeTransaction(transac.id_transaction!);
+                                LocalDBHelper.instance.removeTransaction(transac.idTransaction!);
                               });
                             },
                           ),

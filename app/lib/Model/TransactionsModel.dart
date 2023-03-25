@@ -1,35 +1,35 @@
 class Transaction {
-  int? id_transaction;
+  int? idTransaction;
   int expense;
   String name;
   num total;
-  //DateTime? date;
+  DateTime? date;
   String? notes;
 
   Transaction({
-    this.id_transaction,
+    this.idTransaction,
     required this.expense,
     required this.name,
     required this.total,
-    //this.date,
+    this.date,
     this.notes});
 
   factory Transaction.fromMap(Map<String, dynamic> json) => Transaction(
-        id_transaction: json['id_transaction'],
+        idTransaction: json['idTransaction'],
         expense: json['expense'],
         name: json['name'],
         total: json['total'],
-        //date: json['date'],
+        date: DateTime.fromMillisecondsSinceEpoch(json['date']),
         notes: json['notes'],
       );
 
   Map<String, dynamic> toMap() {
     return {
-      'id_transaction': id_transaction,
+      'idTransaction': idTransaction,
       'expense': expense,
       'name': name,
       'total': total,
-      //'date': date,
+      'date': date?.millisecondsSinceEpoch,
       'notes': notes,
     };
   }

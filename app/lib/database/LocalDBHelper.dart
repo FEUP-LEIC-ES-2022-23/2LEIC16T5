@@ -14,7 +14,7 @@ class LocalDBHelper {
   Future<Database> get database async => _database ??= await _initDatabase();
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'Transactions2.db');
+    String path = join(await getDatabasesPath(), 'localTransactions.db');
     return await openDatabase(
       path,
       version: 1,
@@ -25,27 +25,26 @@ class LocalDBHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE Transact(
-      id_transaction NUMERIC,
+      idTransaction NUMERIC PRIMARY KEY,
       expense NUMERIC,
       name VARCHAR(50) NOT NULL,
       total NUMERIC NOT NULL CHECK (total >= 0),
-      date DATE,
-      notes VARCHAR(200),
-      PRIMARY KEY (id_transaction)
+      date NUMERIC,
+      notes VARCHAR(200)
       );
       ''');
   }
 
   Future<List<model.Transaction>> getTransactions() async {
     Database db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db.query('Transact', orderBy: 'name');
+    final List<Map<String, dynamic>> maps = await db.query('Transact', orderBy: 'date');
     return List.generate(maps.length, (i) {
       return model.Transaction(
-        id_transaction: maps[i]['id_transaction'],
+        idTransaction: maps[i]['idTransaction'],
         expense: maps[i]['expense'],
         name: maps[i]['name'],
         total: maps[i]['total'],
-        //date: maps[i]['date'],
+        date: maps[i]['date'],
         notes: maps[i]['notes'],
       );
     });
@@ -59,7 +58,7 @@ class LocalDBHelper {
 
   Future<int> removeTransaction(int id) async {
     Database db = await instance.database;
-    return await db.delete( 'Transac', where: 'id_transaction = ?', whereArgs: [id]);
+    return await db.delete( 'Transac', where: 'idTransaction = ?', whereArgs: [id]);
   }
 
   Future deleteLocalDB() async {

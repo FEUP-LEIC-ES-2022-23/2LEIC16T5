@@ -9,7 +9,7 @@ class MainMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 210, 212, 235),
+        backgroundColor: Color.fromARGB(255, 12, 18, 50),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -30,7 +30,7 @@ class MainMenu extends StatelessWidget {
                     child: Icon(Icons.settings),
                   )),
               Text('Main Menu',
-                  style: GoogleFonts.shadowsIntoLight(fontSize: 60)),
+                  style: TextStyle(fontSize: 60, color: Colors.white)),
               Image.asset(
                 'assets/img/Luckycat1.png',
                 width: 200,

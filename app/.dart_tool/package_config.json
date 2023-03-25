@@ -260,6 +260,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "simple_circular_progress_bar",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/simple_circular_progress_bar-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -332,7 +338,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-03-21T18:35:27.746387Z",
+  "generated": "2023-03-25T03:03:14.422871Z",
   "generator": "pub",
   "generatorVersion": "2.19.2"
 }

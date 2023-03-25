@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:es/Viewer/MainMenu.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickalert/quickalert.dart';
 import '../Controller/LoginScreenController.dart';
 import 'settings.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'InputElements.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -17,8 +23,36 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  loginScreenController loginController = loginScreenController();
+  InputElements inputElements = InputElements();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
+  Widget inputBox(String? text, TextEditingController textController,
+      loginScreenController loginControl) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 23),
+          child: TextFormField(
+            controller: textController,
+            validator: loginControl.validateEmail,
+            decoration: InputDecoration(
+              labelText: text,
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String errorMessage = '';
   void showErrorAlert() {
     QuickAlert.show(
         context: context,
@@ -29,8 +63,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //resizeToAvoidBottomInset: true,
-      backgroundColor: Color.fromARGB(255, 210, 212, 230),
+      backgroundColor: Color.fromARGB(255, 12, 18, 50),
       body: Form(
         key: _key,
         child: Center(
@@ -46,97 +79,44 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Text(
                   'Welcome to Fortuneko!',
-                  style: GoogleFonts.shadowsIntoLight(fontSize: 30),
+                  style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
-                //SizedBox(height:30),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 23),
-                      child: TextFormField(
-                        controller: usernameController,
-                        validator: loginScreenController().validateEmail,
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
+                SizedBox(height: 30),
+                inputElements.inputBox('Email', usernameController,
+                    loginController.validateEmail, false),
                 SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 23),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        validator: loginScreenController().validatePassword,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
+                inputElements.inputBox('Password', passwordController,
+                    loginController.validatePassword, true),
                 SizedBox(height: 60),
-                Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (_key.currentState!.validate()) {
-                          loginScreenController()
-                              .signIn(usernameController, passwordController);
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          //color: Color.fromARGB(255, 4, 48, 194),
-                          color: Colors.blue,
-                          border: Border.all(
-                              //color: Color.fromARGB(255, 4, 48, 194)),
-                              color: Colors.blue),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Center(
-                          child: Text('Sign in',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18)),
-                        ),
-                      ),
-                    )),
+                inputElements.signInButtonWide(
+                    'Sign in',
+                    _key,
+                    loginController,
+                    usernameController,
+                    passwordController,
+                    context,
+                    loginController.signIn),
                 SizedBox(height: 10),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('Become a member of FortuFamily! ',
-                        style: TextStyle(fontSize: 15)),
-                    Text(
-                      'Register Now',
-                      style: TextStyle(
-                          color: Colors.blue[500],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.underline),
+                        style: TextStyle(fontSize: 15, color: Colors.white)),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  _signUpState().build(context))),
+                      child: Text(
+                        'Register Now',
+                        style: TextStyle(
+                            color: Colors.blue[500],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            decoration: TextDecoration.underline),
+                      ),
                     ),
                   ],
                 ),
@@ -148,6 +128,103 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _signUpState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confimPasswordController = TextEditingController();
+  loginScreenController loginController = loginScreenController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  InputElements inputElement = InputElements();
+
+  ValueNotifier<double> ProgressValue = ValueNotifier(0);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 12, 18, 50),
+      body: Form(
+          key: _key,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/img/Luckycat1.png',
+                      fit: BoxFit.contain,
+                      width: 150,
+                      height: 150,
+                    ),
+                    Text(
+                      'Sign up',
+                      style: TextStyle(fontSize: 40, color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      child: Text(
+                        'Please provide us with the following info to become a member!',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    inputElement.inputBox('Email', usernameController,
+                        loginController.validateEmail, false),
+                    SizedBox(height: 10),
+                    Stack(
+                      children: [
+                        inputElement.inputBox2(
+                            'Password',
+                            passwordController,
+                            loginController.validatePassword,
+                            true,
+                            ProgressValue),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 28),
+                          child: Align(
+                            child: SimpleCircularProgressBar(
+                              valueNotifier: ProgressValue,
+                              size: 20,
+                              backStrokeWidth: 6,
+                              progressStrokeWidth: 6,
+                              animationDuration: 1,
+                              progressColors: [
+                                Colors.red,
+                                Colors.orange,
+                                Colors.yellow,
+                                Colors.green
+                              ],
+                            ),
+                            alignment: Alignment.topRight,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    inputElement.inputBox(
+                        'Confirm password',
+                        confimPasswordController,
+                        loginController.validatePassword,
+                        true),
+                    SizedBox(height: 30),
+                    inputElement.signUpButtonWide(
+                        'Sign up',
+                        _key,
+                        loginController,
+                        usernameController,
+                        passwordController,
+                        confimPasswordController,
+                        context,
+                        loginController.signUp),
+                  ]),
+            ),
+          )),
     );
   }
 }

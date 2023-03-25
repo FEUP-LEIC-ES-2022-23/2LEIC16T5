@@ -1,6 +1,6 @@
 import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/LoginPage.dart';
-import 'package:es/Viewer/WelcomeMenu.dart';
+import 'package:es/Controller/EvaluateLoginState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +11,13 @@ import 'package:quickalert/quickalert.dart';
 class SettingsDemo extends StatefulWidget {
   const SettingsDemo({super.key, required this.title});
   final String title;
+
   @override
   State<SettingsDemo> createState() => _SettingsDemoState();
 }
 
 class _SettingsDemoState extends State<SettingsDemo> {
+  loginScreenController loginController = loginScreenController();
   List listItems = ["€", "\$", "£"];
   String valCurrency = "€";
   bool valMode = true;
@@ -41,7 +43,7 @@ class _SettingsDemoState extends State<SettingsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 210, 212, 230),
+        backgroundColor: Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
           title: Text(widget.title,
               style: const TextStyle(
@@ -57,7 +59,14 @@ class _SettingsDemoState extends State<SettingsDemo> {
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  loginController.signOut();
+                  loginController.toLogInScreen(context);
+                  QuickAlert.show(
+                      context: context,
+                      text: "Sucessfully logged out!",
+                      type: QuickAlertType.success);
+                },
                 icon: const Icon(
                   Icons.logout,
                   color: Colors.white,
@@ -70,7 +79,11 @@ class _SettingsDemoState extends State<SettingsDemo> {
             children: [
               const SizedBox(height: 40),
               buildDropDownBox(
-                  "Currency", listItems, valCurrency, changeCurrency),
+                "Currency",
+                listItems,
+                valCurrency,
+                changeCurrency,
+              ),
               buildSwitch("Mode", valMode, changeMode),
               buildSwitch(
                   "Notifications", valNotifications, changeNotifications),
@@ -97,42 +110,25 @@ class _SettingsDemoState extends State<SettingsDemo> {
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: const [
-                                Text("You are about to sign out"),
+                                Text("You are about to delete all your data,"),
                                 SizedBox(height: 5),
-                                //Text("This action is irreversible"),
-                                //SizedBox(height: 5),
+                                Text("This action is irreversible"),
+                                SizedBox(height: 5),
                                 Text("Do you wish to continue?")
                               ],
                             ),
+                            //actionsAlignment: MainAxisAlignment.end,
                             actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    loginScreenController().signOut();
-                                    Navigator.of(context).pop();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                WelcomePage()));
-                                    QuickAlert.show(
-                                        context: context,
-                                        text: "Sucessfully logged out!",
-                                        type: QuickAlertType.success);
-                                  },
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: const [
-                                        Text("YES"),
-                                      ])),
-                              TextButton(
-                                onPressed: () {},
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      Text("NO"),
-                                    ]),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: Text("YES"),
+                                  ),
+                                  TextButton(
+                                      onPressed: () {}, child: Text("NO")),
+                                ],
                               ),
                             ],
                           );
@@ -157,8 +153,10 @@ class _SettingsDemoState extends State<SettingsDemo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title,
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
             Transform.scale(
               scale: 1,
               child: DropdownButton(
@@ -187,8 +185,10 @@ class _SettingsDemoState extends State<SettingsDemo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title,
-                style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(

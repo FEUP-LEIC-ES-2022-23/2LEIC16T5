@@ -135,8 +135,8 @@ class _SettingsDemoState extends State<SettingsDemo> {
                         });
                   },
                   child: const Text(
-                    "Sign Out",
-                    style: TextStyle(fontSize: 40, color: Colors.red),
+                    "Reset Data",
+                    style: TextStyle(fontSize: 40, color: Colors.white),
                   ),
                 ),
               )

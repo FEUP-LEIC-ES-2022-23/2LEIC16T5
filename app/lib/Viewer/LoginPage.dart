@@ -193,7 +193,7 @@ class _signUpState extends State<LoginPage> {
                               size: 20,
                               backStrokeWidth: 6,
                               progressStrokeWidth: 6,
-                              animationDuration: 1,
+                              animationDuration: 0,
                               progressColors: [
                                 Colors.red,
                                 Colors.orange,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import '../Controller/PopUpController.dart';
 import 'package:es/Viewer/MainMenu.dart';
 
@@ -113,6 +114,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
             Transform.scale(
               scale: 1.3,
               child: DropdownButton(
+                underline: SizedBox(),
+                borderRadius: BorderRadius.circular(12),
                 value: value,
                 iconEnabledColor: Colors.white,
                 onChanged: (newValue) {

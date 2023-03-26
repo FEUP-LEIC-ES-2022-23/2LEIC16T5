@@ -61,7 +61,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                             iconColor: Colors.white,
                             leading: (transac.expense == 1)? const Icon(Icons.money_off) : const Icon(Icons.wallet),
                             title: Text(transac.name, style: const TextStyle(fontSize: 20),),
-                            trailing: (transac.expense == 1)? Text("- ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)) : Text("+ ${euro.format(transac.total)}", style: const TextStyle(fontSize: 20)),
+                            trailing: Text((transac.expense == 1? '-' : '+') + euro.format(transac.total), style: const TextStyle(fontSize: 20),),
                             onTap: () {
                               setState(() {
                                 ButtonActions().showTransaction(context);

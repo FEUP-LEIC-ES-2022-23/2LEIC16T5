@@ -11,9 +11,9 @@ class LocalDBHelper {
   static final LocalDBHelper instance = LocalDBHelper._privateConstructor();
 
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async => _database ??= await initDatabase();
 
-  Future<Database> _initDatabase() async {
+  Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), 'localTransactions.db');
     return await openDatabase(
       path,
@@ -68,9 +68,10 @@ class LocalDBHelper {
       ''');
   }
 
-  Future<bool> isEmpty() async {
+  Future<bool> isLocalDBEmpty() async {
     Database db = await instance.database;
-    int count = db.query('''SELECT COUNT(*) FROM Transact''') as int;
+    var x = await db.rawQuery('SELECT COUNT(*) FROM Transact');
+    int count = Sqflite.firstIntValue(x) as int;
     return count == 0;
   }
 }

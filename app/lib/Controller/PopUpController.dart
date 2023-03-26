@@ -233,10 +233,16 @@ class ButtonActions {
                   },
                   child: const Text("NO", style: TextStyle(color: Colors.lightBlue))),
               TextButton(
-                  onPressed: () {
-                      LocalDBHelper.instance.deleteLocalDB();
-                      Navigator.of(context).pop();
-                      deletdData(context);
+                  onPressed: () async {
+                      if(await LocalDBHelper.instance.isLocalDBEmpty()){
+                        Navigator.of(context).pop();
+                        noData(context);
+                      }
+                      else{
+                        LocalDBHelper.instance.deleteLocalDB();
+                        Navigator.of(context).pop();
+                        deletdData(context);
+                      }
                   },
                   child: const Text("YES", style: TextStyle(color: Colors.lightBlue),))
             ],

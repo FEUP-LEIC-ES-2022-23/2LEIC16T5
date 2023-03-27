@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import '../Controller/PopUpController.dart';
+import 'package:es/Viewer/MainMenu.dart';
 
-class SettingsDemo extends StatefulWidget {
-  const SettingsDemo({super.key, required this.title});
+class SettingsMenu extends StatefulWidget {
+  const SettingsMenu({super.key, required this.title});
   final String title;
   @override
-  State<SettingsDemo> createState() => _SettingsDemoState();
+  State<SettingsMenu> createState() => _SettingsMenuState();
 }
 
-class _SettingsDemoState extends State<SettingsDemo> {
+class _SettingsMenuState extends State<SettingsMenu> {
   List listItems = ["€", "\$", "£"];
   String valCurrency = "€";
   bool valMode = true;
@@ -34,15 +37,20 @@ class _SettingsDemoState extends State<SettingsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 210, 212, 230),
+        backgroundColor: Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
+          backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
               style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
+          centerTitle: true,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);}
+              },
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -75,44 +83,13 @@ class _SettingsDemoState extends State<SettingsDemo> {
               Center(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("WARNING"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text("All your data will be deleted"),
-                                SizedBox(height: 5),
-                                Text("This action is irreversible"),
-                                SizedBox(height: 5),
-                                Text("Do you wish to continue?")
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: const [
-                                        Text("YES"),
-                                        Text("NO")
-                                      ]))
-                            ],
-                          );
-                        });
-                  },
+                  onPressed: () {ButtonActions().resetData(context);},
                   child: const Text(
                     "RESET DATA",
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -133,11 +110,14 @@ class _SettingsDemoState extends State<SettingsDemo> {
           children: [
             Text(title,
                 style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
-              scale: 1,
+              scale: 1.3,
               child: DropdownButton(
+                underline: SizedBox(),
+                borderRadius: BorderRadius.circular(12),
                 value: value,
+                iconEnabledColor: Colors.white,
                 onChanged: (newValue) {
                   setState(() {
                     changeValue(newValue);
@@ -146,7 +126,7 @@ class _SettingsDemoState extends State<SettingsDemo> {
                 items: listItems.map((valueItem) {
                   return DropdownMenuItem(
                     value: valueItem,
-                    child: Text(valueItem),
+                    child: valueItem == value? Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.black),),
                   );
                 }).toList(),
               ),
@@ -163,11 +143,11 @@ class _SettingsDemoState extends State<SettingsDemo> {
           children: [
             Text(title,
                 style:
-                    const TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(
-                activeColor: Colors.blue,
+                activeColor: Colors.lightBlue,
                 trackColor: Colors.grey,
                 value: value,
                 onChanged: (bool newValue) {

@@ -7,16 +7,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Viewer/MainMenu.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:path/path.dart';
+import '../Controller/PopUpController.dart';
 
-class SettingsDemo extends StatefulWidget {
-  const SettingsDemo({super.key, required this.title});
+class SettingsMenu extends StatefulWidget {
+  const SettingsMenu({super.key, required this.title});
   final String title;
 
   @override
-  State<SettingsDemo> createState() => _SettingsDemoState();
+  State<SettingsMenu> createState() => _SettingsMenuState();
 }
 
-class _SettingsDemoState extends State<SettingsDemo> {
+
+  
+class _SettingsMenuState extends State<SettingsMenu> {
   loginScreenController loginController = loginScreenController();
   List listItems = ["€", "\$", "£"];
   String valCurrency = "€";
@@ -45,13 +49,18 @@ class _SettingsDemoState extends State<SettingsDemo> {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
+          backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
               style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
+          centerTitle: true,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);}
+              },
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -95,45 +104,13 @@ class _SettingsDemoState extends State<SettingsDemo> {
               Center(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("WARNING"),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text("You are about to delete all your data,"),
-                                SizedBox(height: 5),
-                                Text("This action is irreversible"),
-                                SizedBox(height: 5),
-                                Text("Do you wish to continue?")
-                              ],
-                            ),
-                            //actionsAlignment: MainAxisAlignment.end,
-                            actions: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text("YES"),
-                                  ),
-                                  TextButton(
-                                      onPressed: () {}, child: Text("NO")),
-                                ],
-                              ),
-                            ],
-                          );
-                        });
-                  },
+                  onPressed: () {ButtonActions().resetData(context);},
                   child: const Text(
                     "Reset Data",
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -153,15 +130,17 @@ class _SettingsDemoState extends State<SettingsDemo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title,
-                style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
+
+                style:
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
-              scale: 1,
+              scale: 1.3,
               child: DropdownButton(
+                underline: SizedBox(),
+                borderRadius: BorderRadius.circular(12),
                 value: value,
                 dropdownColor: Colors.blue,
+                iconEnabledColor: Colors.white,
                 onChanged: (newValue) {
                   setState(() {
                     changeValue(newValue);
@@ -170,10 +149,8 @@ class _SettingsDemoState extends State<SettingsDemo> {
                 items: listItems.map((valueItem) {
                   return DropdownMenuItem(
                     value: valueItem,
-                    child: Text(
-                      valueItem,
-                      style: TextStyle(color: Colors.white),
-                    ),
+
+                    child: valueItem == value? Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.black),),
                   );
                 }).toList(),
               ),
@@ -189,14 +166,13 @@ class _SettingsDemoState extends State<SettingsDemo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title,
-                style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
+
+                style:
+                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(
-                activeColor: Colors.blue,
+                activeColor: Colors.lightBlue,
                 trackColor: Colors.grey,
                 value: value,
                 onChanged: (bool newValue) {

@@ -12,6 +12,7 @@ You can find here details about the product (or mini-app or module), from a high
   * [Logical architecture](docs/ArchitectureAndDesign.md#Logical-Architecture)
   * [Physical architecture](docs/ArchitectureAndDesign.md#Physical-Architecture)
   * [Vertical prototype](docs/ArchitectureAndDesign.md#Vertical-Prototype)
+* [Project management](docs/ProjectManagement.md)
 
 So far, contributions are exclusively made by the initial team, but we hope to open them to the community, in all areas and topics: requirements, technologies, development, experimentation, testing, etc.
 

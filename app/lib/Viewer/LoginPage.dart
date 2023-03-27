@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quickalert/quickalert.dart';
 import '../Controller/LoginScreenController.dart';
-import 'settings.dart';
+import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'InputElements.dart';

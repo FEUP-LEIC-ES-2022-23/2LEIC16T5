@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'LoginScreenController.dart';
-import '../Viewer/settings.dart';
+import 'package:es/Viewer/SettingsMenu.dart';
 
 //import 'package:firebase_core/firebase_core.dart';
 

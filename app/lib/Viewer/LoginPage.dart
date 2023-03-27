@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   InputElements inputElements = InputElements();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-
   String errorMessage = '';
   void showErrorAlert() {
     QuickAlert.show(
@@ -50,8 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                 Image.asset(
                   'assets/img/Luckycat1.png',
                   fit: BoxFit.contain,
-                  width: 150,
-                  height: 150,
+                  width: 250,
                 ),
                 Text(
                   'Welcome to Fortuneko!',
@@ -131,8 +129,7 @@ class _signUpState extends State<LoginPage> {
                     Image.asset(
                       'assets/img/Luckycat1.png',
                       fit: BoxFit.contain,
-                      width: 150,
-                      height: 150,
+                      width: 250,
                     ),
                     Text(
                       'Sign up',

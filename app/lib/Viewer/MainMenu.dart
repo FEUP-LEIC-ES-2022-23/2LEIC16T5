@@ -31,10 +31,12 @@ class MainMenu extends StatelessWidget {
                   )),
               Text('Main Menu',
                   style: TextStyle(fontSize: 60, color: Colors.white)),
+              SizedBox(
+                height: 20,
+              ),
               Image.asset(
                 'assets/img/Luckycat1.png',
-                width: 200,
-                height: 200,
+                width: 250,
               ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(

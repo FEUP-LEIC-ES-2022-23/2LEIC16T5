@@ -161,6 +161,7 @@ class _SettingsDemoState extends State<SettingsDemo> {
               scale: 1,
               child: DropdownButton(
                 value: value,
+                dropdownColor: Colors.blue,
                 onChanged: (newValue) {
                   setState(() {
                     changeValue(newValue);
@@ -169,7 +170,10 @@ class _SettingsDemoState extends State<SettingsDemo> {
                 items: listItems.map((valueItem) {
                   return DropdownMenuItem(
                     value: valueItem,
-                    child: Text(valueItem),
+                    child: Text(
+                      valueItem,
+                      style: TextStyle(color: Colors.white),
+                    ),
                   );
                 }).toList(),
               ),

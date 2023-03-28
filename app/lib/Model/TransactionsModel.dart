@@ -3,7 +3,7 @@ class Transaction {
   int expense;
   String name;
   num total;
-  DateTime? date;
+  DateTime date;
   String? notes;
 
   Transaction({
@@ -11,7 +11,7 @@ class Transaction {
     required this.expense,
     required this.name,
     required this.total,
-    this.date,
+    required this.date,
     this.notes});
 
   factory Transaction.fromMap(Map<String, dynamic> json) => Transaction(

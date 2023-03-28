@@ -2,8 +2,6 @@ import 'package:es/Viewer/MainMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../Controller/LoginScreenController.dart';
-import 'SettingsMenu.dart';
 //import 'package:firebase_core/firebase_core.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomInset: true,
-      backgroundColor: Color.fromARGB(255, 210, 212, 230),
+      backgroundColor: const Color.fromARGB(255, 210, 212, 230),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -52,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(left: 23),
                       child: TextField(
                         controller: usernameController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Username',
                           border: InputBorder.none,
                         ),
@@ -60,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
@@ -74,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextField(
                         controller: passwordController,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Password',
                           border: InputBorder.none,
                         ),
@@ -83,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                SizedBox(height: 60),
+                const SizedBox(height: 60),
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: GestureDetector(
@@ -91,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MainMenu()));
+                                builder: (context) => const MainMenu()));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -102,19 +100,19 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.blue),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        padding: EdgeInsets.all(12),
-                        child: Center(
+                        padding: const EdgeInsets.all(12),
+                        child: const Center(
                           child: Text('Sign in',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                         ),
                       ),
                     )),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Become a member of FortuFamily! ',
+                    const Text('Become a member of FortuFamily! ',
                         style: TextStyle(fontSize: 15)),
                     Text(
                       'Register Now',
@@ -127,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 45,
                 )
               ],

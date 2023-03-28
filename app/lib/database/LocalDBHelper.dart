@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:es/Model/TransactionsModel.dart' as model;
@@ -38,14 +35,14 @@ class LocalDBHelper {
   Future<List<model.Transaction>> getTransactions() async {
     Database db = await instance.database;
     final List<Map<String, dynamic>> maps =
-        await db.query('Transact', orderBy: 'date');
+        await db.query('Transact', orderBy: 'date DESC');
     return List.generate(maps.length, (i) {
       return model.Transaction(
         idTransaction: maps[i]['idTransaction'],
         expense: maps[i]['expense'],
         name: maps[i]['name'],
         total: maps[i]['total'],
-        date: maps[i]['date'],
+        date: DateTime.fromMillisecondsSinceEpoch(maps[i]['date']),
         notes: maps[i]['notes'],
       );
     });

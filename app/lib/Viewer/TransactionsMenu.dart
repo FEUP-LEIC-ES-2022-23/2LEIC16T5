@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../Controller/PopUpController.dart';
+import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/database/LocalDBHelper.dart';
 
@@ -64,7 +64,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                             trailing: Text((transac.expense == 1? '-' : '+') + euro.format(transac.total), style: const TextStyle(fontSize: 20),),
                             onTap: () {
                               setState(() {
-                                ButtonActions().showTransaction(context);
+                                NewTransactionController().showTransaction(context);
                               });
                             },
                             onLongPress: () {
@@ -94,7 +94,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                   child: FloatingActionButton(
                       heroTag: "Add",
                       onPressed: () {
-                        ButtonActions().newTransaction(context);
+                        NewTransactionController().newTransaction(context);
                       },
                       child: const Icon(Icons.add)),
                 ))

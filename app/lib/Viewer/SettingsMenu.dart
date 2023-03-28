@@ -1,14 +1,8 @@
 import 'package:es/Controller/LoginScreenController.dart';
-import 'package:es/Viewer/LoginPage.dart';
-import 'package:es/Controller/EvaluateLoginState.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
+import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:es/Viewer/MainMenu.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:path/path.dart';
-import '../Controller/PopUpController.dart';
 
 class SettingsMenu extends StatefulWidget {
   const SettingsMenu({super.key, required this.title});
@@ -47,7 +41,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 12, 18, 50),
+        backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
@@ -69,12 +63,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           actions: [
             IconButton(
                 onPressed: () {
-                  loginController.signOut();
-                  loginController.toLogInScreen(context);
-                  QuickAlert.show(
-                      context: context,
-                      text: "Sucessfully logged out!",
-                      type: QuickAlertType.success);
+                  SettingsPopUpViewer().sureLogout(context, loginController);
                 },
                 icon: const Icon(
                   Icons.logout,
@@ -86,7 +75,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              const SizedBox(height: 40),
+              /*const SizedBox(height: 40),
               buildDropDownBox(
                 "Currency",
                 listItems,
@@ -96,7 +85,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
               buildSwitch("Mode", valMode, changeMode),
               buildSwitch(
                   "Notifications", valNotifications, changeNotifications),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10),*/
+              const SizedBox(height: 200),
               SizedBox(
                 height: 200,
                 child: Image.asset('assets/img/Luckycat1.png'),
@@ -110,7 +100,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {ButtonActions().resetData(context);},
+                  onPressed: () {SettingsPopUpViewer().resetData(context);},
                   child: const Text(
                     "Reset Data",
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -136,7 +126,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
             Transform.scale(
               scale: 1.3,
               child: DropdownButton(
-                underline: SizedBox(),
+                underline: const SizedBox(),
                 borderRadius: BorderRadius.circular(12),
                 value: value,
                 dropdownColor: Colors.blue,
@@ -150,7 +140,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   return DropdownMenuItem(
                     value: valueItem,
 
-                    child: valueItem == value? Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: TextStyle(fontSize: 20, color: Colors.black),),
+                    child: valueItem == value? Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.black),),
                   );
                 }).toList(),
               ),

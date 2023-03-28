@@ -1,11 +1,9 @@
-import 'package:es/Viewer/TransactionsMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:es/database/LocalDBHelper.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
-import 'package:sqflite/sqflite.dart';
 import 'package:intl/intl.dart';
 
-class ButtonActions {
+class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
@@ -19,7 +17,7 @@ class ButtonActions {
         name: textcontrollerNAME.text.isEmpty? "Transaction" : textcontrollerNAME.text,
         expense: _isIncome? 0 : 1,
         total: num.parse(textcontrollerTOTAL.text),
-        //date:  DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+        date: textcontrollerDATE.text.isEmpty?  DateTime.now() : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         notes: textcontrollerNOTES.text
     );
 
@@ -208,66 +206,4 @@ class ButtonActions {
   void showTransaction(BuildContext context){
     /*TO BE DONE*/
   }
-
-  //Settings
-  void resetData(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("WARNING"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text("All your data will be deleted"),
-                SizedBox(height: 5),
-                Text("This action is irreversible"),
-                SizedBox(height: 5),
-                Text("Do you wish to continue?")
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("NO", style: TextStyle(color: Colors.lightBlue))),
-              TextButton(
-                  onPressed: () async {
-                      if(await LocalDBHelper.instance.isLocalDBEmpty()){
-                        Navigator.of(context).pop();
-                        noData(context);
-                      }
-                      else{
-                        LocalDBHelper.instance.deleteLocalDB();
-                        Navigator.of(context).pop();
-                        deletdData(context);
-                      }
-                  },
-                  child: const Text("YES", style: TextStyle(color: Colors.lightBlue),))
-            ],
-          );
-        });
-  }
-
-  void deletdData(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Your data has been successfully deleted", textAlign: TextAlign.center)
-          );
-        });
-  }
-
-  void noData(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-              title: Text("No data has been inserted into the app", textAlign: TextAlign.center)
-          );
-        });
-  }
-
 }

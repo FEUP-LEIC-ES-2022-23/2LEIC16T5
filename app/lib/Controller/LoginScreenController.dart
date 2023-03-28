@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:es/Viewer/MainMenu.dart';
 import 'package:flutter/rendering.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
-import 'EvaluateLoginState.dart';
 
 class loginScreenController extends StatelessWidget {
   bool rememberMeChecked = false;
@@ -17,9 +15,9 @@ class loginScreenController extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return MainMenu();
+              return const MainMenu();
             } else {
-              return LoginPage();
+              return const LoginPage();
             }
           }),
     );
@@ -35,7 +33,7 @@ class loginScreenController extends StatelessWidget {
   Future signIn(TextEditingController email, TextEditingController password,
       BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance!.signInWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
     } on FirebaseAuthException catch (e) {
       QuickAlert.show(

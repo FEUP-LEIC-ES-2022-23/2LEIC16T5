@@ -1,15 +1,8 @@
-import 'dart:math';
-
-import 'package:es/Viewer/MainMenu.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:quickalert/quickalert.dart';
 import '../Controller/LoginScreenController.dart';
-import 'package:es/Viewer/SettingsMenu.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'InputElements.dart';
 
@@ -38,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 12, 18, 50),
+      backgroundColor: const Color.fromARGB(255, 12, 18, 50),
       body: Form(
         key: _key,
         child: Center(
@@ -51,17 +44,17 @@ class _LoginPageState extends State<LoginPage> {
                   fit: BoxFit.contain,
                   width: 250,
                 ),
-                Text(
+                const Text(
                   'Welcome to Fortuneko!',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 inputElements.inputBox('Email', usernameController,
                     loginController.validateEmail, false),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 inputElements.inputBox('Password', passwordController,
                     loginController.validatePassword, true),
-                SizedBox(height: 60),
+                const SizedBox(height: 60),
                 inputElements.signInButtonWide(
                     'Sign in',
                     _key,
@@ -70,11 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                     passwordController,
                     context,
                     loginController.signIn),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Become a member of FortuFamily! ',
+                    const Text('Become a member of FortuFamily! ',
                         style: TextStyle(fontSize: 15, color: Colors.white)),
                     GestureDetector(
                       onTap: () => Navigator.push(
@@ -94,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 45,
                 )
               ],
@@ -118,7 +111,7 @@ class _signUpState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 12, 18, 50),
+      backgroundColor: const Color.fromARGB(255, 12, 18, 50),
       body: Form(
           key: _key,
           child: Center(
@@ -131,14 +124,14 @@ class _signUpState extends State<LoginPage> {
                       fit: BoxFit.contain,
                       width: 250,
                     ),
-                    Text(
+                    const Text(
                       'Sign up',
                       style: TextStyle(fontSize: 40, color: Colors.white),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Text(
                         'Please provide us with the following info to become a member!',
@@ -146,10 +139,10 @@ class _signUpState extends State<LoginPage> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     inputElement.inputBox('Email', usernameController,
                         loginController.validateEmail, false),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Stack(
                       children: [
                         inputElement.inputBox2(
@@ -159,7 +152,7 @@ class _signUpState extends State<LoginPage> {
                             true,
                             ProgressValue),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 28),
+                          padding: const EdgeInsets.symmetric(horizontal: 28),
                           child: Align(
                             child: SimpleCircularProgressBar(
                               valueNotifier: ProgressValue,
@@ -179,13 +172,13 @@ class _signUpState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     inputElement.inputBox(
                         'Confirm password',
                         confimPasswordController,
                         loginController.validatePassword,
                         true),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     inputElement.signUpButtonWide(
                         'Sign up',
                         _key,

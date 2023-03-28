@@ -29,7 +29,7 @@ class Transaction {
       'expense': expense,
       'name': name,
       'total': total,
-      'date': date?.millisecondsSinceEpoch,
+      'date': date.millisecondsSinceEpoch,
       'notes': notes,
     };
   }

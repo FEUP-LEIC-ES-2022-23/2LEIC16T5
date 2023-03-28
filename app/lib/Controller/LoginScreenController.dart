@@ -33,7 +33,7 @@ class loginScreenController extends StatelessWidget {
   Future signIn(TextEditingController email, TextEditingController password,
       BuildContext context) async {
     try {
-      await FirebaseAuth.instance!.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
     } on FirebaseAuthException catch (e) {
       QuickAlert.show(

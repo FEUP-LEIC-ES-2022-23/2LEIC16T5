@@ -65,9 +65,10 @@ class SettingsPopUpViewer {
         context: context,
         type: QuickAlertType.warning,
         title: 'WARNING',
-        text: 'This is still a beta version. Therefore, once you logout, all your data will be deletd',
+        text: 'This is still a beta version. Therefore, once you logout, all your data will be deleted',
         confirmBtnColor: Colors.lightBlue,
         onConfirmBtnTap: () {
+          LocalDBHelper.instance.deleteLocalDB();
           loginController.signOut();
           loginController.toLogInScreen(context);
           QuickAlert.show(

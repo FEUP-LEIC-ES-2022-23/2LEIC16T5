@@ -1,15 +1,25 @@
 
 ## Project management
-Software project management is the art and science of planning and leading software projects, in which software projects are planned, implemented, monitored and controlled.
-
-In the context of ESOF, we recommend each team to adopt a set of project management practices and tools capable of registering tasks, assigning tasks to team members, adding estimations to tasks, monitor tasks progress, and therefore being able to track their projects.
-
-Common practices of managing iterative software development are: backlog management, release management, estimation, iteration planning, iteration development, acceptance tests, and retrospectives.
 
 You can find below information and references related with the project management in our team: 
 
-* Backlog management: Product backlog and Iteration backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2022-23/projects/1);
-* Release management: [v0](#), v1, v2, v3, v...;
+* Backlog management: Product backlog and Iteration backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2022-23/projects/30);
+* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), v1, v2, v3, v4;
 * Iteration planning and retrospectives: 
-  * plans: screenshots of Github Projects board at begin and end of each iteration;
-  * retrospectives: meeting notes in a document in the repository
+
+  ### Iteration 0
+  
+  <img width="1440" alt="Iteration0_Backlog" src="https://user-images.githubusercontent.com/92641892/228287213-0a00ead1-f501-4f2f-9215-d468a9785dba.png">
+  
+  ### Iteration 1
+
+  We were planning on completing the 5 features below, but unfortunately the "Categories" feature is still in progress, since we came across some issues during the creation of our SQLite Database. However, we managed to balance that, by implementing another feature which was not planned and whose effort and priority values are the same: the "Reset Data" feature.
+  
+  #### Begin
+ 
+  <img width="1440" alt="Iteration1_Begin" src="https://user-images.githubusercontent.com/92641892/228287832-3d540681-7d06-479b-9a48-845256e27b33.png">
+ 
+  #### End
+  
+  <img width="1440" alt="Iteration1_End" src="https://user-images.githubusercontent.com/92641892/228287319-e393f6a0-1dac-42e3-aba0-0ee879d1230a.png">
+ 

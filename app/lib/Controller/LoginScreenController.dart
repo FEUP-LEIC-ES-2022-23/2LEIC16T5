@@ -1,11 +1,9 @@
 import 'package:es/Viewer/LoginPage.dart';
+import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Viewer/MainMenu.dart';
-import 'package:flutter/rendering.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
-import 'EvaluateLoginState.dart';
 
 class loginScreenController extends StatelessWidget {
   bool rememberMeChecked = false;
@@ -17,9 +15,9 @@ class loginScreenController extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return MainMenu();
+              return const MainMenu();
             } else {
-              return LoginPage();
+              return const LoginPage();
             }
           }),
     );
@@ -36,7 +34,7 @@ class loginScreenController extends StatelessWidget {
       BuildContext context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim());
+          email: email.text.trim(), password: password.text.trim())!;
     } on FirebaseAuthException catch (e) {
       QuickAlert.show(
           context: context, type: QuickAlertType.error, text: e.message!);
@@ -48,7 +46,9 @@ class loginScreenController extends StatelessWidget {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
-
+      if (FirebaseAuth.instance != null) {
+        RemoteDBHelper().createUser(FirebaseAuth.instance);
+      }
       QuickAlert.show(
           context: context,
           type: QuickAlertType.success,

@@ -1,3 +1,5 @@
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/database/LocalDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
@@ -25,20 +27,33 @@ class SettingsPopUpViewer {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text("NO", style: TextStyle(color: Colors.lightBlue))),
+                  child: const Text("NO",
+                      style: TextStyle(color: Colors.lightBlue))),
               TextButton(
                   onPressed: () async {
-                    if(await LocalDBHelper.instance.isLocalDBEmpty()){
+                    /*if(await LocalDBHelper.instance.isLocalDBEmpty()){
                       Navigator.of(context).pop();
                       noData(context);
-                    }
-                    else{
-                      LocalDBHelper.instance.deleteLocalDB();
+                    }*/
+                    try {
+                      RemoteDBHelper(userInstance: FirebaseAuth.instance)
+                          .userResetData();
                       Navigator.of(context).pop();
-                      deletdData(context);
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.success,
+                          text: "Data deleted sucessfully");
+                    } catch (e) {
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.error,
+                          text: "Error deleting data");
                     }
                   },
-                  child: const Text("YES", style: TextStyle(color: Colors.lightBlue),))
+                  child: const Text(
+                    "YES",
+                    style: TextStyle(color: Colors.lightBlue),
+                  ))
             ],
           );
         });
@@ -60,22 +75,21 @@ class SettingsPopUpViewer {
         text: 'No data has been inserted into the app');
   }
 
-  void sureLogout(BuildContext context, loginScreenController loginController){
+  void sureLogout(BuildContext context, loginScreenController loginController) {
     QuickAlert.show(
-        context: context,
-        type: QuickAlertType.warning,
-        title: 'WARNING',
-        text: 'This is still a beta version. Therefore, once you logout, all your data will be deleted',
-        confirmBtnColor: Colors.lightBlue,
-        onConfirmBtnTap: () {
-          LocalDBHelper.instance.deleteLocalDB();
-          loginController.signOut();
-          loginController.toLogInScreen(context);
-          QuickAlert.show(
-              context: context,
-              text: "Sucessfully logged out!",
-              type: QuickAlertType.success);
-        },
+      context: context,
+      type: QuickAlertType.warning,
+      title: 'WARNING',
+      text: 'You will be logged out!',
+      confirmBtnColor: Colors.lightBlue,
+      onConfirmBtnTap: () {
+        loginController.signOut();
+        loginController.toLogInScreen(context);
+        QuickAlert.show(
+            context: context,
+            text: "Sucessfully logged out!",
+            type: QuickAlertType.success);
+      },
     );
   }
 }

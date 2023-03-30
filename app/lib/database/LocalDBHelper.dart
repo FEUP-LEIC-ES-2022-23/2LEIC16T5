@@ -22,7 +22,7 @@ class LocalDBHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE Transact(
-      idTransaction NUMERIC PRIMARY KEY,
+      userID NUMERIC PRIMARY KEY,
       expense NUMERIC,
       name VARCHAR(50) NOT NULL,
       total NUMERIC NOT NULL CHECK (total >= 0),
@@ -38,7 +38,7 @@ class LocalDBHelper {
         await db.query('Transact', orderBy: 'date DESC');
     return List.generate(maps.length, (i) {
       return model.TransactionModel(
-        idTransaction: maps[i]['idTransaction'],
+        userID: maps[i]['userID'],
         expense: maps[i]['expense'],
         name: maps[i]['name'],
         total: maps[i]['total'],
@@ -57,7 +57,7 @@ class LocalDBHelper {
   Future<int> removeTransaction(int id) async {
     Database db = await instance.database;
     return await db
-        .delete('Transac', where: 'idTransaction = ?', whereArgs: [id]);
+        .delete('Transac', where: 'userID = ?', whereArgs: [id]);
   }
 
   Future deleteLocalDB() async {

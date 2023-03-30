@@ -32,6 +32,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "cloud_firestore",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore-3.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "cloud_firestore_platform_interface",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-5.7.7",
       "packageUri": "lib/",
@@ -356,7 +362,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-03-30T19:32:17.667847Z",
+  "generated": "2023-03-30T19:37:06.613923Z",
   "generator": "pub",
-  "generatorVersion": "2.19.5"
+  "generatorVersion": "2.19.2"
 }

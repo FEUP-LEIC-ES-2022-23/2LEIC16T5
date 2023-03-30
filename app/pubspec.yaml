@@ -34,6 +34,7 @@ dependencies:
   intl:
   firebase_auth: ^3.3.14
   firebase_core_platform_interface: 4.5.1
+  cloud_firestore: ^3.3.13
   quickalert: ^1.0.1
   simple_circular_progress_bar: ^1.0.2
 

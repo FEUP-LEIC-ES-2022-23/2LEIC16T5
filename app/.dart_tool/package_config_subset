@@ -18,6 +18,10 @@ clock
 2.12
 file:///home/not_real_fu/.pub-cache/hosted/pub.dev/clock-1.1.1/
 file:///home/not_real_fu/.pub-cache/hosted/pub.dev/clock-1.1.1/lib/
+cloud_firestore
+2.16
+file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore-3.5.1/
+file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore-3.5.1/lib/
 cloud_firestore_platform_interface
 2.16
 file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-5.7.7/

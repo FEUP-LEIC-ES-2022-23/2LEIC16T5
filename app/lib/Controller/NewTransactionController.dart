@@ -1,5 +1,7 @@
+
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:es/database/LocalDBHelper.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:intl/intl.dart';
 
@@ -10,10 +12,13 @@ class NewTransactionController {
   static final textcontrollerNOTES = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
-
+  
+  RemoteDBHelper remoteDBHelper =
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
+        userID: FirebaseAuth.instance.currentUser!.uid,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
@@ -24,7 +29,8 @@ class NewTransactionController {
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         notes: textcontrollerNOTES.text);
 
-    LocalDBHelper.instance.addTransaction(transaction);
+
+    remoteDBHelper.addTransaction(transaction);
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();

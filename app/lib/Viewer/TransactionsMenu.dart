@@ -1,3 +1,5 @@
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
@@ -13,6 +15,8 @@ class TransactionsMenu extends StatefulWidget {
 }
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
+  RemoteDBHelper remoteDBHelper =
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
@@ -40,8 +44,8 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
         ),
         body: Stack(
           children: [
-            FutureBuilder<List<t_model.TransactionModel>>(
-                future: LocalDBHelper.instance.getTransactions(),
+            StreamBuilder<List<t_model.TransactionModel>>(
+                stream: remoteDBHelper.readTransactions(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<t_model.TransactionModel>> snapshot) {
                   if (!snapshot.hasData) {
@@ -90,8 +94,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                   },
                                   onLongPress: () {
                                     setState(() {
-                                      LocalDBHelper.instance.removeTransaction(
-                                          transac.idTransaction!);
+                                      remoteDBHelper.removeTransaction(transac);
                                     });
                                   },
                                 ),

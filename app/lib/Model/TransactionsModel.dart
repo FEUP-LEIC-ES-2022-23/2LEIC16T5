@@ -1,5 +1,6 @@
 class TransactionModel {
-  int? idTransaction;
+  String? transactionID;
+  String? userID;
   int expense;
   String name;
   num total;
@@ -7,7 +8,8 @@ class TransactionModel {
   String? notes;
 
   TransactionModel(
-      {this.idTransaction,
+      {this.transactionID,
+      required this.userID,
       required this.expense,
       required this.name,
       required this.total,
@@ -16,7 +18,8 @@ class TransactionModel {
 
   factory TransactionModel.fromMap(Map<String, dynamic> json) =>
       TransactionModel(
-        idTransaction: json['idTransaction'],
+        transactionID: json['transactionID'],
+        userID: json['userID'],
         expense: json['expense'],
         name: json['name'],
         total: json['total'],
@@ -26,7 +29,7 @@ class TransactionModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'idTransaction': idTransaction,
+      'userID': userID,
       'expense': expense,
       'name': name,
       'total': total,

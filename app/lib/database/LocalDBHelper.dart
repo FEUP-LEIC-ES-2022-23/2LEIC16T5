@@ -22,7 +22,7 @@ class LocalDBHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE Transact(
-      idTransaction NUMERIC PRIMARY KEY,
+      userID NUMERIC PRIMARY KEY,
       expense NUMERIC,
       name VARCHAR(50) NOT NULL,
       total NUMERIC NOT NULL CHECK (total >= 0),
@@ -32,13 +32,13 @@ class LocalDBHelper {
       ''');
   }
 
-  Future<List<model.Transaction>> getTransactions() async {
+  Future<List<model.TransactionModel>> getTransactions() async {
     Database db = await instance.database;
     final List<Map<String, dynamic>> maps =
         await db.query('Transact', orderBy: 'date DESC');
     return List.generate(maps.length, (i) {
-      return model.Transaction(
-        idTransaction: maps[i]['idTransaction'],
+      return model.TransactionModel(
+        userID: maps[i]['userID'],
         expense: maps[i]['expense'],
         name: maps[i]['name'],
         total: maps[i]['total'],
@@ -48,7 +48,7 @@ class LocalDBHelper {
     });
   }
 
-  Future<void> addTransaction(model.Transaction transaction) async {
+  Future<void> addTransaction(model.TransactionModel transaction) async {
     Database db = await instance.database;
     await db.insert('Transact', transaction.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -57,7 +57,7 @@ class LocalDBHelper {
   Future<int> removeTransaction(int id) async {
     Database db = await instance.database;
     return await db
-        .delete('Transac', where: 'idTransaction = ?', whereArgs: [id]);
+        .delete('Transac', where: 'userID = ?', whereArgs: [id]);
   }
 
   Future deleteLocalDB() async {

@@ -1,3 +1,5 @@
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
@@ -13,6 +15,8 @@ class TransactionsMenu extends StatefulWidget {
 }
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
+  RemoteDBHelper remoteDBHelper =
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
@@ -40,44 +44,64 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
         ),
         body: Stack(
           children: [
-            FutureBuilder<List<t_model.Transaction>>(
-                future: LocalDBHelper.instance.getTransactions(),
+            StreamBuilder<List<t_model.TransactionModel>>(
+                stream: remoteDBHelper.readTransactions(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<t_model.Transaction>> snapshot) {
+                    AsyncSnapshot<List<t_model.TransactionModel>> snapshot) {
                   if (!snapshot.hasData) {
-                    return const Center(child: Text('Loading...', style: TextStyle(fontSize: 20, color: Colors.white)));
+                    return const Center(
+                        child: Text('Loading...',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)));
                   }
                   return snapshot.data!.isEmpty
-                    ? const Center( child: Text("Nothing to show", style: TextStyle(fontSize: 20, color: Colors.white)),)
+                      ? const Center(
+                          child: Text("Nothing to show",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                        )
                       : ListView(
-                    shrinkWrap: true,
-                    children: snapshot.data!.map((transac) {
-                      return Center(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              border: Border(bottom: BorderSide(color: Colors.white24))),
-                          child: ListTile(
-                            textColor: Colors.white,
-                            iconColor: Colors.white,
-                            leading: (transac.expense == 1)? const Icon(Icons.money_off) : const Icon(Icons.wallet),
-                            title: Text(transac.name, style: const TextStyle(fontSize: 20),),
-                            subtitle: Text( DateFormat('dd-MM-yyyy').format(transac.date)),
-                            trailing: Text((transac.expense == 1? '-' : '+') + euro.format(transac.total), style: const TextStyle(fontSize: 20),),
-                            onTap: () {
-                              setState(() {
-                                NewTransactionController().showTransaction(context);
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                LocalDBHelper.instance.removeTransaction(transac.idTransaction!);
-                              });
-                            },
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  );
+                          shrinkWrap: true,
+                          children: snapshot.data!.map((transac) {
+                            return Center(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                            BorderSide(color: Colors.white24))),
+                                child: ListTile(
+                                  textColor: Colors.white,
+                                  iconColor: Colors.white,
+                                  leading: (transac.expense == 1)
+                                      ? const Icon(Icons.money_off)
+                                      : const Icon(Icons.wallet),
+                                  title: Text(
+                                    transac.name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  subtitle: Text(DateFormat('dd-MM-yyyy')
+                                      .format(transac.date)),
+                                  trailing: Text(
+                                    (transac.expense == 1 ? '-' : '+') +
+                                        euro.format(transac.total),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      NewTransactionController()
+                                          .showTransaction(context);
+                                    });
+                                  },
+                                  onLongPress: () {
+                                    setState(() {
+                                      remoteDBHelper.removeTransaction(transac);
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
                 }),
             Align(
                 alignment: Alignment.bottomLeft,
@@ -85,7 +109,9 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                   padding: const EdgeInsets.all(10),
                   child: FloatingActionButton(
                       heroTag: "Reload",
-                      onPressed: () {setState(() {});},
+                      onPressed: () {
+                        setState(() {});
+                      },
                       child: const Icon(Icons.refresh)),
                 )),
             Align(

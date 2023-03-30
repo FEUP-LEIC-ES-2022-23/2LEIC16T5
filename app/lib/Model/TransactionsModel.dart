@@ -1,21 +1,25 @@
-class Transaction {
-  int? idTransaction;
+class TransactionModel {
+  String? transactionID;
+  String? userID;
   int expense;
   String name;
   num total;
   DateTime date;
   String? notes;
 
-  Transaction({
-    this.idTransaction,
-    required this.expense,
-    required this.name,
-    required this.total,
-    required this.date,
-    this.notes});
+  TransactionModel(
+      { this.transactionID,
+      required this.userID,
+      required this.expense,
+      required this.name,
+      required this.total,
+      required this.date,
+      this.notes});
 
-  factory Transaction.fromMap(Map<String, dynamic> json) => Transaction(
-        idTransaction: json['idTransaction'],
+  factory TransactionModel.fromMap(Map<String, dynamic> json) =>
+      TransactionModel(
+        transactionID: json['transactionID'],
+        userID: json['userID'],
         expense: json['expense'],
         name: json['name'],
         total: json['total'],
@@ -25,7 +29,7 @@ class Transaction {
 
   Map<String, dynamic> toMap() {
     return {
-      'idTransaction': idTransaction,
+      'userID': userID,
       'expense': expense,
       'name': name,
       'total': total,

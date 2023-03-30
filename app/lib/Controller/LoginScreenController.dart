@@ -8,6 +8,8 @@ import 'package:quickalert/quickalert.dart';
 class loginScreenController extends StatelessWidget {
   bool rememberMeChecked = false;
   loginScreenController({Key? key}) : super(key: key);
+  RemoteDBHelper remoteDBHelper =
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +49,7 @@ class loginScreenController extends StatelessWidget {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
       if (FirebaseAuth.instance != null) {
-        RemoteDBHelper().createUser(FirebaseAuth.instance);
+        remoteDBHelper.createUser();
       }
       QuickAlert.show(
           context: context,

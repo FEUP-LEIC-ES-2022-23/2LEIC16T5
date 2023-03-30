@@ -16,14 +16,14 @@ The ***Fortuneko** System* contains the core functionality of our app. It is fur
 
 The *External Services* holds the dependencies of our app, namely the [*Google Maps API*](https://developers.google.com/maps), [*Firebase*](https://firebase.google.com) and the [*PORDATA database*](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela). 
 
-![LogicalArchitecture](https://user-images.githubusercontent.com/92641892/225074006-1127015a-5a66-4358-ade6-66dabd23e93f.jpeg)
+![LogicalArchitecture](https://user-images.githubusercontent.com/92641892/226919091-170e7fcd-ab76-480a-9cd7-863d7d16b8a8.jpeg)
 
 ### Physical architecture
 
 Our Physical Architecture diagram shows our mobile app, connected to all the dependencies we have identified until now. [Firebase](https://firebase.google.com) is used for authentication, storage, and synchronisation of user data across multiple devices. [Google Maps API](https://developers.google.com/maps) is used for generating a geographical chart of expenses. [PORDATA database](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela) provides the “National Comparison” feature.
 Therefore, this diagram illustrates the communication and data flow between **Fortuneko** app and these external services.
 
-![PhysicalArchitecture](https://user-images.githubusercontent.com/92641892/225074024-deae9f0c-1ce2-49b5-afd1-4426504eb021.jpeg)
+![PhysicalArchitecture](https://user-images.githubusercontent.com/92641892/227900317-3b06c22b-b91a-4f75-be38-2da4c1d0b7c0.jpeg)
 
 ### Vertical prototype
 

@@ -1,17 +1,7 @@
-import 'dart:math';
-
-import 'package:es/Viewer/LoginPage.dart';
-import 'package:es/Viewer/MainMenu.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:quickalert/quickalert.dart';
 import '../Controller/LoginScreenController.dart';
-import 'settings.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 
 class InputElements {
   Widget signInButtonWide(
@@ -40,10 +30,10 @@ class InputElements {
                   color: Colors.blue),
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Center(
               child: Text(text,
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: const TextStyle(color: Colors.white, fontSize: 18)),
             ),
           ),
         ));
@@ -84,10 +74,10 @@ class InputElements {
                   color: Colors.blue),
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Center(
               child: Text(text,
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: const TextStyle(color: Colors.white, fontSize: 18)),
             ),
           ),
         ));
@@ -120,65 +110,65 @@ class InputElements {
   }
 
   double? CheckPasswordStrength(String password) {
-    RegExp Number = RegExp(r'(?=.*\d)');
-    RegExp Lowercase = RegExp(r'(?=.*[a-z])');
-    RegExp Upper = RegExp(r'(?=.*[A-Z])');
-    RegExp simbols = RegExp(r'(?=.*?[!@#\$&*~_])');
-    if (password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            password.contains(simbols)) {
+    RegExp number = RegExp(r'(?=.*\d)');
+    RegExp lowercase = RegExp(r'(?=.*[a-z])');
+    RegExp upper = RegExp(r'(?=.*[A-Z])');
+    RegExp symbols = RegExp(r'(?=.*?[!@#\$&*~_])');
+    if (password.contains(number) &&
+            !password.contains(lowercase) &&
+            !password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            password.contains(lowercase) &&
+            !password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            !password.contains(lowercase) &&
+            password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            !password.contains(lowercase) &&
+            !password.contains(upper) &&
+            password.contains(symbols)) {
       return 25;
-    } else if (password.contains(Number) &&
-            password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            password.contains(simbols) ||
-        password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            password.contains(simbols))
+    } else if (password.contains(number) &&
+            password.contains(lowercase) &&
+            !password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            password.contains(lowercase) &&
+            password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            !password.contains(lowercase) &&
+            password.contains(upper) &&
+            password.contains(symbols) ||
+        password.contains(number) &&
+            !password.contains(lowercase) &&
+            !password.contains(upper) &&
+            password.contains(symbols))
       return 50;
-    else if (password.contains(Number) &&
-            password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            !password.contains(simbols) ||
-        !password.contains(Number) &&
-            password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            password.contains(simbols) ||
-        password.contains(Number) &&
-            !password.contains(Lowercase) &&
-            password.contains(Upper) &&
-            password.contains(simbols) ||
-        password.contains(Number) &&
-            password.contains(Lowercase) &&
-            !password.contains(Upper) &&
-            password.contains(simbols))
+    else if (password.contains(number) &&
+            password.contains(lowercase) &&
+            password.contains(upper) &&
+            !password.contains(symbols) ||
+        !password.contains(number) &&
+            password.contains(lowercase) &&
+            password.contains(upper) &&
+            password.contains(symbols) ||
+        password.contains(number) &&
+            !password.contains(lowercase) &&
+            password.contains(upper) &&
+            password.contains(symbols) ||
+        password.contains(number) &&
+            password.contains(lowercase) &&
+            !password.contains(upper) &&
+            password.contains(symbols))
       return 75;
-    else if (password.contains(Number) &&
-        password.contains(Lowercase) &&
-        password.contains(Upper) &&
-        password.contains(simbols)) return 100;
+    else if (password.contains(number) &&
+        password.contains(lowercase) &&
+        password.contains(upper) &&
+        password.contains(symbols)) return 100;
     return 0;
   }
 

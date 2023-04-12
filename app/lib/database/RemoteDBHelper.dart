@@ -47,10 +47,8 @@ class RemoteDBHelper {
   }
 
   Stream<List<TransactionModel>> readTransactions() {
-    User? usr = FirebaseAuth.instance.currentUser;
     return FirebaseFirestore.instance
         .collection('Transactions')
-        .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => TransactionModel.fromMap(doc.data()))
@@ -67,5 +65,6 @@ class RemoteDBHelper {
         ds.reference.delete();
       }
     });
+    
   }
 }

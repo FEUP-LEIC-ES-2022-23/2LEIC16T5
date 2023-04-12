@@ -4,7 +4,7 @@
 You can find below information and references related with the project management in our team: 
 
 * Backlog management: Product backlog and Iteration backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2022-23/projects/30);
-* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), v1, v2, v3, v4;
+* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), [v1](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v1), v2, v3, v4;
 * Iteration planning and retrospectives: 
 
   ### Iteration 0
@@ -17,9 +17,23 @@ You can find below information and references related with the project managemen
   
   #### Begin
  
-  <img width="1440" alt="Iteration1_Begin" src="https://user-images.githubusercontent.com/92641892/228287832-3d540681-7d06-479b-9a48-845256e27b33.png">
- 
+  <img width="1440" alt="Iteration1_Begin" src="https://user-images.githubusercontent.com/92641892/229573624-a17bf147-d121-4aa4-b863-d10990a9d325.png">
+  
   #### End
   
-  <img width="1440" alt="Iteration1_End" src="https://user-images.githubusercontent.com/92641892/228287319-e393f6a0-1dac-42e3-aba0-0ee879d1230a.png">
+  <img width="1440" alt="Iteration1_End" src="https://user-images.githubusercontent.com/92641892/229573629-8c62a750-9024-4af1-bec6-ab66e55703ce.png">
+  
+  #### Retrospectives
+  
+  * What went well
+    * We were able to connect our app with Firebase, which enabled us to fully implement the Login feature
+    * The Transactions are now fully functional
+    * Although it wasn't planned, we ended up implementing the Reset Data feature, which turned out to be trully useful for testing
+
+  * What went wrong
+    * It took us a while to discover how to store the same variable, but with different types, in SQLite and Flutter
+    * The Categories feature ended up not being fully implemtned, due to the issue discribed in the last topic
+
+  * What is still a problem
+    * We haven't been able to connect our Firebase database with our SQLite one, but we're working on it
  

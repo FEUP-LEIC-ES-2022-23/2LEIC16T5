@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quickalert/quickalert.dart';
 
 class RemoteDBHelper {
   FirebaseAuth userInstance;
@@ -29,7 +29,7 @@ class RemoteDBHelper {
         .doc(transaction.transactionID)
         .update({
       'transactionID': transaction.transactionID,
-      'userUID': userInstance.currentUser!.uid,
+      'userID': userInstance.currentUser!.uid,
       'expense': transaction.expense,
       'name': transaction.name,
       'total': transaction.total,
@@ -55,6 +55,24 @@ class RemoteDBHelper {
         .map((snapshot) => snapshot.docs
             .map((doc) => TransactionModel.fromMap(doc.data()))
             .toList());
+  }
+
+  Stream<SavingsModel> readSaving(String? name) {
+    User? usr = FirebaseAuth.instance.currentUser;
+    return FirebaseFirestore.instance
+        .collection('Transactions')
+        .doc(name)
+        .snapshots()
+        .map((doc) => SavingsModel.fromMap(doc.data()));
+  }
+
+  Future addSavings(SavingsModel saving) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    saving.userID = usr!.uid;
+    await FirebaseFirestore.instance
+        .collection('Savings')
+        .doc(saving.name)
+        .set(saving.toMap());
   }
 
   Future userResetData() async {

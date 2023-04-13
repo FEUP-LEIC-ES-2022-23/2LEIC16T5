@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Viewer/MapMenu.dart';
 import 'package:es/database/LocalDBHelper.dart';
 
 class TransactionsMenu extends StatefulWidget {
@@ -24,6 +25,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
     return Scaffold(
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
+          backgroundColor: Colors.lightBlue,
           title: Text(widget.title,
               style: const TextStyle(
                   fontSize: 35,
@@ -41,6 +43,18 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
               }
             },
           ),
+          actions: [
+            IconButton(
+                onPressed: () {Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const MapMenu(title: 'Transactions Map',)));},
+                icon: const Icon(
+                  Icons.map_sharp,
+                  color: Colors.white,
+                ))
+          ],
         ),
         body: Stack(
           children: [
@@ -108,11 +122,10 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: FloatingActionButton(
-                      heroTag: "Reload",
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: const Icon(Icons.refresh)),
+                      heroTag: "Filter",
+                      onPressed: () {},
+                      backgroundColor: Colors.lightBlue,
+                      child: const Icon(Icons.filter_alt_rounded)),
                 )),
             Align(
                 alignment: Alignment.bottomRight,
@@ -123,6 +136,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                       onPressed: () {
                         NewTransactionController().newTransaction(context);
                       },
+                      backgroundColor: Colors.lightBlue,
                       child: const Icon(Icons.add)),
                 ))
           ],

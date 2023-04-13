@@ -1,15 +1,21 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:es/Controller/MapMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:es/Viewer/MapMenu.dart';
+import 'package:quickalert/quickalert.dart';
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
+  GeoPoint? position = null;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   
@@ -27,6 +33,7 @@ class NewTransactionController {
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+        location: position,
         notes: textcontrollerNOTES.text);
 
 
@@ -36,6 +43,7 @@ class NewTransactionController {
     textcontrollerTOTAL.clear();
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
+    position = null;
   }
 
   void newTransaction(BuildContext context) {
@@ -46,9 +54,14 @@ class NewTransactionController {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Colors.lightBlue,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      color: Colors.lightBlue,
+                    ),
+                    height: 75,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -205,16 +218,48 @@ class NewTransactionController {
                   ),
                 ),
                 actions: <Widget>[
-                  MaterialButton(
-                    color: Colors.lightBlue,
-                    child: const Text('Add',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _enterTransaction();
-                        Navigator.of(context).pop();
-                      }
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      !_isIncome?
+                      FloatingActionButton(
+                          mini: true,
+                          backgroundColor: Colors.lightBlue,
+                          heroTag: "Map",
+                          onPressed: () {
+                            MapMenuController().getCurrentLocation(context).then((value) {
+                              QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.confirm,
+                                  confirmBtnColor: Colors.lightBlue,
+                                  text: "Do you wish to set your current location as the transaction location?",
+                                  confirmBtnText: "Yes",
+                                  cancelBtnText: "No",
+                                  onConfirmBtnTap: () {
+                                    position = GeoPoint(double.parse('${value.latitude}'),double.parse('${value.longitude}'));
+                                    Navigator.of(context).pop();
+                                  },
+                                  onCancelBtnTap: () {
+                                    position = null;
+                                    Navigator.of(context).pop();
+                                  });
+                            });
+                          },
+                          child: const Icon(Icons.map_rounded) )
+                          : const SizedBox(width: 48.0,),
+                      MaterialButton(
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        color: Colors.lightBlue,
+                        child: const Text('Add',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _enterTransaction();
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      )
+                    ],
                   )
                 ],
               );

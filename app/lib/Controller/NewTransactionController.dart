@@ -4,10 +4,7 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:es/Viewer/MapMenu.dart';
 import 'package:quickalert/quickalert.dart';
 
 class NewTransactionController {
@@ -15,7 +12,7 @@ class NewTransactionController {
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
-  GeoPoint? position = null;
+  GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   
@@ -33,9 +30,8 @@ class NewTransactionController {
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: position,
+        location: _isIncome? null : position,
         notes: textcontrollerNOTES.text);
-
 
     remoteDBHelper.addTransaction(transaction);
 
@@ -232,20 +228,24 @@ class NewTransactionController {
                                   context: context,
                                   type: QuickAlertType.confirm,
                                   confirmBtnColor: Colors.lightBlue,
-                                  text: "Do you wish to set your current location as the transaction location?",
+                                  text: "Do you wish to set your current location as this transaction's location?",
                                   confirmBtnText: "Yes",
                                   cancelBtnText: "No",
                                   onConfirmBtnTap: () {
-                                    position = GeoPoint(double.parse('${value.latitude}'),double.parse('${value.longitude}'));
+                                    setState(() {
+                                      position = GeoPoint(double.parse('${value.latitude}'), double.parse('${value.longitude}'));
+                                    });
                                     Navigator.of(context).pop();
                                   },
                                   onCancelBtnTap: () {
-                                    position = null;
+                                    setState(() {
+                                      position = null;
+                                    });
                                     Navigator.of(context).pop();
                                   });
                             });
                           },
-                          child: const Icon(Icons.map_rounded) )
+                          child: (position == null)? const Icon(Icons.pin_drop_rounded) :  const Icon(Icons.done_all_rounded))
                           : const SizedBox(width: 48.0,),
                       MaterialButton(
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),

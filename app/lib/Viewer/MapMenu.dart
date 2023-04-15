@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:es/Controller/MapMenuController.dart';
 
 class MapMenu extends StatefulWidget {
@@ -14,7 +12,8 @@ class MapMenu extends StatefulWidget {
 
 class _MapMenuState extends State<MapMenu> {
   late GoogleMapController mapController = MapMenuController().mapController;
-  static final List<Marker> _marker = [];
+  List<Marker> markers = MapMenuController().getMarkers();
+  LatLng? currentPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +39,14 @@ class _MapMenuState extends State<MapMenu> {
     ),),
       body: GoogleMap(
         mapType: MapType.normal,
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(21.1458,79.2882),
+        initialCameraPosition: CameraPosition(
+          target: LatLng(40.36206255131749, -7.861238880957604),
           zoom: 14.0),
-        markers: Set<Marker>.of(_marker),
+        markers: Set<Marker>.of(markers),
         onMapCreated: (GoogleMapController controller){
           MapMenuController().setMapController(controller);
         },
+        myLocationEnabled: true,
       )
     );
   }

@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
-import 'package:es/database/LocalDBHelper.dart';
 
 class TransactionsMenu extends StatefulWidget {
   const TransactionsMenu({Key? key, required this.title}) : super(key: key);

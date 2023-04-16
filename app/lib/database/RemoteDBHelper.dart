@@ -39,7 +39,6 @@ class RemoteDBHelper {
   }
 
   Future removeTransaction(TransactionModel transaction) async {
-    UserModel user = UserModel(uid: userInstance.currentUser!.uid);
     await FirebaseFirestore.instance
         .collection('Transactions')
         .doc(transaction.transactionID)
@@ -58,12 +57,23 @@ class RemoteDBHelper {
   }
 
   Stream<SavingsModel> readSaving(String? name) {
+    return FirebaseFirestore.instance
+        .collection('Savings')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: name)
+        .snapshots()
+        .map((snapshot) => SavingsModel.fromMap(snapshot.docs.first.data()));
+  }
+
+  Stream<List<SavingsModel>> readSavings() {
     User? usr = FirebaseAuth.instance.currentUser;
     return FirebaseFirestore.instance
-        .collection('Transactions')
-        .doc(name)
+        .collection('Savings')
+        .where('userID', isEqualTo: usr!.uid)
         .snapshots()
-        .map((doc) => SavingsModel.fromMap(doc.data()));
+        .map((snapshot) => snapshot.docs
+            .map((doc) => SavingsModel.fromMap(doc.data()))
+            .toList());
   }
 
   Future addSavings(SavingsModel saving) async {
@@ -73,6 +83,19 @@ class RemoteDBHelper {
         .collection('Savings')
         .doc(saving.name)
         .set(saving.toMap());
+  }
+
+  Future deleteSaving(String? name) async {
+    FirebaseFirestore.instance
+        .collection('Savings')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: name)
+        .get()
+        .then((doc) {
+      for (DocumentSnapshot ds in doc.docs) {
+        ds.reference.delete();
+      }
+    });
   }
 
   Future userResetData() async {

@@ -2,7 +2,7 @@
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Model/TransactionModel.dart' as t_model;
 import 'package:intl/intl.dart';
 
 class NewTransactionController {

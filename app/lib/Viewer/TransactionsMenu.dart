@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
-import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Model/TransactionModel.dart' as t_model;
 import 'package:es/database/LocalDBHelper.dart';
 
 class TransactionsMenu extends StatefulWidget {

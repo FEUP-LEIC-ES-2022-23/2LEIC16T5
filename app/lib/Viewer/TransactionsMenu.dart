@@ -88,7 +88,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                   ),
                                   onTap: () {
                                     setState(() {
-                                      NewTransactionController()
+                                      NewTransactionController(remoteDBHelper)
                                           .showTransaction(context);
                                     });
                                   },
@@ -121,7 +121,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                   child: FloatingActionButton(
                       heroTag: "Add",
                       onPressed: () {
-                        NewTransactionController().newTransaction(context);
+                        NewTransactionController(remoteDBHelper).newTransaction(context);
                       },
                       child: const Icon(Icons.add)),
                 ))

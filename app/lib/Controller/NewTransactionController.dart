@@ -6,23 +6,25 @@ import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:intl/intl.dart';
 
 class NewTransactionController {
-  static final textcontrollerNAME = TextEditingController();
-  static final textcontrollerTOTAL = TextEditingController();
-  static final textcontrollerDATE = TextEditingController();
-  static final textcontrollerNOTES = TextEditingController();
+  static var textcontrollerNAME = TextEditingController();
+  static var textcontrollerTOTAL = TextEditingController();
+  static var textcontrollerDATE = TextEditingController();
+  static var textcontrollerNOTES = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isIncome = false;
-  
+  bool isIncome = false;
+
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
+
+  NewTransactionController(this.remoteDBHelper);
   //Transactions
-  void _enterTransaction() {
+  void enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
-        expense: _isIncome ? 0 : 1,
+        expense: isIncome ? 0 : 1,
         total: num.parse(textcontrollerTOTAL.text),
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
@@ -78,10 +80,10 @@ class NewTransactionController {
                         children: [
                           const Text('Expense'),
                           Switch(
-                            value: _isIncome,
+                            value: isIncome,
                             onChanged: (newValue) {
                               setState(() {
-                                _isIncome = newValue;
+                                isIncome = newValue;
                               });
                             },
                           ),
@@ -211,7 +213,7 @@ class NewTransactionController {
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        _enterTransaction();
+                        enterTransaction();
                         Navigator.of(context).pop();
                       }
                     },

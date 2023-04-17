@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -150,13 +151,83 @@ class SavingsMenuController {
         });
   }
 
-  Future updateSavingValue(String? name, double value) async {
-    remoteDBHelper.updateSavingValue(name, value);
-    remoteDBHelper.addTransaction(TransactionModel(
-        userID: userInstance.currentUser!.uid,
-        expense: 1,
-        name: name!,
-        total: value,
-        date: DateTime.now()));
+  void addSavingValue(
+      BuildContext context, double currVal, double valToAdd, String name) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      barrierColor: Colors.black,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return AlertDialog(
+              insetPadding: EdgeInsets.symmetric(vertical: 200, horizontal: 10),
+              titlePadding: const EdgeInsets.all(0),
+              title: Container(
+                  color: Color.fromRGBO(226, 177, 60, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const Text(
+                        'Value',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )),
+              content: Slider(
+                value: valToAdd,
+                onChanged: (_value) {
+                  setState(
+                    () {
+                      valToAdd = _value;
+                    },
+                  );
+                },
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  color: Color.fromRGBO(226, 177, 60, 10),
+                  child: const Text('Update',
+                      style: TextStyle(color: Colors.black)),
+                  onPressed: () {
+                    print(valToAdd);
+                    //updateSavingValue(name, currVal, valToAdd);
+                  },
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future updateSavingValue(
+      String? name, double currVal, double valueToAdd) async {
+    bool fail = false;
+    try {
+      remoteDBHelper.updateSavingValue(name, currVal, valueToAdd);
+      remoteDBHelper.addTransaction(TransactionModel(
+          userID: userInstance.currentUser!.uid,
+          expense: 1,
+          name: name!,
+          total: valueToAdd,
+          date: DateTime.now()));
+    } catch (e) {
+      fail = true;
+      throw fail;
+    }
   }
 }

@@ -18,7 +18,7 @@ class _SavingsMenu extends State<SavingsMenu> {
   List<String?> listitems = ['1'];
 
   String? selectedVal = 'Ola';
-
+  double valToAdd = 0;
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
 
@@ -27,6 +27,7 @@ class _SavingsMenu extends State<SavingsMenu> {
   Stream<SavingsModel> savings =
       RemoteDBHelper(userInstance: FirebaseAuth.instance).readSaving('1');
   bool initState_ = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,30 +47,40 @@ class _SavingsMenu extends State<SavingsMenu> {
                   onPressed: () => {
                     savingsMenuController.newSavings(context),
                   },
+                  iconSize: 40,
                   icon: const Icon(Icons.add),
                   color: Colors.white,
                 )
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Stack(
               children: [
-                IconButton(
-                  onPressed: () => {
-                    remoteDBHelper.deleteSaving(selectedVal),
-                    setInitState(remoteDBHelper.readSavings(), setState),
-                  },
-                  icon: const Icon(Icons.delete),
-                  color: Colors.red,
+                Padding(
+                  padding: EdgeInsets.only(left: 90),
+                  child: IconButton(
+                    onPressed: () => {
+                      remoteDBHelper.deleteSaving(selectedVal),
+                      setInitState(remoteDBHelper.readSavings(), setState),
+                    },
+                    iconSize: 40,
+                    icon: const Icon(Icons.delete_rounded),
+                    color: Colors.red,
+                  ),
                 ),
-                const SizedBox(
-                  width: 30,
-                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 30,
+                    ),
 
-                //Builds DropdownMenu
-                buildDropdownList(remoteDBHelper),
+                    //Builds DropdownMenu
+                    buildDropdownList(remoteDBHelper),
+                  ],
+                ),
               ],
             ),
+
             const SizedBox(
               height: 60,
             ),
@@ -180,10 +191,22 @@ class _SavingsMenu extends State<SavingsMenu> {
                                 child: Padding(
                                   padding: EdgeInsets.all(75),
                                   child: IconButton(
-                                      onPressed: () {},
-                                      iconSize: 35,
+                                      onPressed: () {
+                                        savingsMenuController.addSavingValue(
+                                            context,
+                                            snapshot.data!.value!.toDouble(),
+                                            valToAdd,
+                                            selectedVal!);
+                                        /*savingsMenuController.updateSavingValue(
+                                            selectedVal,
+                                            snapshot.data!.value!.toDouble(),
+                                            20);*/
+                                        
+                                      },
+                                      iconSize: 50,
                                       color: Colors.white,
-                                      icon: const Icon(Icons.add)),
+                                      icon:
+                                          const Icon(Icons.add_circle_outline)),
                                 ),
                               ),
                               Flexible(
@@ -191,9 +214,10 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   padding: EdgeInsets.all(75),
                                   child: IconButton(
                                       onPressed: () {},
-                                      iconSize: 35,
+                                      iconSize: 50,
                                       color: Colors.white,
-                                      icon: const Icon(Icons.remove)),
+                                      icon: const Icon(
+                                          Icons.remove_circle_outline)),
                                 ),
                               )
                             ],
@@ -217,7 +241,7 @@ class _SavingsMenu extends State<SavingsMenu> {
         temp.add(element.name);
       });
       callback!(() {
-        if (temp.isNotEmpty) {
+        if (event.isNotEmpty) {
           selectedVal = temp.first;
           listitems = temp;
           savings = remoteDBHelper.readSaving(selectedVal);

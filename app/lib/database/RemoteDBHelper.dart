@@ -76,16 +76,16 @@ class RemoteDBHelper {
             .toList());
   }
 
-  Future updateSavingValue(String? name,double value) async {
-    FirebaseFirestore.instance
+  Future updateSavingValue(
+      String? name, double currVal, double valToAdd) async {
+    await FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
-        .snapshots()
-        .forEach((snapshot) {
-      snapshot.docs.forEach((doc) {
-        doc.reference.update(<String,dynamic>{'value':value});
-      });
+        .limit(1)
+        .get()
+        .then((value) {
+      value.docs.first.reference.update({"value": currVal + valToAdd});
     });
   }
 
@@ -94,8 +94,19 @@ class RemoteDBHelper {
     saving.userID = usr!.uid;
     await FirebaseFirestore.instance
         .collection('Savings')
-        .doc(saving.name)
-        .set(saving.toMap());
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: saving.name)
+        .get()
+        .then((value) {
+      if (value.docs.length < 1) {
+        FirebaseFirestore.instance.collection('Savings').add(saving.toMap());
+      } else {
+        FirebaseFirestore.instance
+            .collection('Savings')
+            .doc(value.docs.first.reference.id)
+            .update(saving.toMap());
+      }
+    });
   }
 
   Future deleteSaving(String? name) async {

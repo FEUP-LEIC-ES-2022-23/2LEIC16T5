@@ -76,7 +76,20 @@ class RemoteDBHelper {
             .toList());
   }
 
-  Future addSavings(SavingsModel saving) async {
+  Future updateSavingValue(String? name,double value) async {
+    FirebaseFirestore.instance
+        .collection('Savings')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: name)
+        .snapshots()
+        .forEach((snapshot) {
+      snapshot.docs.forEach((doc) {
+        doc.reference.update(<String,dynamic>{'value':value});
+      });
+    });
+  }
+
+  Future addSaving(SavingsModel saving) async {
     User? usr = FirebaseAuth.instance.currentUser;
     saving.userID = usr!.uid;
     await FirebaseFirestore.instance

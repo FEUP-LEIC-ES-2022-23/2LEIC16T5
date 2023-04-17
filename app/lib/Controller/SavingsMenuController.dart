@@ -1,4 +1,5 @@
 import 'package:es/Model/SavingsModel.dart';
+import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,23 +10,25 @@ import 'package:quickalert/quickalert.dart';
 class SavingsMenuController {
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  FirebaseAuth userInstance = FirebaseAuth.instance;
 
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
- void newSavings(BuildContext context) {
+  void newSavings(BuildContext context) {
     showDialog(
         barrierDismissible: true,
         context: context,
+        barrierColor: Colors.black,
         builder: (BuildContext context) {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Colors.lightBlue,
+                    color: Color.fromRGBO(226, 177, 60, 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -37,13 +40,13 @@ class SavingsMenuController {
                           },
                           icon: const Icon(
                             Icons.close,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                         const Text(
                           'NEW  SAVINGS',
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: Colors.black, fontWeight: FontWeight.bold),
                         ),
                       ],
                     )),
@@ -119,12 +122,12 @@ class SavingsMenuController {
                 ),
                 actions: <Widget>[
                   MaterialButton(
-                    color: Colors.lightBlue,
+                    color: Color.fromRGBO(226, 177, 60, 10),
                     child: const Text('Add',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.black)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        remoteDBHelper.addSavings(SavingsModel(
+                        remoteDBHelper.addSaving(SavingsModel(
                             userID: FirebaseAuth.instance.currentUser!.uid,
                             name: textcontrollerNAME.text,
                             notes: textcontrollerNOTES.text,
@@ -136,7 +139,7 @@ class SavingsMenuController {
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.success,
-                            text: "Item added/updated successfully!");
+                            text: "Item added/reset successfully!");
                       }
                     },
                   )
@@ -147,5 +150,13 @@ class SavingsMenuController {
         });
   }
 
-   
+  Future updateSavingValue(String? name, double value) async {
+    remoteDBHelper.updateSavingValue(name, value);
+    remoteDBHelper.addTransaction(TransactionModel(
+        userID: userInstance.currentUser!.uid,
+        expense: 1,
+        name: name!,
+        total: value,
+        date: DateTime.now()));
+  }
 }

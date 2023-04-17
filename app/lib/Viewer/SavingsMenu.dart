@@ -1,4 +1,5 @@
 import 'package:es/Controller/SavingsMenuController.dart';
+import 'package:flutter/foundation.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                     setInitState(remoteDBHelper.readSavings(), setState),
                   },
                   icon: const Icon(Icons.delete),
-                  color: Colors.white,
+                  color: Colors.red,
                 ),
                 const SizedBox(
                   width: 30,
@@ -72,6 +73,7 @@ class _SavingsMenu extends State<SavingsMenu> {
             const SizedBox(
               height: 60,
             ),
+            //Builds body according to the database
             buildBody(context, savings),
           ],
         ),
@@ -143,26 +145,62 @@ class _SavingsMenu extends State<SavingsMenu> {
                     height: 90,
                   ),
                   CircularProgressIndicator(
-                    color: Colors.yellow,
+                    color: Color.fromRGBO(226, 177, 60, 10),
                   )
                 ]);
           }
           double percent = snapshot.data!.value!.toDouble() /
               snapshot.data!.total!.toDouble();
           return snapshot.hasData
-              ? Stack(alignment: AlignmentDirectional.center, children: [
-                  CircularPercentIndicator(
-                    animation: true,
-                    animationDuration: 600,
-                    radius: 140.0,
-                    lineWidth: 13.0,
-                    percent: percent,
-                    progressColor: Colors.yellow,
-                    circularStrokeCap: CircularStrokeCap.round,
-                  ),
-                  Image.asset(
-                    'assets/img/Luckycat1.png',
-                    width: 250,
+              ? Column(children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      CircularPercentIndicator(
+                        animation: true,
+                        animationDuration: 600,
+                        radius: 180.0,
+                        lineWidth: 13.0,
+                        percent: percent,
+                        progressColor: const Color.fromRGBO(226, 177, 60, 10),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        backgroundColor: Colors.white,
+                      ),
+                      Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Image.asset(
+                            'assets/img/Luckycat1.png',
+                            width: 250,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.all(75),
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      iconSize: 35,
+                                      color: Colors.white,
+                                      icon: const Icon(Icons.add)),
+                                ),
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.all(75),
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      iconSize: 35,
+                                      color: Colors.white,
+                                      icon: const Icon(Icons.remove)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ])
               : const Center(

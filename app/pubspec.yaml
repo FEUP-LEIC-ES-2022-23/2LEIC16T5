@@ -44,10 +44,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   sqflite: ^2.2.6
+  google_maps_flutter: ^2.2.5
+  geoflutterfire: ^3.0.2
+  location: ^4.4.0
+
+  mockito: ^5.0.0
+  glob: ^2.1.1
+
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
+  flutter_gherkin: ^2.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -92,6 +92,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               ),
               Center(
                 child: OutlinedButton(
+                  key: const Key("Reset Data"),
                   style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(

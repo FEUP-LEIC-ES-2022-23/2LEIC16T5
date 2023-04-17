@@ -3,6 +3,7 @@ import 'package:es/Model/TransactionModel.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:es/Controller/MapMenuController.dart';
 
 class RemoteDBHelper {
   FirebaseAuth userInstance;
@@ -35,6 +36,7 @@ class RemoteDBHelper {
       'total': transaction.total,
       'date': transaction.date.millisecondsSinceEpoch,
       'notes': transaction.notes,
+      'location' : transaction.location
     });
   }
 
@@ -47,13 +49,40 @@ class RemoteDBHelper {
 
   Stream<List<TransactionModel>> readTransactions() {
     User? usr = FirebaseAuth.instance.currentUser;
-    return FirebaseFirestore.instance
+    User? usr = FirebaseAuth.instance.currentUser;
+    var transactions = FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => TransactionModel.fromMap(doc.data()))
-            .toList());
+        .map((doc) => TransactionModel.fromMap(doc.data()))
+        .toList());
+
+    transactions.listen((list) {
+      list.forEach((transaction) {
+        if (transaction.transactionID != null && transaction.location != null){
+          MapMenuController().addMarker(transaction);
+        }
+      });
+    });
+    return transactions;
+  }
+
+  Future<bool> hasTransactions() async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    var transactions = FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => TransactionModel.fromMap(doc.data()))
+        .toList());
+    try {
+      var firstTransaction = await transactions.first;
+      return firstTransaction.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
   }
 
   Stream<SavingsModel> readSaving(String? name) {

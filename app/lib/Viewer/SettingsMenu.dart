@@ -2,7 +2,6 @@ import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quickalert/quickalert.dart';
 
 class SettingsMenu extends StatefulWidget {
   const SettingsMenu({super.key, required this.title});

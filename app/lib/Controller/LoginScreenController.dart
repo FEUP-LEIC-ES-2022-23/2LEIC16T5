@@ -6,7 +6,6 @@ import 'package:es/Viewer/MainMenu.dart';
 import 'package:quickalert/quickalert.dart';
 
 class loginScreenController extends StatelessWidget {
-  bool rememberMeChecked = false;
   loginScreenController({Key? key}) : super(key: key);
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);

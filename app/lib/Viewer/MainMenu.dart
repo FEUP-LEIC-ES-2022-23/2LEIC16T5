@@ -19,6 +19,7 @@ class MainMenu extends StatelessWidget {
               Align(
                   alignment: Alignment.topRight,
                   child: FloatingActionButton(
+                    key: Key("Settings"),
                     onPressed: () {
                       Navigator.push(
                           context,

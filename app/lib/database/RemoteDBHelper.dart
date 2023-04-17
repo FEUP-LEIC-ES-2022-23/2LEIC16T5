@@ -67,6 +67,23 @@ class RemoteDBHelper {
     return transactions;
   }
 
+  Future<bool> hasTransactions() async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    var transactions = FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => TransactionModel.fromMap(doc.data()))
+        .toList());
+    try {
+      var firstTransaction = await transactions.first;
+      return firstTransaction.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future userResetData() async {
     FirebaseFirestore.instance
         .collection('Transactions')
@@ -77,6 +94,5 @@ class RemoteDBHelper {
         ds.reference.delete();
       }
     });
-    
   }
 }

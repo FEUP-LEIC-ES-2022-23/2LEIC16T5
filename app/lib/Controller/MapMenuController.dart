@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class MapMenuController {
-  RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  //RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
   late GoogleMapController mapController;
   Location location = Location();
   static final List<Marker> _markers = [];
@@ -45,8 +45,7 @@ class MapMenuController {
       }
     }
 
-    var pos = await location.getLocation();
-    return await pos;
+    return await location.getLocation();
   }
 
   List<Marker> getMarkers() {

@@ -2,10 +2,34 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "_fe_analyzer_shared",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-58.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "_flutterfire_internals",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "analyzer",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/analyzer-5.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "archive",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/archive-3.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/args-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "async",
@@ -18,6 +42,24 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "build",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "built_collection",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/built_collection-5.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "built_value",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/built_value-8.4.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "characters",
@@ -50,10 +92,22 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "code_builder",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/code_builder-4.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "collection",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/collection-1.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "convert",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/convert-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "crypto",
@@ -66,6 +120,12 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "dart_style",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/dart_style-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "fake_async",
@@ -122,10 +182,28 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "fixnum",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/fixnum-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_driver",
+      "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/flutter_driver",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_gherkin",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/flutter_gherkin-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_lints",
@@ -152,10 +230,28 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "fuchsia_remote_debug_protocol",
+      "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/fuchsia_remote_debug_protocol",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "geoflutterfire",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/geoflutterfire-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "gherkin",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/gherkin-2.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "glob",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/glob-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "google_fonts",
@@ -200,6 +296,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "integration_test",
+      "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/integration_test",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
@@ -236,6 +338,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "logging",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/logging-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/matcher-0.12.13",
       "packageUri": "lib/",
@@ -250,6 +358,18 @@
     {
       "name": "meta",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/meta-1.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "mockito",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/mockito-5.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "package_config",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/package_config-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -314,6 +434,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "pub_semver",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/pub_semver-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "quickalert",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/quickalert-1.0.1",
       "packageUri": "lib/",
@@ -336,6 +462,12 @@
       "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "source_gen",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/source_gen-1.2.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "source_span",
@@ -380,6 +512,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "sync_http",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/sync_http-0.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "synchronized",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/synchronized-3.0.1",
       "packageUri": "lib/",
@@ -410,6 +548,24 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "vm_service",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/vm_service-9.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "watcher",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/watcher-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "webdriver",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/webdriver-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "win32",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/win32-3.1.4",
       "packageUri": "lib/",
@@ -422,13 +578,19 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "yaml",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/yaml-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "es",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-15T15:47:22.499447Z",
+  "generated": "2023-04-16T19:27:01.139838Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

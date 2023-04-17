@@ -24,30 +24,29 @@ class SettingsPopUpViewer {
             ),
             actions: [
               TextButton(
+                key: Key("No"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: const Text("NO",
                       style: TextStyle(color: Colors.lightBlue))),
               TextButton(
+                  key: const Key("Yes"),
                   onPressed: () async {
-                    /*if(await LocalDBHelper.instance.isLocalDBEmpty()){
+                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())){
                       Navigator.of(context).pop();
-                      noData(context);
-                    }*/
-                    try {
-                      RemoteDBHelper(userInstance: FirebaseAuth.instance)
-                          .userResetData();
-                      Navigator.of(context).pop();
-                      QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.success,
-                          text: "Data deleted sucessfully");
-                    } catch (e) {
-                      QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.error,
-                          text: "Error deleting data");
+                      errorDeleteData(context, 'No data has been inserted into the app');
+                    }
+                    else{
+                      try {
+                        RemoteDBHelper(userInstance: FirebaseAuth.instance)
+                            .userResetData();
+                        Navigator.of(context).pop();
+                        deletdData(context);
+                      } catch (e) {
+                        Navigator.of(context).pop();
+                        errorDeleteData(context, 'Error deleting data');
+                      }
                     }
                   },
                   child: const Text(
@@ -67,12 +66,12 @@ class SettingsPopUpViewer {
         text: 'Your data has been successfully deleted');
   }
 
-  void noData(BuildContext context) {
+  void errorDeleteData(BuildContext context, String text) {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
         title: 'Miau...',
-        text: 'No data has been inserted into the app');
+        text: text);
   }
 
   void sureLogout(BuildContext context, loginScreenController loginController) {

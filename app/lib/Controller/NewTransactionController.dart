@@ -15,9 +15,9 @@ class NewTransactionController {
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
-  
+
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
@@ -48,6 +48,7 @@ class NewTransactionController {
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
+            key: const Key("New Transaction"),
             builder: (BuildContext context, setState) {
               return AlertDialog(
                 shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
@@ -83,10 +84,12 @@ class NewTransactionController {
                   child: Column(
                     children: [
                       Row(
+                        key: const Key("Switch"),
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text('Expense'),
                           Switch(
+                            key: _isIncome? Key("Income") :  Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -122,13 +125,14 @@ class NewTransactionController {
                             child: Form(
                               key: _formKey,
                               child: TextFormField(
+                                key: const Key("Total"),
                                 decoration: const InputDecoration(
                                   icon: Icon(Icons.attach_money_rounded),
                                   labelText: 'Total',
                                 ),
                                 keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                const TextInputType.numberWithOptions(
+                                    decimal: true),
                                 validator: (text) {
                                   if (text == null ||
                                       text.isEmpty ||
@@ -169,7 +173,7 @@ class NewTransactionController {
                                             onPrimary: Colors
                                                 .white, // header text color
                                             onSurface:
-                                                Colors.black, // body text color
+                                            Colors.black, // body text color
                                           ),
                                         ),
                                         child: child!,
@@ -248,6 +252,7 @@ class NewTransactionController {
                           child: (position == null)? const Icon(Icons.pin_drop_rounded) :  const Icon(Icons.done_all_rounded))
                           : const SizedBox(width: 48.0,),
                       MaterialButton(
+                        key: const Key("Add"),
                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                         color: Colors.lightBlue,
                         child: const Text('Add',

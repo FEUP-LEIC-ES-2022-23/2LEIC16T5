@@ -1,4 +1,4 @@
-import 'package:es/Model/TransactionModel.dart';
+import 'package:es/Model/TransactionsModel.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 TransactionModel object = TransactionModel(userID: '1', expense: 100, name: 'Joe', total: 200, date: DateTime(2020,10, 1));

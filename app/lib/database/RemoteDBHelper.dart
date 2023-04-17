@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/Model/TransactionModel.dart';
+import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,7 +48,6 @@ class RemoteDBHelper {
   }
 
   Stream<List<TransactionModel>> readTransactions() {
-    User? usr = FirebaseAuth.instance.currentUser;
     User? usr = FirebaseAuth.instance.currentUser;
     var transactions = FirebaseFirestore.instance
         .collection('Transactions')

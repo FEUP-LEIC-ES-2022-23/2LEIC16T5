@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:es/Model/TransactionModel.dart' as model;
+import 'package:es/Model/TransactionsModel.dart' as model;
 
 class LocalDBHelper {
   LocalDBHelper._privateConstructor();

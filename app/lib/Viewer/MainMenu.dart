@@ -20,12 +20,13 @@ class MainMenu extends StatelessWidget {
               Align(
                   alignment: Alignment.topRight,
                   child: FloatingActionButton(
+                    key: const Key("Settings"),
                     onPressed: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const SettingsMenu(title: 'Settings')));
+                              const SettingsMenu(title: 'Settings')));
                     },
                     child: const Icon(Icons.settings),
                   )),
@@ -40,6 +41,7 @@ class MainMenu extends StatelessWidget {
                 width: 250,
               ),
               ElevatedButton(
+                  key: const Key("Transactions"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {

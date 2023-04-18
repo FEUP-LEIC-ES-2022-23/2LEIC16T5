@@ -2,7 +2,6 @@ import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quickalert/quickalert.dart';
 
 class SettingsMenu extends StatefulWidget {
   const SettingsMenu({super.key, required this.title});
@@ -13,7 +12,7 @@ class SettingsMenu extends StatefulWidget {
 }
 
 
-  
+
 class _SettingsMenuState extends State<SettingsMenu> {
   loginScreenController loginController = loginScreenController();
   List listItems = ["€", "\$", "£"];
@@ -51,10 +50,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
+            key: Key("Home"),
             onPressed: () {
               if (Navigator.canPop(context)) {
                 Navigator.pop(context);}
-              },
+            },
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -93,6 +93,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
               ),
               Center(
                 child: OutlinedButton(
+                  key: const Key("Reset Data"),
                   style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.lightBlue,
                       padding: const EdgeInsets.symmetric(
@@ -122,7 +123,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
             Text(title,
 
                 style:
-                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1.3,
               child: DropdownButton(
@@ -158,7 +159,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
             Text(title,
 
                 style:
-                    const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(

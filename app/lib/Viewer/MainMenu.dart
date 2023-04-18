@@ -1,5 +1,6 @@
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
+import 'CategoriesMenu.dart';
 import 'TransactionsMenu.dart';
 
 class MainMenu extends StatelessWidget {
@@ -50,7 +51,20 @@ class MainMenu extends StatelessWidget {
                           builder: (context) => const TransactionsMenu(title: 'Transactions')),
                     );
                   },
-                  child: const Text('Transactions', style: TextStyle(fontSize: 20))),
+                  child: const Text('Transactions', style: TextStyle(fontSize: 20))
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CategoriesMenu(title: 'Categories')),
+                    );
+                  },
+                  child: const Text('Categories', style: TextStyle(fontSize: 20))
+              ),
               /*ElevatedButton(
                 onPressed: () {},
                 child: Text('Budget', style: TextStyle(fontSize: 20)),

@@ -38,7 +38,7 @@ class RemoteDBHelper {
       'total': transaction.total,
       'date': transaction.date.millisecondsSinceEpoch,
       'notes': transaction.notes,
-      'location' : transaction.location
+      'location': transaction.location
     });
   }
 
@@ -83,10 +83,9 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => TransactionModel.fromMap(doc.data()))
-        .toList());
-
-    transactions.listen((list) {
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
+        transactions.listen((list) {
       list.forEach((transaction) {
         if (transaction.transactionID != null && transaction.location != null){
           MapMenuController().addMarker(transaction);
@@ -96,6 +95,7 @@ class RemoteDBHelper {
     return transactions;
   }
 
+
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
     var transactions = FirebaseFirestore.instance
@@ -103,8 +103,8 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => TransactionModel.fromMap(doc.data()))
-        .toList());
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
     try {
       var firstTransaction = await transactions.first;
       return firstTransaction.isNotEmpty;
@@ -120,8 +120,8 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => CategoryModel.fromMap(doc.data()))
-        .toList());
+            .map((doc) => CategoryModel.fromMap(doc.data()))
+            .toList());
     try {
       var firstCategory = await categories.first;
       return firstCategory.isNotEmpty;
@@ -130,11 +130,11 @@ class RemoteDBHelper {
     }
   }
 
-    Stream<List<CategoryModel>> readCategories() {
-    User? usr= FirebaseAuth.instance.currentUser;
+  Stream<List<CategoryModel>> readCategories() {
+    User? usr = FirebaseAuth.instance.currentUser;
     return FirebaseFirestore.instance
         .collection('Categories')
-        .where('userID',isEqualTo: usr!.uid)
+        .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => CategoryModel.fromMap(doc.data()))

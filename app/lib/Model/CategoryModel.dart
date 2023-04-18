@@ -25,6 +25,7 @@ class CategoryModel {
   Map<String, dynamic> toMap() {
     print(color.toString());
     return {
+      'categoryID' : categoryID,
       'userID': userID,
       'name': name,
       'color': color,

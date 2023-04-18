@@ -1,11 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-<<<<<<< HEAD
-FLUTTER_ROOT=/home/not_real_fu/snap/flutter/common/flutter
-FLUTTER_APPLICATION_PATH=/home/not_real_fu/Desktop/Es1/app
-=======
-FLUTTER_ROOT=/Users/Sofia/UniProjects/FlutterProjects/flutter
-FLUTTER_APPLICATION_PATH=/Users/Sofia/UniProjects/EsofProj/2LEIC16T5/app
->>>>>>> 4c309c9ac356e7218d947c5f1eaa5cc0b4cedf89
+FLUTTER_ROOT=/home/pbarbeira/snap/flutter/common/flutter
+FLUTTER_APPLICATION_PATH=/home/pbarbeira/feup3a2s/esof/2LEIC16T5/app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

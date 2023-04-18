@@ -31,6 +31,9 @@ class _SavingsMenu extends State<SavingsMenu> {
 
   @override
   Widget build(BuildContext context) {
+    if (initState_) {
+      setInitState(remoteDBHelper.readSavings(), setState);
+    }
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 12, 18, 50),
       body: SingleChildScrollView(
@@ -46,7 +49,10 @@ class _SavingsMenu extends State<SavingsMenu> {
                 IconButton(
                   //TESTE
                   onPressed: () => {
-                    savingsMenuController.newSavings(context),
+                    setState(() {
+                      initState_ = false;
+                      selectedVal = savingsMenuController.newSavings(context);
+                    }),
                   },
                   iconSize: 40,
                   icon: const Icon(Icons.add),
@@ -94,10 +100,6 @@ class _SavingsMenu extends State<SavingsMenu> {
   }
 
   Widget buildDropdownList(RemoteDBHelper db) {
-    if (initState_) {
-      setInitState(remoteDBHelper.readSavings(), setState);
-    }
-
     return StreamBuilder<List<SavingsModel>>(
         stream: db.readSavings(),
         builder:
@@ -206,11 +208,12 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   child: IconButton(
                                       onPressed: () {
                                         savingsMenuController.changeSavingValue(
-                                            context,
-                                            snapshot.data!.value!.toDouble(),
-                                            multiplier,
-                                            selectedVal!,
-                                            true);
+                                          context,
+                                          snapshot.data!.value!.toDouble(),
+                                          multiplier,
+                                          selectedVal!,
+                                          true,
+                                        );
                                       },
                                       iconSize: 50,
                                       color: Colors.white,
@@ -224,11 +227,12 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   child: IconButton(
                                       onPressed: () {
                                         savingsMenuController.changeSavingValue(
-                                            context,
-                                            snapshot.data!.value!.toDouble(),
-                                            multiplier,
-                                            selectedVal!,
-                                            false);
+                                          context,
+                                          snapshot.data!.value!.toDouble(),
+                                          multiplier,
+                                          selectedVal!,
+                                          false,
+                                        );
                                       },
                                       iconSize: 50,
                                       color: Colors.white,

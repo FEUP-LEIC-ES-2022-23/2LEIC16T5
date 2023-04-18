@@ -19,7 +19,7 @@ class SavingsMenuController {
   static final textcontrollerNOTES = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void newSavings(BuildContext context) {
+  String? newSavings(BuildContext context) {
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -37,7 +37,7 @@ class SavingsMenuController {
                         IconButton(
                           onPressed: () {
                             if (Navigator.canPop(context)) {
-                              Navigator.pop(context);
+                              Navigator.of(context).pop();
                             }
                           },
                           icon: const Icon(
@@ -135,7 +135,9 @@ class SavingsMenuController {
                             notes: textcontrollerNOTES.text,
                             value: 0,
                             total: num.tryParse(textcontrollerTOTAL.text)));
-
+                        setState(
+                          () {},
+                        );
                         Navigator.of(context).pop();
                         QuickAlert.show(
                             context: context,
@@ -149,6 +151,7 @@ class SavingsMenuController {
             },
           );
         });
+    return textcontrollerNAME.text;
   }
 
   static TextEditingController textcontrollerValue = TextEditingController();
@@ -176,7 +179,7 @@ class SavingsMenuController {
                         IconButton(
                           onPressed: () {
                             if (Navigator.canPop(context)) {
-                              Navigator.pop(context);
+                              Navigator.of(context).pop();
                             }
                           },
                           icon: const Icon(
@@ -195,12 +198,12 @@ class SavingsMenuController {
                   children: [
                     Slider(
                       value: multiplier,
-                      onChanged: (_value) {
+                      onChanged: (value_) {
                         setState(
                           () {
                             textcontrollerValue.text =
-                                (_value * totalSliderVal).toStringAsFixed(2);
-                            multiplier = _value;
+                                (value_ * totalSliderVal).toStringAsFixed(2);
+                            multiplier = value_;
                           },
                         );
                       },
@@ -260,7 +263,8 @@ class SavingsMenuController {
                       double res =
                           num.tryParse(textcontrollerValue.text.trim())!
                               .toDouble();
-                      if (Navigator.canPop(context)) Navigator.pop(context);
+                      Navigator.of(context).pop();
+
                       updateSavingValue(context, name, currVal, res, ifAdd);
                     },
                   )
@@ -285,10 +289,10 @@ class SavingsMenuController {
     }
   }
 
-  Future updateSavingValue(BuildContext context, String? name, double currVal,
+  Future updateSavingValue(BuildContext context, String? name_, double currVal,
       double valueToAdd, bool ifAdd) async {
     if ((!ifAdd && currVal - valueToAdd >= 0) || (ifAdd)) {
-      remoteDBHelper.updateSavingValue(name, currVal, valueToAdd, ifAdd);
+      remoteDBHelper.updateSavingValue(name_, currVal, valueToAdd, ifAdd);
       QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -303,14 +307,14 @@ class SavingsMenuController {
       remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 1,
-          name: name!,
+          name: name_!,
           total: valueToAdd,
           date: DateTime.now()));
     } else {
       remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 0,
-          name: name!,
+          name: name_!,
           total: valueToAdd,
           date: DateTime.now()));
     }

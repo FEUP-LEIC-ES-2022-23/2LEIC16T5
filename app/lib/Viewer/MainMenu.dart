@@ -27,7 +27,7 @@ class MainMenu extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const SettingsMenu(title: 'Settings')));
+                                  const SettingsMenu(title: 'Settings')));
                     },
                     child: const Icon(Icons.settings),
                   )),
@@ -58,27 +58,31 @@ class MainMenu extends StatelessWidget {
                   },
                   child: const Text('Transactions',
                       style: TextStyle(fontSize: 20))),
-               ElevatedButton(
+              ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CategoriesMenu(title: 'Categories')),
+                          builder: (context) =>
+                              const CategoriesMenu(title: 'Categories')),
                     );
                   },
-                  child: const Text('Categories', style: TextStyle(fontSize: 20))
-              ),
+                  child:
+                      const Text('Categories', style: TextStyle(fontSize: 20))),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SavingsMenu()));
-                },
-                child: Text('Savings', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const SavingsMenu(title: 'Savings')),
+                    );
+                  },
+                  child: const Text('Savings', style: TextStyle(fontSize: 20))),
               /*ElevatedButton(
                 onPressed: () {},
                 child: Text('Goal', style: TextStyle(fontSize: 20)),

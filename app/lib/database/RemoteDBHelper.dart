@@ -38,7 +38,7 @@ class RemoteDBHelper {
       'total': transaction.total,
       'date': transaction.date.millisecondsSinceEpoch,
       'notes': transaction.notes,
-      'location' : transaction.location
+      'location': transaction.location
     });
   }
 
@@ -78,25 +78,23 @@ class RemoteDBHelper {
 
   Stream<List<TransactionModel>> readTransactions() {
     User? usr = FirebaseAuth.instance.currentUser;
-    return FirebaseFirestore.instance
+    var transactions = FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => TransactionModel.fromMap(doc.data()))
-        .toList());
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
+        transactions.listen((list) {
+      list.forEach((transaction) {
+        if (transaction.transactionID != null && transaction.location != null){
+          MapMenuController().addMarker(transaction);
+        }
+      });
+    });
+    return transactions;
   }
 
-  Stream<List<CategoryModel>> readCategories() {
-    User? usr= FirebaseAuth.instance.currentUser;
-    return FirebaseFirestore.instance
-        .collection('Categories')
-        .where('userID',isEqualTo: usr!.uid)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => CategoryModel.fromMap(doc.data()))
-            .toList());
-  }
 
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
@@ -105,8 +103,8 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => TransactionModel.fromMap(doc.data()))
-        .toList());
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
     try {
       var firstTransaction = await transactions.first;
       return firstTransaction.isNotEmpty;
@@ -122,8 +120,8 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => CategoryModel.fromMap(doc.data()))
-        .toList());
+            .map((doc) => CategoryModel.fromMap(doc.data()))
+            .toList());
     try {
       var firstCategory = await categories.first;
       return firstCategory.isNotEmpty;
@@ -132,13 +130,26 @@ class RemoteDBHelper {
     }
   }
 
-  Stream<SavingsModel> readSaving(String? name) {
+  Stream<List<CategoryModel>> readCategories() {
+    User? usr = FirebaseAuth.instance.currentUser;
+    return FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => CategoryModel.fromMap(doc.data()))
+            .toList());
+  }
+
+  Stream<List<SavingsModel>> readSaving(String? name) {
     return FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
         .snapshots()
-        .map((snapshot) => SavingsModel.fromMap(snapshot.docs.first.data()));
+        .map((snapshot) => snapshot.docs
+            .map((doc) => SavingsModel.fromMap(doc.data()))
+            .toList());
   }
 
   Stream<List<SavingsModel>> readSavings() {
@@ -152,17 +163,42 @@ class RemoteDBHelper {
             .toList());
   }
 
-  Future addSavings(SavingsModel saving) async {
+  Future updateSavingValue(
+      String? name, double currVal, double valToUpdate, bool ifAdd) async {
+    await FirebaseFirestore.instance
+        .collection('Savings')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: name)
+        .limit(1)
+        .get()
+        .then((item) {
+      item.docs.first.reference.update(
+          {"value": ifAdd ? currVal + valToUpdate : currVal - valToUpdate});
+    });
+  }
+
+  Future addSaving(SavingsModel saving) async {
     User? usr = FirebaseAuth.instance.currentUser;
     saving.userID = usr!.uid;
     await FirebaseFirestore.instance
         .collection('Savings')
-        .doc(saving.name)
-        .set(saving.toMap());
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .where('name', isEqualTo: saving.name)
+        .get()
+        .then((value) {
+      if (value.docs.length < 1) {
+        FirebaseFirestore.instance.collection('Savings').add(saving.toMap());
+      } else {
+        FirebaseFirestore.instance
+            .collection('Savings')
+            .doc(value.docs.first.reference.id)
+            .update(saving.toMap());
+      }
+    });
   }
 
   Future deleteSaving(String? name) async {
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
@@ -175,7 +211,7 @@ class RemoteDBHelper {
   }
 
   Future userResetData() async {
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get()

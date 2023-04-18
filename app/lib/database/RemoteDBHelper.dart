@@ -32,10 +32,7 @@ class RemoteDBHelper {
         .update({
       'transactionID': transaction.transactionID,
       'userID': userInstance.currentUser!.uid,
-<<<<<<< HEAD
       'categoryID': transaction.categoryID,
-=======
->>>>>>> UnitTests
       'expense': transaction.expense,
       'name': transaction.name,
       'total': transaction.total,
@@ -90,6 +87,17 @@ class RemoteDBHelper {
         .toList());
   }
 
+  Stream<List<CategoryModel>> readCategories() {
+    User? usr= FirebaseAuth.instance.currentUser;
+    return FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID',isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => CategoryModel.fromMap(doc.data()))
+            .toList());
+  }
+
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
     var transactions = FirebaseFirestore.instance
@@ -102,6 +110,23 @@ class RemoteDBHelper {
     try {
       var firstTransaction = await transactions.first;
       return firstTransaction.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> hasCategories() async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    var categories = FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => CategoryModel.fromMap(doc.data()))
+        .toList());
+    try {
+      var firstCategory = await categories.first;
+      return firstCategory.isNotEmpty;
     } catch (e) {
       return false;
     }

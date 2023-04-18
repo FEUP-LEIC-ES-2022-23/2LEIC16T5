@@ -58,6 +58,18 @@ class MainMenu extends StatelessWidget {
                   },
                   child: const Text('Transactions',
                       style: TextStyle(fontSize: 20))),
+               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CategoriesMenu(title: 'Categories')),
+                    );
+                  },
+                  child: const Text('Categories', style: TextStyle(fontSize: 20))
+              ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context,

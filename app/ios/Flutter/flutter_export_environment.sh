@@ -3,7 +3,7 @@
 export "FLUTTER_ROOT=/home/not_real_fu/snap/flutter/common/flutter"
 export "FLUTTER_APPLICATION_PATH=/home/not_real_fu/Desktop/Es1/app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=lib/main.dart"
+export "FLUTTER_TARGET=lib\main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"

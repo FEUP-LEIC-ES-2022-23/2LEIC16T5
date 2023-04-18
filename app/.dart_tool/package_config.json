@@ -2,10 +2,34 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "_fe_analyzer_shared",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-58.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "_flutterfire_internals",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "analyzer",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/analyzer-5.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "archive",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/archive-3.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "args",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/args-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "async",
@@ -18,6 +42,24 @@
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "build",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/build-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "built_collection",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/built_collection-5.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "built_value",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/built_value-8.4.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "characters",
@@ -50,10 +92,22 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "code_builder",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/code_builder-4.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "collection",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/collection-1.17.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "convert",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/convert-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "crypto",
@@ -66,6 +120,12 @@
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "dart_style",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/dart_style-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "fake_async",
@@ -122,16 +182,46 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "fixnum",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/fixnum-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_colorpicker",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_colorpicker-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_driver",
+      "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/flutter_driver",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_gherkin",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_gherkin-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_test",
@@ -146,8 +236,56 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "fuchsia_remote_debug_protocol",
+      "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/fuchsia_remote_debug_protocol",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geoflutterfire",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/geoflutterfire-3.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "gherkin",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/gherkin-2.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "glob",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/glob-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "google_fonts",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/google_fonts-4.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "google_maps_flutter",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/google_maps_flutter-2.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "google_maps_flutter_android",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.4.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "google_maps_flutter_ios",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "google_maps_flutter_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.2.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -160,6 +298,12 @@
     {
       "name": "http_parser",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "integration_test",
+      "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/integration_test",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -182,6 +326,30 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "location",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/location-4.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "location_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/location_platform_interface-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "location_web",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/location_web-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "logging",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/logging-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/matcher-0.12.13",
       "packageUri": "lib/",
@@ -200,6 +368,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "mockito",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/mockito-5.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "package_config",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/package_config-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/path-1.8.2",
       "packageUri": "lib/",
@@ -213,15 +393,15 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/path_provider_android-2.0.24",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/path_provider_android-2.0.25",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "path_provider_foundation",
-      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/path_provider_foundation-2.2.1",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/path_provider_foundation-2.2.2",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.18"
     },
     {
       "name": "path_provider_linux",
@@ -260,10 +440,22 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "pub_semver",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/pub_semver-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "quickalert",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/quickalert-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "simple_circular_progress_bar",
@@ -276,6 +468,12 @@
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "source_gen",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/source_gen-1.2.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "source_span",
@@ -308,10 +506,22 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "stream_transform",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/stream_transform-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "string_scanner",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "sync_http",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/sync_http-0.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "synchronized",
@@ -344,8 +554,26 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "vm_service",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/vm_service-9.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "watcher",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/watcher-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "webdriver",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/webdriver-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "win32",
-      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/win32-3.1.3",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/win32-3.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -356,13 +584,19 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "yaml",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/yaml-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "es",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-04-18T22:07:44.397953Z",
+  "generated": "2023-04-18T22:20:32.759079Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

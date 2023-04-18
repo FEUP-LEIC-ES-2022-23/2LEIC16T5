@@ -49,22 +49,13 @@ class RemoteDBHelper {
 
   Stream<List<TransactionModel>> readTransactions() {
     User? usr = FirebaseAuth.instance.currentUser;
-    var transactions = FirebaseFirestore.instance
+    return FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
         .map((doc) => TransactionModel.fromMap(doc.data()))
         .toList());
-
-    transactions.listen((list) {
-      list.forEach((transaction) {
-        if (transaction.transactionID != null && transaction.location != null){
-          MapMenuController().addMarker(transaction);
-        }
-      });
-    });
-    return transactions;
   }
 
   Future<bool> hasTransactions() async {

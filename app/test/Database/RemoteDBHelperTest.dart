@@ -1,18 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/database/RemoteDBHelper.dart';
 import 'package:es/Model/TransactionsModel.dart';
-import 'package:es/Model/SavingsModel.dart';
-import 'package:es/Model/UserModel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:mockito/annotations.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:es/database/RemoteDBHelper.dart';
 import 'package:es/testenv.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 
 bool USE_FIRESTORE_EMULATOR = true;

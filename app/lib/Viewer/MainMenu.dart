@@ -1,3 +1,4 @@
+import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
 import 'CategoriesMenu.dart';
@@ -26,13 +27,16 @@ class MainMenu extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const SettingsMenu(title: 'Settings')));
+                                  const SettingsMenu(title: 'Settings')));
                     },
                     child: const Icon(Icons.settings),
                   )),
               const SizedBox(height: 20),
               const Text('FORTUNEKO',
-                  style: TextStyle(fontSize: 60, color: Colors.white, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 60,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(
                 height: 20,
               ),
@@ -48,11 +52,12 @@ class MainMenu extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const TransactionsMenu(title: 'Transactions')),
+                          builder: (context) =>
+                              const TransactionsMenu(title: 'Transactions')),
                     );
                   },
-                  child: const Text('Transactions', style: TextStyle(fontSize: 20))
-              ),
+                  child: const Text('Transactions',
+                      style: TextStyle(fontSize: 20))),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
@@ -60,18 +65,25 @@ class MainMenu extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CategoriesMenu(title: 'Categories')),
+                          builder: (context) =>
+                              const CategoriesMenu(title: 'Categories')),
                     );
                   },
-                  child: const Text('Categories', style: TextStyle(fontSize: 20))
-              ),
-              /*ElevatedButton(
-                onPressed: () {},
-                child: Text('Budget', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
+                  child:
+                      const Text('Categories', style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const SavingsMenu(title: 'Savings')),
+                    );
+                  },
+                  child: const Text('Savings', style: TextStyle(fontSize: 20))),
+              /*ElevatedButton(
                 onPressed: () {},
                 child: Text('Goal', style: TextStyle(fontSize: 20)),
                 style:

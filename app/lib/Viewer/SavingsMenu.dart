@@ -139,9 +139,6 @@ class _SavingsMenu extends State<SavingsMenu> {
   }
 
   Widget buildDropdownList(RemoteDBHelper db) {
-    if (initState_) {
-      setInitState(remoteDBHelper.readSavings(), setState);
-    }
     return StreamBuilder<List<SavingsModel>>(
         stream: db.readSavings(),
         builder:

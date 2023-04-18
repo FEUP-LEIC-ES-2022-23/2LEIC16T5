@@ -21,6 +21,12 @@ class LocalDBHelper {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
+      CREATE TABLE Categor(
+      userID NUMERIC PRIMARY KEY,
+      name VARCHAR(50) NOT NULL,
+      color VARCHAR(50) NOT NULL
+      );
+      
       CREATE TABLE Transact(
       userID NUMERIC PRIMARY KEY,
       expense NUMERIC,
@@ -39,6 +45,7 @@ class LocalDBHelper {
     return List.generate(maps.length, (i) {
       return model.TransactionModel(
         userID: maps[i]['userID'],
+        categoryID: maps[i]['categoryID'],
         expense: maps[i]['expense'],
         name: maps[i]['name'],
         total: maps[i]['total'],

@@ -1,6 +1,7 @@
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
+import 'CategoriesMenu.dart';
 import 'TransactionsMenu.dart';
 
 class MainMenu extends StatelessWidget {
@@ -20,6 +21,7 @@ class MainMenu extends StatelessWidget {
               Align(
                   alignment: Alignment.topRight,
                   child: FloatingActionButton(
+                    key: const Key("Settings"),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -43,6 +45,7 @@ class MainMenu extends StatelessWidget {
                 width: 250,
               ),
               ElevatedButton(
+                  key: const Key("Transactions"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -56,18 +59,30 @@ class MainMenu extends StatelessWidget {
                   child: const Text('Transactions',
                       style: TextStyle(fontSize: 20))),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                        const SavingsMenu(title: 'Savings')),
-                  );
-                },
-                child: Text('Savings', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const CategoriesMenu(title: 'Categories')),
+                    );
+                  },
+                  child:
+                      const Text('Categories', style: TextStyle(fontSize: 20))),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const SavingsMenu(title: 'Savings')),
+                    );
+                  },
+                  child: const Text('Savings', style: TextStyle(fontSize: 20))),
               /*ElevatedButton(
                 onPressed: () {},
                 child: Text('Goal', style: TextStyle(fontSize: 20)),

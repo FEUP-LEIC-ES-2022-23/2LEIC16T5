@@ -1,6 +1,7 @@
 class TransactionModel {
   String? transactionID;
   String? userID;
+  String? categoryID;
   int expense;
   String name;
   num total;
@@ -10,6 +11,7 @@ class TransactionModel {
   TransactionModel(
       {this.transactionID,
       required this.userID,
+      required this.categoryID,
       required this.expense,
       required this.name,
       required this.total,
@@ -20,6 +22,7 @@ class TransactionModel {
       TransactionModel(
         transactionID: json['transactionID'],
         userID: json['userID'],
+        categoryID: json['categoryID'],
         expense: json['expense'],
         name: json['name'],
         total: json['total'],
@@ -30,6 +33,7 @@ class TransactionModel {
   Map<String, dynamic> toMap() {
     return {
       'userID': userID,
+      'categoryID': categoryID,
       'expense': expense,
       'name': name,
       'total': total,

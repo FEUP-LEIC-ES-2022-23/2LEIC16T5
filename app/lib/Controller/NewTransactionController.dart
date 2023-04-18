@@ -19,6 +19,7 @@ class NewTransactionController {
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
+        categoryID: null,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
@@ -28,7 +29,6 @@ class NewTransactionController {
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         notes: textcontrollerNOTES.text);
-
 
     remoteDBHelper.addTransaction(transaction);
 

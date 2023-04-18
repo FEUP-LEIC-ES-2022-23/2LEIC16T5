@@ -49,10 +49,13 @@ class _SavingsMenu extends State<SavingsMenu> {
                 IconButton(
                   //TESTE
                   onPressed: () => {
-                    setState(() {
-                      initState_ = false;
-                      selectedVal = savingsMenuController.newSavings(context);
-                    }),
+                    if (this.mounted)
+                      {
+                        savingsMenuController.newSavings(context),
+                        setState(() {
+                          initState_ = false;
+                        }),
+                      },
                   },
                   iconSize: 40,
                   icon: const Icon(Icons.add),
@@ -66,8 +69,22 @@ class _SavingsMenu extends State<SavingsMenu> {
                   padding: EdgeInsets.only(left: 90),
                   child: IconButton(
                     onPressed: () => {
-                      remoteDBHelper.deleteSaving(selectedVal),
                       setInitState(remoteDBHelper.readSavings(), setState),
+                      if (selectedVal != "")
+                        {
+                          remoteDBHelper.deleteSaving(selectedVal),
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.success,
+                              text: "Successfully deleted saving!"),
+                        }
+                      else
+                        {
+                          QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.warning,
+                              text: "There are no more items to delete!"),
+                        },
                     },
                     iconSize: 40,
                     icon: const Icon(Icons.delete_rounded),
@@ -120,7 +137,7 @@ class _SavingsMenu extends State<SavingsMenu> {
 
           return snapshot.hasData
               ? DropdownButton(
-                  dropdownColor: Colors.black,
+                  dropdownColor: const Color.fromRGBO(255, 113, 64, 10),
                   iconEnabledColor: Colors.white,
                   value: selectedVal,
                   items: listitems
@@ -128,15 +145,17 @@ class _SavingsMenu extends State<SavingsMenu> {
                           value: e,
                           child: Text(
                             e!,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.black),
                           )))
                       .toList(),
                   onChanged: (val) {
-                    setState(() {
-                      selectedVal = val as String;
-                      savings = remoteDBHelper.readSaving(val);
-                      initState_ = false;
-                    });
+                    if (this.mounted) {
+                      setState(() {
+                        selectedVal = val as String;
+                        savings = remoteDBHelper.readSaving(val);
+                        initState_ = false;
+                      });
+                    }
                   })
               : DropdownButton(
                   dropdownColor: Colors.black,
@@ -156,12 +175,24 @@ class _SavingsMenu extends State<SavingsMenu> {
           if (!snapshot.hasData) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 90,
                   ),
-                  CircularProgressIndicator(
+                  const CircularProgressIndicator(
                     color: Color.fromRGBO(226, 177, 60, 10),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Loading or no data associated...",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    ],
                   )
                 ]);
           }
@@ -278,22 +309,46 @@ class _SavingsMenu extends State<SavingsMenu> {
         });
   }
 
+  void refreshState(Stream<List<SavingsModel>> stream, Function? callback,
+      String? selectedVal_) {
+    stream.listen((event) {
+      List<String?> temp = [];
+      event.forEach((element) {
+        temp.add(element.name);
+      });
+      if (this.mounted) {
+        callback!(() {
+          if (event.isNotEmpty) {
+            selectedVal = selectedVal_;
+            listitems = temp;
+            savings = remoteDBHelper.readSaving(selectedVal);
+          } else {
+            selectedVal = '';
+            listitems = [''];
+          }
+        });
+      }
+    });
+  }
+
   void setInitState(Stream<List<SavingsModel>> stream, Function? callback) {
     stream.listen((event) {
       List<String?> temp = [];
       event.forEach((element) {
         temp.add(element.name);
       });
-      callback!(() {
-        if (event.isNotEmpty) {
-          selectedVal = temp.first;
-          listitems = temp;
-          savings = remoteDBHelper.readSaving(selectedVal);
-        } else {
-          selectedVal = '';
-          listitems = [''];
-        }
-      });
+      if (this.mounted) {
+        callback!(() {
+          if (event.isNotEmpty) {
+            selectedVal = temp.first;
+            listitems = temp;
+            savings = remoteDBHelper.readSaving(selectedVal);
+          } else {
+            selectedVal = '';
+            listitems = [''];
+          }
+        });
+      }
     });
   }
 }

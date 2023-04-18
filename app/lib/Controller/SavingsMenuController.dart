@@ -135,9 +135,7 @@ class SavingsMenuController {
                             notes: textcontrollerNOTES.text,
                             value: 0,
                             total: num.tryParse(textcontrollerTOTAL.text)));
-                        setState(
-                          () {},
-                        );
+
                         Navigator.of(context).pop();
                         QuickAlert.show(
                             context: context,
@@ -199,13 +197,15 @@ class SavingsMenuController {
                     Slider(
                       value: multiplier,
                       onChanged: (value_) {
-                        setState(
-                          () {
-                            textcontrollerValue.text =
-                                (value_ * totalSliderVal).toStringAsFixed(2);
-                            multiplier = value_;
-                          },
-                        );
+                        if (context.mounted) {
+                          setState(
+                            () {
+                              textcontrollerValue.text =
+                                  (value_ * totalSliderVal).toStringAsFixed(2);
+                              multiplier = value_;
+                            },
+                          );
+                        }
                       },
                     ),
                     Expanded(
@@ -220,20 +220,22 @@ class SavingsMenuController {
                           ),
                           onChanged: (value) {
                             // if (_formKey.currentState!.validate()) {
-                            setState(
-                              () {
-                                if (value.isNotEmpty) {
-                                  multiplier =
-                                      (num.tryParse(value.trim())!.toDouble() /
-                                                  totalSliderVal) >
-                                              1
-                                          ? 1
-                                          : (num.tryParse(value.trim())!
-                                                  .toDouble() /
-                                              totalSliderVal);
-                                }
-                              },
-                            );
+                            if (context.mounted) {
+                              setState(
+                                () {
+                                  if (value.isNotEmpty) {
+                                    multiplier = (num.tryParse(value.trim())!
+                                                    .toDouble() /
+                                                totalSliderVal) >
+                                            1
+                                        ? 1
+                                        : (num.tryParse(value.trim())!
+                                                .toDouble() /
+                                            totalSliderVal);
+                                  }
+                                },
+                              );
+                            }
                           },
                           //},
                           keyboardType: const TextInputType.numberWithOptions(
@@ -292,7 +294,7 @@ class SavingsMenuController {
   Future updateSavingValue(BuildContext context, String? name_, double currVal,
       double valueToAdd, bool ifAdd) async {
     if ((!ifAdd && currVal - valueToAdd >= 0) || (ifAdd)) {
-      remoteDBHelper.updateSavingValue(name_, currVal, valueToAdd, ifAdd);
+      await remoteDBHelper.updateSavingValue(name_, currVal, valueToAdd, ifAdd);
       QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -304,14 +306,14 @@ class SavingsMenuController {
           text: "Value to update leads to a negative saving!");
     }
     if (ifAdd) {
-      remoteDBHelper.addTransaction(TransactionModel(
+      await remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 1,
           name: name_!,
           total: valueToAdd,
           date: DateTime.now()));
     } else {
-      remoteDBHelper.addTransaction(TransactionModel(
+      await remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 0,
           name: name_!,

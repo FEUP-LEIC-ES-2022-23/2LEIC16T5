@@ -18,7 +18,8 @@ class _SavingsMenu extends State<SavingsMenu> {
   List<String?> listitems = ['1'];
 
   String? selectedVal = 'Ola';
-  double valToAdd = 0;
+  double multiplier = 0;
+  double currSliderVal = 0;
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
 
@@ -148,11 +149,13 @@ class _SavingsMenu extends State<SavingsMenu> {
     return StreamBuilder<SavingsModel>(
         stream: savings,
         builder: (BuildContext context, AsyncSnapshot<SavingsModel> snapshot) {
+          // bool hasOverflowed = false;
+
           if (!snapshot.hasData) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  const SizedBox(
+                  SizedBox(
                     height: 90,
                   ),
                   CircularProgressIndicator(
@@ -162,8 +165,18 @@ class _SavingsMenu extends State<SavingsMenu> {
           }
           double percent = snapshot.data!.value!.toDouble() /
               snapshot.data!.total!.toDouble();
+          double overflow = 0;
+
+          if (percent > 1) {
+            // overflow = snapshot.data!.value!.toDouble() -
+            //     snapshot.data!.total!.toDouble();
+            //  hasOverflowed = true;
+            percent = 1.0;
+          }
           return snapshot.hasData
               ? Column(children: [
+                  /*savingsMenuController.checkSavingOverflow(
+                      context, hasOverflowed, overflow),*/
                   Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
@@ -192,16 +205,12 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   padding: EdgeInsets.all(75),
                                   child: IconButton(
                                       onPressed: () {
-                                        savingsMenuController.addSavingValue(
+                                        savingsMenuController.changeSavingValue(
                                             context,
                                             snapshot.data!.value!.toDouble(),
-                                            valToAdd,
-                                            selectedVal!);
-                                        /*savingsMenuController.updateSavingValue(
-                                            selectedVal,
-                                            snapshot.data!.value!.toDouble(),
-                                            20);*/
-                                        
+                                            multiplier,
+                                            selectedVal!,
+                                            true);
                                       },
                                       iconSize: 50,
                                       color: Colors.white,
@@ -213,7 +222,14 @@ class _SavingsMenu extends State<SavingsMenu> {
                                 child: Padding(
                                   padding: EdgeInsets.all(75),
                                   child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        savingsMenuController.changeSavingValue(
+                                            context,
+                                            snapshot.data!.value!.toDouble(),
+                                            multiplier,
+                                            selectedVal!,
+                                            false);
+                                      },
                                       iconSize: 50,
                                       color: Colors.white,
                                       icon: const Icon(
@@ -223,9 +239,33 @@ class _SavingsMenu extends State<SavingsMenu> {
                             ],
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(snapshot.data!.value!.toStringAsFixed(2),
+                          style: const TextStyle(
+                              fontSize: 28,
+                              color: Color.fromRGBO(226, 177, 60, 10))),
+                      const Icon(Icons.euro,
+                          size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
+                      const Text("/",
+                          style: const TextStyle(
+                              fontSize: 28,
+                              color: Color.fromRGBO(226, 177, 60, 10))),
+                      Text(snapshot.data!.total.toString(),
+                          style: const TextStyle(
+                              fontSize: 28,
+                              color: Color.fromRGBO(226, 177, 60, 10))),
+                      const Icon(Icons.euro,
+                          size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
+                    ],
+                  )
                 ])
               : const Center(
                   child: Text("Nothing to show",

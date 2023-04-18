@@ -12,6 +12,7 @@ class SavingsMenuController {
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   FirebaseAuth userInstance = FirebaseAuth.instance;
+  static double totalSliderVal = 1000;
 
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
@@ -136,7 +137,6 @@ class SavingsMenuController {
                             total: num.tryParse(textcontrollerTOTAL.text)));
 
                         Navigator.of(context).pop();
-
                         QuickAlert.show(
                             context: context,
                             type: QuickAlertType.success,
@@ -151,8 +151,11 @@ class SavingsMenuController {
         });
   }
 
-  void addSavingValue(
-      BuildContext context, double currVal, double valToAdd, String name) {
+  static TextEditingController textcontrollerValue = TextEditingController();
+  final _formKey1 = GlobalKey<FormState>();
+
+  void changeSavingValue(BuildContext context, double currVal,
+      double multiplier, String name, bool ifAdd) {
     showDialog(
       barrierDismissible: true,
       context: context,
@@ -160,53 +163,109 @@ class SavingsMenuController {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
-            return AlertDialog(
-              insetPadding: EdgeInsets.symmetric(vertical: 200, horizontal: 10),
-              titlePadding: const EdgeInsets.all(0),
-              title: Container(
-                  color: Color.fromRGBO(226, 177, 60, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          if (Navigator.canPop(context)) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.black,
+            return SingleChildScrollView(
+              child: AlertDialog(
+                insetPadding:
+                    EdgeInsets.symmetric(vertical: 200, horizontal: 10),
+                titlePadding: const EdgeInsets.all(0),
+                title: Container(
+                    color: Color.fromRGBO(226, 177, 60, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          'Value',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )),
+                content: Row(
+                  children: [
+                    Slider(
+                      value: multiplier,
+                      onChanged: (_value) {
+                        setState(
+                          () {
+                            textcontrollerValue.text =
+                                (_value * totalSliderVal).toStringAsFixed(2);
+                            multiplier = _value;
+                          },
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: Form(
+                        key: _formKey1,
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            hintText: 'Value',
+                          ),
+                          onChanged: (value) {
+                            // if (_formKey.currentState!.validate()) {
+                            setState(
+                              () {
+                                if (value.isNotEmpty) {
+                                  multiplier =
+                                      (num.tryParse(value.trim())!.toDouble() /
+                                                  totalSliderVal) >
+                                              1
+                                          ? 1
+                                          : (num.tryParse(value.trim())!
+                                                  .toDouble() /
+                                              totalSliderVal);
+                                }
+                              },
+                            );
+                          },
+                          //},
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          validator: (text) {
+                            if (text == null ||
+                                text.isEmpty ||
+                                num.tryParse(text) == null) {
+                              return 'Enter an amount';
+                            } else if (num.tryParse(text)!.isNegative) {
+                              return 'Enter a positive amount';
+                            }
+                            return null;
+                          },
+                          controller: textcontrollerValue,
                         ),
                       ),
-                      const Text(
-                        'Value',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  )),
-              content: Slider(
-                value: valToAdd,
-                onChanged: (_value) {
-                  setState(
-                    () {
-                      valToAdd = _value;
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  MaterialButton(
+                    color: Color.fromRGBO(226, 177, 60, 10),
+                    child: const Text('Update',
+                        style: TextStyle(color: Colors.black)),
+                    onPressed: () {
+                      double res =
+                          num.tryParse(textcontrollerValue.text.trim())!
+                              .toDouble();
+                      if (Navigator.canPop(context)) Navigator.pop(context);
+                      updateSavingValue(context, name, currVal, res, ifAdd);
                     },
-                  );
-                },
+                  )
+                ],
               ),
-              actions: <Widget>[
-                MaterialButton(
-                  color: Color.fromRGBO(226, 177, 60, 10),
-                  child: const Text('Update',
-                      style: TextStyle(color: Colors.black)),
-                  onPressed: () {
-                    print(valToAdd);
-                    //updateSavingValue(name, currVal, valToAdd);
-                  },
-                )
-              ],
             );
           },
         );
@@ -214,20 +273,46 @@ class SavingsMenuController {
     );
   }
 
-  Future updateSavingValue(
-      String? name, double currVal, double valueToAdd) async {
-    bool fail = false;
-    try {
-      remoteDBHelper.updateSavingValue(name, currVal, valueToAdd);
+  dynamic checkSavingOverflow(
+      BuildContext context, bool hasOverflowed, double value) {
+    if (hasOverflowed) {
+      return QuickAlert.show(
+          context: context,
+          type: QuickAlertType.info,
+          text: "Saving has overflowed by: " + value.toString());
+    } else {
+      return Text("");
+    }
+  }
+
+  Future updateSavingValue(BuildContext context, String? name, double currVal,
+      double valueToAdd, bool ifAdd) async {
+    if ((!ifAdd && currVal - valueToAdd >= 0) || (ifAdd)) {
+      remoteDBHelper.updateSavingValue(name, currVal, valueToAdd, ifAdd);
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: "Item updated successfully!");
+    } else {
+      QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          text: "Value to update leads to a negative saving!");
+    }
+    if (ifAdd) {
       remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 1,
           name: name!,
           total: valueToAdd,
           date: DateTime.now()));
-    } catch (e) {
-      fail = true;
-      throw fail;
+    } else {
+      remoteDBHelper.addTransaction(TransactionModel(
+          userID: userInstance.currentUser!.uid,
+          expense: 0,
+          name: name!,
+          total: valueToAdd,
+          date: DateTime.now()));
     }
   }
 }

@@ -77,15 +77,16 @@ class RemoteDBHelper {
   }
 
   Future updateSavingValue(
-      String? name, double currVal, double valToAdd) async {
+      String? name, double currVal, double valToUpdate, bool ifAdd) async {
     await FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
         .limit(1)
         .get()
-        .then((value) {
-      value.docs.first.reference.update({"value": currVal + valToAdd});
+        .then((item) {
+      item.docs.first.reference.update(
+          {"value": ifAdd ? currVal + valToUpdate : currVal - valToUpdate});
     });
   }
 
@@ -110,7 +111,7 @@ class RemoteDBHelper {
   }
 
   Future deleteSaving(String? name) async {
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
@@ -123,7 +124,7 @@ class RemoteDBHelper {
   }
 
   Future userResetData() async {
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get()

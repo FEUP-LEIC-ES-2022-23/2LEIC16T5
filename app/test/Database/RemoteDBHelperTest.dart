@@ -32,8 +32,9 @@ Future<void> main() async {
   RemoteDBHelper db = RemoteDBHelper(userInstance: auth);
   test('test',() async{
     Stream<List<TransactionModel>> transactions = db.readTransactions();
-    transactions.forEach((element) {
-      print(element.first.name);
+    List<TransactionModel> modelList = await transactions.first;
+    modelList.forEach((element) {
+      print(element.name);
     });
   });
 }

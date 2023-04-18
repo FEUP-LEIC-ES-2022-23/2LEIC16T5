@@ -49,7 +49,8 @@ class _SavingsMenu extends State<SavingsMenu> {
         leading: IconButton(
           onPressed: () {
             if (Navigator.canPop(context)) {
-              Navigator.pop(context);}
+              Navigator.pop(context);
+            }
           },
           icon: const Icon(
             Icons.home,
@@ -61,7 +62,7 @@ class _SavingsMenu extends State<SavingsMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -138,6 +139,9 @@ class _SavingsMenu extends State<SavingsMenu> {
   }
 
   Widget buildDropdownList(RemoteDBHelper db) {
+    if (initState_) {
+      setInitState(remoteDBHelper.readSavings(), setState);
+    }
     return StreamBuilder<List<SavingsModel>>(
         stream: db.readSavings(),
         builder:
@@ -188,9 +192,13 @@ class _SavingsMenu extends State<SavingsMenu> {
   }
 
   Widget buildBody(BuildContext context, Stream<List<SavingsModel>> savings) {
+    if (initState_) {
+      setInitState(remoteDBHelper.readSavings(), setState);
+    }
     return StreamBuilder<List<SavingsModel>>(
         stream: savings,
-        builder: (BuildContext context, AsyncSnapshot<List<SavingsModel>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<SavingsModel>> snapshot) {
           // bool hasOverflowed = false;
 
           if (!snapshot.hasData) {
@@ -217,15 +225,16 @@ class _SavingsMenu extends State<SavingsMenu> {
                   )
                 ]);
           }
-          if(snapshot.data!.isEmpty){
+          if (snapshot.data!.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
                 SizedBox(height: 150),
-                Text("Nothing to show", style: TextStyle(fontSize: 20, color: Colors.white))],
+                Text("Nothing to show",
+                    style: TextStyle(fontSize: 20, color: Colors.white))
+              ],
             );
-          }
-          else {
+          } else {
             double percent = snapshot.data!.first.value!.toDouble() /
                 snapshot.data!.first.total!.toDouble();
             double overflow = 0;
@@ -277,8 +286,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   },
                                   iconSize: 50,
                                   color: Colors.white,
-                                  icon:
-                                  const Icon(Icons.add_circle_outline)),
+                                  icon: const Icon(Icons.add_circle_outline)),
                             ),
                           ),
                           Flexible(
@@ -296,8 +304,8 @@ class _SavingsMenu extends State<SavingsMenu> {
                                   },
                                   iconSize: 50,
                                   color: Colors.white,
-                                  icon: const Icon(
-                                      Icons.remove_circle_outline)),
+                                  icon:
+                                      const Icon(Icons.remove_circle_outline)),
                             ),
                           )
                         ],
@@ -336,7 +344,14 @@ class _SavingsMenu extends State<SavingsMenu> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                    Text((snapshot.data!.first.targetDate == null)? "": "Target Date:  " + DateFormat('dd-MM-yyyy').format(snapshot.data!.first.targetDate!), style: TextStyle(color: Colors.white, fontSize: 20),)
+                  Text(
+                    (snapshot.data!.first.targetDate == null)
+                        ? ""
+                        : "Target Date:  " +
+                            DateFormat('dd-MM-yyyy')
+                                .format(snapshot.data!.first.targetDate!),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  )
                 ],
               )
             ]);

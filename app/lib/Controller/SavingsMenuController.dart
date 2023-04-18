@@ -279,18 +279,6 @@ class SavingsMenuController {
     );
   }
 
-  dynamic checkSavingOverflow(
-      BuildContext context, bool hasOverflowed, double value) {
-    if (hasOverflowed) {
-      return QuickAlert.show(
-          context: context,
-          type: QuickAlertType.info,
-          text: "Saving has overflowed by: " + value.toString());
-    } else {
-      return Text("");
-    }
-  }
-
   Future updateSavingValue(BuildContext context, String? name_, double currVal,
       double valueToAdd, bool ifAdd) async {
     if ((!ifAdd && currVal - valueToAdd >= 0) || (ifAdd)) {

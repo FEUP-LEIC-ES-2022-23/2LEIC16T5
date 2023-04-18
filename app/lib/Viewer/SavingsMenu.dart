@@ -145,7 +145,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                           value: e,
                           child: Text(
                             e!,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.white),
                           )))
                       .toList(),
                   onChanged: (val) {

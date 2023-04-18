@@ -57,8 +57,12 @@ class MainMenu extends StatelessWidget {
                       style: TextStyle(fontSize: 20))),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SavingsMenu()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        const SavingsMenu(title: 'Savings')),
+                  );
                 },
                 child: Text('Savings', style: TextStyle(fontSize: 20)),
                 style:

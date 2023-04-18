@@ -1,5 +1,6 @@
 import 'package:es/Controller/SavingsMenuController.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,8 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
 
 class SavingsMenu extends StatefulWidget {
-  const SavingsMenu({Key? key}) : super(key: key);
+  const SavingsMenu({super.key, required this.title});
+  final String title;
 
   @override
   State<SavingsMenu> createState() => _SavingsMenu();
@@ -25,7 +27,7 @@ class _SavingsMenu extends State<SavingsMenu> {
 
   SavingsMenuController savingsMenuController = SavingsMenuController();
 
-  Stream<SavingsModel> savings =
+  Stream<List<SavingsModel>> savings =
       RemoteDBHelper(userInstance: FirebaseAuth.instance).readSaving('1');
   bool initState_ = true;
 
@@ -36,6 +38,25 @@ class _SavingsMenu extends State<SavingsMenu> {
     }
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 12, 18, 50),
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue,
+        title: Text(widget.title,
+            style: const TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic)),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);}
+          },
+          icon: const Icon(
+            Icons.home,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -166,10 +187,10 @@ class _SavingsMenu extends State<SavingsMenu> {
         });
   }
 
-  Widget buildBody(BuildContext context, Stream<SavingsModel> savings) {
-    return StreamBuilder<SavingsModel>(
+  Widget buildBody(BuildContext context, Stream<List<SavingsModel>> savings) {
+    return StreamBuilder<List<SavingsModel>>(
         stream: savings,
-        builder: (BuildContext context, AsyncSnapshot<SavingsModel> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<SavingsModel>> snapshot) {
           // bool hasOverflowed = false;
 
           if (!snapshot.hasData) {
@@ -187,125 +208,139 @@ class _SavingsMenu extends State<SavingsMenu> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const [
                       Text(
-                        "Loading or no data associated...",
+                        "Loading...",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       )
                     ],
                   )
                 ]);
           }
-          double percent = snapshot.data!.value!.toDouble() /
-              snapshot.data!.total!.toDouble();
-          double overflow = 0;
-
-          if (percent > 1) {
-            // overflow = snapshot.data!.value!.toDouble() -
-            //     snapshot.data!.total!.toDouble();
-            //  hasOverflowed = true;
-            percent = 1.0;
+          if(snapshot.data!.isEmpty){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                SizedBox(height: 150),
+                Text("Nothing to show", style: TextStyle(fontSize: 20, color: Colors.white))],
+            );
           }
-          return snapshot.hasData
-              ? Column(children: [
-                  /*savingsMenuController.checkSavingOverflow(
+          else {
+            double percent = snapshot.data!.first.value!.toDouble() /
+                snapshot.data!.first.total!.toDouble();
+            double overflow = 0;
+
+            if (percent > 1) {
+              // overflow = snapshot.data!.value!.toDouble() -
+              //     snapshot.data!.total!.toDouble();
+              //  hasOverflowed = true;
+              percent = 1.0;
+            }
+            return Column(children: [
+              /*savingsMenuController.checkSavingOverflow(
                       context, hasOverflowed, overflow),*/
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  CircularPercentIndicator(
+                    animation: true,
+                    animationDuration: 600,
+                    radius: 180.0,
+                    lineWidth: 13.0,
+                    percent: percent,
+                    progressColor: const Color.fromRGBO(226, 177, 60, 10),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    backgroundColor: Colors.white,
+                  ),
                   Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
-                      CircularPercentIndicator(
-                        animation: true,
-                        animationDuration: 600,
-                        radius: 180.0,
-                        lineWidth: 13.0,
-                        percent: percent,
-                        progressColor: const Color.fromRGBO(226, 177, 60, 10),
-                        circularStrokeCap: CircularStrokeCap.round,
-                        backgroundColor: Colors.white,
+                      Image.asset(
+                        'assets/img/Luckycat1.png',
+                        width: 250,
                       ),
-                      Stack(
-                        alignment: AlignmentDirectional.center,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Image.asset(
-                            'assets/img/Luckycat1.png',
-                            width: 250,
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.all(75),
+                              child: IconButton(
+                                  onPressed: () {
+                                    savingsMenuController.changeSavingValue(
+                                      context,
+                                      snapshot.data!.first.value!.toDouble(),
+                                      multiplier,
+                                      selectedVal!,
+                                      true,
+                                    );
+                                  },
+                                  iconSize: 50,
+                                  color: Colors.white,
+                                  icon:
+                                  const Icon(Icons.add_circle_outline)),
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Flexible(
-                                child: Padding(
-                                  padding: EdgeInsets.all(75),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        savingsMenuController.changeSavingValue(
-                                          context,
-                                          snapshot.data!.value!.toDouble(),
-                                          multiplier,
-                                          selectedVal!,
-                                          true,
-                                        );
-                                      },
-                                      iconSize: 50,
-                                      color: Colors.white,
-                                      icon:
-                                          const Icon(Icons.add_circle_outline)),
-                                ),
-                              ),
-                              Flexible(
-                                child: Padding(
-                                  padding: EdgeInsets.all(75),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        savingsMenuController.changeSavingValue(
-                                          context,
-                                          snapshot.data!.value!.toDouble(),
-                                          multiplier,
-                                          selectedVal!,
-                                          false,
-                                        );
-                                      },
-                                      iconSize: 50,
-                                      color: Colors.white,
-                                      icon: const Icon(
-                                          Icons.remove_circle_outline)),
-                                ),
-                              )
-                            ],
-                          ),
+                          Flexible(
+                            child: Padding(
+                              padding: EdgeInsets.all(75),
+                              child: IconButton(
+                                  onPressed: () {
+                                    savingsMenuController.changeSavingValue(
+                                      context,
+                                      snapshot.data!.first.value!.toDouble(),
+                                      multiplier,
+                                      selectedVal!,
+                                      false,
+                                    );
+                                  },
+                                  iconSize: 50,
+                                  color: Colors.white,
+                                  icon: const Icon(
+                                      Icons.remove_circle_outline)),
+                            ),
+                          )
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(snapshot.data!.value!.toStringAsFixed(2),
-                          style: const TextStyle(
-                              fontSize: 28,
-                              color: Color.fromRGBO(226, 177, 60, 10))),
-                      const Icon(Icons.euro,
-                          size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
-                      const Text("/",
-                          style: const TextStyle(
-                              fontSize: 28,
-                              color: Color.fromRGBO(226, 177, 60, 10))),
-                      Text(snapshot.data!.total.toString(),
-                          style: const TextStyle(
-                              fontSize: 28,
-                              color: Color.fromRGBO(226, 177, 60, 10))),
-                      const Icon(Icons.euro,
-                          size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
-                    ],
-                  )
-                ])
-              : const Center(
-                  child: Text("Nothing to show",
-                      style: TextStyle(fontSize: 20, color: Colors.white)),
-                );
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(snapshot.data!.first.value!.toStringAsFixed(2),
+                      style: const TextStyle(
+                          fontSize: 28,
+                          color: Color.fromRGBO(226, 177, 60, 10))),
+                  const Icon(Icons.euro,
+                      size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
+                  const Text("/",
+                      style: TextStyle(
+                          fontSize: 28,
+                          color: Color.fromRGBO(226, 177, 60, 10))),
+                  Text(snapshot.data!.first.total.toString(),
+                      style: const TextStyle(
+                          fontSize: 28,
+                          color: Color.fromRGBO(226, 177, 60, 10))),
+                  const Icon(Icons.euro,
+                      size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                    Text((snapshot.data!.first.targetDate == null)? "": "Target Date:  " + DateFormat('dd-MM-yyyy').format(snapshot.data!.first.targetDate!), style: TextStyle(color: Colors.white, fontSize: 20),)
+                ],
+              )
+            ]);
+          }
         });
   }
 

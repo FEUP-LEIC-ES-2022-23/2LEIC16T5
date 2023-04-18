@@ -56,13 +56,15 @@ class RemoteDBHelper {
             .toList());
   }
 
-  Stream<SavingsModel> readSaving(String? name) {
+  Stream<List<SavingsModel>> readSaving(String? name) {
     return FirebaseFirestore.instance
         .collection('Savings')
         .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .where('name', isEqualTo: name)
         .snapshots()
-        .map((snapshot) => SavingsModel.fromMap(snapshot.docs.first.data()));
+        .map((snapshot) => snapshot.docs
+            .map((doc) => SavingsModel.fromMap(doc.data()))
+            .toList());
   }
 
   Stream<List<SavingsModel>> readSavings() {

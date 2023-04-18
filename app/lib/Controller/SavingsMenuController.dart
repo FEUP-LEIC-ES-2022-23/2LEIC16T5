@@ -5,6 +5,7 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:quickalert/quickalert.dart';
 
@@ -16,21 +17,25 @@ class SavingsMenuController {
 
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
-  static final textcontrollerNOTES = TextEditingController();
+  static final textcontrollerDATE= TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String? newSavings(BuildContext context) {
     showDialog(
         barrierDismissible: true,
         context: context,
-        barrierColor: Colors.black,
         builder: (BuildContext context) {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Color.fromRGBO(226, 177, 60, 10),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      color: Colors.lightBlue,
+                    ),
+                    height: 60,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -42,13 +47,13 @@ class SavingsMenuController {
                           },
                           icon: const Icon(
                             Icons.close,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                         const Text(
-                          'NEW  SAVINGS',
+                          'NEW  SAVING',
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
                     )),
@@ -101,17 +106,47 @@ class SavingsMenuController {
                         ],
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 5,
                       ),
                       Row(
                         children: [
                           Expanded(
                             child: TextField(
                               decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: 'Notes',
+                                icon: Icon(Icons.calendar_today),
+                                labelText: 'Target Date',
                               ),
-                              controller: textcontrollerNOTES,
+                              controller: textcontrollerDATE,
+                              onTap: () async {
+                                DateTime? pickeddate = await showDatePicker(
+                                    context: context,
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(context).copyWith(
+                                          colorScheme: const ColorScheme.light(
+                                            primary: Colors
+                                                .lightBlue, // header background color
+                                            onPrimary: Colors
+                                                .white, // header text color
+                                            onSurface:
+                                            Colors.black, // body text color
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101));
+
+                                if (pickeddate != null) {
+                                  setState(() {
+                                    textcontrollerDATE.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(pickeddate);
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ],
@@ -124,17 +159,24 @@ class SavingsMenuController {
                 ),
                 actions: <Widget>[
                   MaterialButton(
-                    color: Color.fromRGBO(226, 177, 60, 10),
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                    color: Colors.lightBlue,
                     child: const Text('Add',
-                        style: TextStyle(color: Colors.black)),
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         remoteDBHelper.addSaving(SavingsModel(
                             userID: FirebaseAuth.instance.currentUser!.uid,
                             name: textcontrollerNAME.text,
-                            notes: textcontrollerNOTES.text,
+                            targetDate: textcontrollerDATE.text.isEmpty?
+                                null
+                                : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
                             value: 0,
                             total: num.tryParse(textcontrollerTOTAL.text)));
+
+                        textcontrollerNAME.clear();
+                        textcontrollerTOTAL.clear();
+                        textcontrollerDATE.clear();
 
                         Navigator.of(context).pop();
                         QuickAlert.show(
@@ -160,7 +202,6 @@ class SavingsMenuController {
     showDialog(
       barrierDismissible: true,
       context: context,
-      barrierColor: Colors.black,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, setState) {
@@ -293,7 +334,7 @@ class SavingsMenuController {
           type: QuickAlertType.error,
           text: "Value to update leads to a negative saving!");
     }
-    if (ifAdd) {
+    /*if (ifAdd) {
       await remoteDBHelper.addTransaction(TransactionModel(
           userID: userInstance.currentUser!.uid,
           expense: 1,
@@ -307,6 +348,6 @@ class SavingsMenuController {
           name: name_!,
           total: valueToAdd,
           date: DateTime.now()));
-    }
+    }*/
   }
 }

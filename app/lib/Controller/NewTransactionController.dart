@@ -17,7 +17,7 @@ class NewTransactionController {
   bool _isIncome = false;
 
   RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
@@ -31,7 +31,7 @@ class NewTransactionController {
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: _isIncome? null : position,
+        location: _isIncome ? null : position,
         notes: textcontrollerNOTES.text);
 
     remoteDBHelper.addTransaction(transaction);
@@ -52,11 +52,13 @@ class NewTransactionController {
             key: const Key("New Transaction"),
             builder: (BuildContext context, setState) {
               return AlertDialog(
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(32.0)),
                       color: Colors.lightBlue,
                     ),
                     height: 75,
@@ -90,7 +92,7 @@ class NewTransactionController {
                         children: [
                           const Text('Expense'),
                           Switch(
-                            key: _isIncome? Key("Income") :  Key("Expense"),
+                            key: _isIncome ? Key("Income") : Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -132,8 +134,8 @@ class NewTransactionController {
                                   labelText: 'Total',
                                 ),
                                 keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
                                 validator: (text) {
                                   if (text == null ||
                                       text.isEmpty ||
@@ -174,7 +176,7 @@ class NewTransactionController {
                                             onPrimary: Colors
                                                 .white, // header text color
                                             onSurface:
-                                            Colors.black, // body text color
+                                                Colors.black, // body text color
                                           ),
                                         ),
                                         child: child!,
@@ -222,39 +224,51 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome?
-                      FloatingActionButton(
-                          mini: true,
-                          backgroundColor: Colors.lightBlue,
-                          heroTag: "Map",
-                          onPressed: () {
-                            MapMenuController().getCurrentLocation(context).then((value) {
-                              QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.confirm,
-                                  confirmBtnColor: Colors.lightBlue,
-                                  text: "Do you wish to set your current location as this transaction's location?",
-                                  confirmBtnText: "Yes",
-                                  cancelBtnText: "No",
-                                  onConfirmBtnTap: () {
-                                    setState(() {
-                                      position = GeoPoint(double.parse('${value.latitude}'), double.parse('${value.longitude}'));
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                  onCancelBtnTap: () {
-                                    setState(() {
-                                      position = null;
-                                    });
-                                    Navigator.of(context).pop();
-                                  });
-                            });
-                          },
-                          child: (position == null)? const Icon(Icons.pin_drop_rounded) :  const Icon(Icons.done_all_rounded))
-                          : const SizedBox(width: 48.0,),
+                      !_isIncome
+                          ? FloatingActionButton(
+                              mini: true,
+                              backgroundColor: Colors.lightBlue,
+                              heroTag: "Map",
+                              onPressed: () {
+                                MapMenuController()
+                                    .getCurrentLocation(context)
+                                    .then((value) {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      confirmBtnColor: Colors.lightBlue,
+                                      text:
+                                          "Do you wish to set your current location as this transaction's location?",
+                                      confirmBtnText: "Yes",
+                                      cancelBtnText: "No",
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          position = GeoPoint(
+                                              double.parse('${value.latitude}'),
+                                              double.parse(
+                                                  '${value.longitude}'));
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      onCancelBtnTap: () {
+                                        setState(() {
+                                          position = null;
+                                        });
+                                        Navigator.of(context).pop();
+                                      });
+                                });
+                              },
+                              child: (position == null)
+                                  ? const Icon(Icons.pin_drop_rounded)
+                                  : const Icon(Icons.done_all_rounded))
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       MaterialButton(
                         key: const Key("Add"),
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
                         color: Colors.lightBlue,
                         child: const Text('Add',
                             style: TextStyle(color: Colors.white)),
@@ -274,7 +288,103 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
+  void showTransaction(BuildContext context, t_model.TransactionModel transac) {
+    t_model.TransactionModel example = t_model.TransactionModel(
+        userID: '0',
+        categoryID: '1',
+        expense: 0,
+        name: 'expense example',
+        total: 100,
+        date: DateTime(2022, 6, 6),
+        notes: 'example notes',
+        location: const GeoPoint(41, 8.6));
+
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              key: const Key("New Transaction"),
+              builder: (BuildContext context, setState) {
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                  titlePadding: const EdgeInsets.all(0),
+                  title: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(32.0)),
+                        color: Colors.lightBlue,
+                      ),
+                      height: 75,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const Text(
+                            'Transaction name',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text(example.total.toString())],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            (example.expense == 0)
+                                ? Text('is expense')
+                                : Text('is income')
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(DateFormat('dd-MM-yyyy').format(example.date))
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              example.notes?.isEmpty ?? true
+                                  ? 'No notes'
+                                  : example.notes!,
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              (example.location != null)
+                                  ? 'Location' //lat and long ?
+                                  : 'No location'
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        });
   }
 }

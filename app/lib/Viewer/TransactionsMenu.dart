@@ -106,7 +106,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                             onTap: () {
                               setState(() {
                                 NewTransactionController()
-                                    .showTransaction(context);
+                                    .showTransaction(context, transac);
                               });
                             },
                             onLongPress: () {

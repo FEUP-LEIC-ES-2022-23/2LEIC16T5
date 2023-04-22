@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:es/Viewer/MainMenu.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,9 @@ import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
 
 class TransactionsMenu extends StatefulWidget {
-  const TransactionsMenu({Key? key, required this.title}) : super(key: key);
+  const TransactionsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
   final String title;
+  final String currency;
 
   @override
   State<TransactionsMenu> createState() => _TransactionsMenuState();
@@ -19,10 +21,10 @@ class TransactionsMenu extends StatefulWidget {
 class _TransactionsMenuState extends State<TransactionsMenu> {
   RemoteDBHelper remoteDBHelper =
   RemoteDBHelper(userInstance: FirebaseAuth.instance);
+
   @override
   Widget build(BuildContext context) {
-    NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-
+    NumberFormat coin = NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
     return Scaffold(
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
@@ -100,7 +102,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                 .format(transac.date)),
                             trailing: Text(
                               (transac.expense == 1 ? '-' : '+') +
-                                  euro.format(transac.total),
+                                  coin.format(transac.total),
                               style: const TextStyle(fontSize: 20),
                             ),
                             onTap: () {

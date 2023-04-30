@@ -1,3 +1,4 @@
+import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
@@ -94,13 +95,19 @@ class MainMenu extends StatelessWidget {
                 child: Text('Statistics', style: TextStyle(fontSize: 20)),
                 style:
                     ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('National', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
               ),*/
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          const NationalMenu(title: 'National Comparison')),
+                    );
+                  },
+                  child: const Text('National Comparison', style: TextStyle(fontSize: 20))),
             ],
           ),
         ));

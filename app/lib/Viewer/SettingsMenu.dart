@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -95,6 +97,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           Transform.scale(
                             scale: 1.3,
                             child: DropdownButton(
+                              key: Key('DropDown'),
                               underline: const SizedBox(),
                               borderRadius: BorderRadius.circular(12),
                               value: snapshot.data,
@@ -107,6 +110,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                               },
                               items: listItems.map((dynamic valueItem) {
                                 return DropdownMenuItem(
+                                  key: Key(valueItem),
                                   value: valueItem,
                                   child: valueItem == snapshot.data? Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.black),),
                                 );

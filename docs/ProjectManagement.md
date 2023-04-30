@@ -36,4 +36,31 @@ You can find below information and references related with the project managemen
 
   * What is still a problem
     * We haven't been able to connect our Firebase database with our SQLite one, but we're working on it
+
+### Iteration 2
+
+  Once again, we were unable to fullfill all our expectations, although we believe we accomplished some outstanding remarks: the connection with both Firebase and GoogleMaps API, and the implementation of the required tests (Unit and Acceptance). Plus, we managed to finish the "Categories" feature, which was left behind on the last iteration.
+  
+  #### Begin
+ 
+  <img width="940" alt="Iteration2_Begin" src="https://user-images.githubusercontent.com/92641892/232618821-0594b135-02e1-45dc-87a2-df406ef99a69.png">
+  
+  #### End
+  
+  <img width="948" alt="Iteration2_End" src="https://user-images.githubusercontent.com/92641892/232920659-21f64140-2bbc-4c8c-a3e0-f062f085cd05.png">
+  
+  #### Retrospectives
+  
+  * What went well
+    * We successfully connected our app with Firebase
+    * The acceptance tests (although started as a struggle) are now mastered
+    * The connection with the GoogleMaps API was fairly simple
+
+  * What went wrong
+    * It was a struggle to develop the Unit Tests, due to Firebase issues
+    * Because of the last topic, we were unnable to fullfill the "Dark Mode" feature
+
+  * What is still a problem
+    * Accomplishing to implement all the features we initially planned
+
  

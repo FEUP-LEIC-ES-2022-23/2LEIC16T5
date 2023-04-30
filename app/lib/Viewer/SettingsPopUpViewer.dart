@@ -33,7 +33,8 @@ class SettingsPopUpViewer {
               TextButton(
                   key: const Key("Yes"),
                   onPressed: () async {
-                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())){
+                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())
+                    && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasCategories())){
                       Navigator.of(context).pop();
                       errorDeleteData(context, 'No data has been inserted into the app');
                     }

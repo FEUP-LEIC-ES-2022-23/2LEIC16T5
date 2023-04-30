@@ -10,6 +10,7 @@ void main() {
     // Arrange
     final transaction = TransactionModel(
       userID: '1',
+      categoryID: null,
       transactionID: '1',
       name: 'Test Transaction',
       expense: 0,

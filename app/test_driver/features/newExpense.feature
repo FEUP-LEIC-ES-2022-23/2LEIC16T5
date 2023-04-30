@@ -2,8 +2,7 @@ Feature: Manually register new expense
 
   Rule: "Total" field must be filled in
     Background:
-      Given the user presses the "Transactions" button
-      And the user is in the "Transactions" menu
+      Given the user is in the "Transactions" menu
       And the user presses the "Plus" button
 
     Scenario: Valid registration of expense

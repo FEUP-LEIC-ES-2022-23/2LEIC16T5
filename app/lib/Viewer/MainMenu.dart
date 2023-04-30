@@ -10,6 +10,7 @@ class MainMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         body: SingleChildScrollView(
           child: Column(

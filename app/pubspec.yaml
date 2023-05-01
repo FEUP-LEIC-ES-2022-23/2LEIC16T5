@@ -52,6 +52,9 @@ dependencies:
   firebase_auth_mocks: ^0.8.7
   google_sign_in_mocks: ^0.2.2
 
+  url_launcher: ^6.0.3
+  csv: ^5.0.2
+
 
 dev_dependencies:
   integration_test:
@@ -112,3 +115,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/img/
+    - assets/fortuneko.csv

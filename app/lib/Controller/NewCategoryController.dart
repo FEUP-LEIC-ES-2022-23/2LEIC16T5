@@ -22,7 +22,7 @@ class NewCategoryController {
       color: c,
     );
     await remoteDBHelper.addCategory(category);
-    await remoteDBHelper.addEmptyBudgetBar(category); 
+    await remoteDBHelper.addEmptyBudgetBar(category);
     textcontrollerNAME.clear();
   }
 

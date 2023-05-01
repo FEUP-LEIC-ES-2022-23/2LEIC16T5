@@ -24,17 +24,21 @@ class BarGraphState extends State<MyBarGraph> {
   bool barTouched = false;
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return  Row(
       children: [
-        Expanded(
+        
+       Expanded(
           child: Card(
             elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+           
+               
             color: Colors.black,
-            child: Container(
+            child:SingleChildScrollView(
+  scrollDirection: Axis.horizontal,
+  child: Container(
               height: widget.graphContainerHeight,
-              child: Padding(
+              width: (widget.barWidth+widget.spaceBetweenBars)*widget.barsData.length,
+              child:  Padding(
                 padding: EdgeInsets.all(30),
                 child: BarChart(
                   BarChartData(
@@ -44,9 +48,11 @@ class BarGraphState extends State<MyBarGraph> {
                     barTouchData: BarTouchData(
                         enabled: true,
                         touchCallback: (p0, p1) {
-                          setState(() {
-                            barTouched = p0.isInterestedForInteractions;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              barTouched = p0.isInterestedForInteractions;
+                            });
+                          }
                         },
                         touchTooltipData: BarTouchTooltipData(
                           tooltipBgColor: Colors.white,
@@ -136,7 +142,7 @@ class BarGraphState extends State<MyBarGraph> {
               ),
             ),
           ),
-        )
+        ),),
       ],
     );
   }

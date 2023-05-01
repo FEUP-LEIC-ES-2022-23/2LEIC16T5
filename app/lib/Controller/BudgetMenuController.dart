@@ -19,7 +19,7 @@ class BudgetMenuController {
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   String selectedVal = '';
-  List<String> listitems = [''];
+  List<String> listitems = [];
   bool initState_ = true;
   double totalBudgetValue = -1;
 
@@ -71,6 +71,7 @@ class BudgetMenuController {
                           if (context.mounted)
                             buildDropdownList(
                                 remoteDBHelper, context, setState),
+                                
                         ],
                       ),
                       Row(
@@ -128,7 +129,7 @@ class BudgetMenuController {
                             selectedVal,
                             num.parse(textcontrollerCategoryBudgetLimit.text)
                                 .toDouble());
-                      }
+                        }
                       textcontrollerCategoryBudgetLimit.clear();
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
@@ -141,49 +142,30 @@ class BudgetMenuController {
           );
         });
   }
+  void _loadBudgetBars(BuildContext context,Function? callback ) async{
+    Stream<List<BudgetBarModel>> stream =  remoteDBHelper.readBudgetBars();
+    stream.listen((budgetBars) {
+      if (context.mounted) {
+        callback!(() {
+          listitems=[];
+          for (var budgetBar in budgetBars) {
+            listitems.add(budgetBar.categoryName!);
+          }
+          selectedVal=listitems.first;
+        });
+      }
+    });
+  }
 
   Widget buildDropdownList(
       RemoteDBHelper db, BuildContext context, Function callback) {
-    if (context.mounted && initState_) {
-      setInitState(remoteDBHelper.readBudgetBars(), callback);
-      callback(() {
-        initState_ = false;
-      });
-    }
-
-    return StreamBuilder<List<BudgetBarModel>>(
-        stream: db.readBudgetBars(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<BudgetBarModel>> snapshot) {
-          List<String> temp = [];
-          if (!snapshot.hasData) {
-            return DropdownButton(
-                dropdownColor: Colors.black,
-                iconEnabledColor: Colors.white,
-                value: '',
-                items: ['']
-                    .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(
-                          e!,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15),
-                        )))
-                    .toList(),
-                onChanged: (val) {
-                  callback(() {
-                    selectedVal = val!;
-                    initState_ = false;
-                  });
-                });
-          }
-          snapshot.data!.forEach((element) {
-            temp.add(element.categoryName!);
-          });
-          listitems = temp;
-
-          return snapshot.hasData
-              ? DropdownButtonHideUnderline(
+        
+        if(initState_){
+          _loadBudgetBars(context, callback);
+          callback((){initState_=false;});
+        }  
+        
+    return DropdownButtonHideUnderline(
                   child: DropdownButton(
                       dropdownColor: Colors.white,
                       iconEnabledColor: Colors.black,
@@ -198,28 +180,14 @@ class BudgetMenuController {
                               )))
                           .toList(),
                       onChanged: (val) {
-                        if (context.mounted)
+                        if (context.mounted) {
                           callback(() {
                             selectedVal = val as String;
-                            initState_ = false;
+                            
                           });
-                      }))
-              : DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      dropdownColor: Colors.black,
-                      iconEnabledColor: Colors.white,
-                      value: '',
-                      items: ['']
-                          .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(
-                                e!,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 15),
-                              )))
-                          .toList(),
-                      onChanged: (val) {}));
-        });
+                        }
+                      }));
+              
   }
 
   void setInitState(Stream<List<BudgetBarModel>> stream, Function? callback) {

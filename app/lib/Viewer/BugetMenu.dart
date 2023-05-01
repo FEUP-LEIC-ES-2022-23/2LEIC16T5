@@ -17,15 +17,7 @@ class BudgetMenu extends StatefulWidget {
 }
 
 class BudgetMenuState extends State<BudgetMenu> {
-  double totalBudgetVal = 0;
   bool totalLimitEdited = false;
-  callback(totalLimitValue) {
-    if (mounted) {
-      setState(() {
-        totalBudgetVal = totalLimitValue;
-      });
-    }
-  }
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
@@ -61,11 +53,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                 child: IconButton(
                   onPressed: () {
                     if (mounted) {
-                      BudgetMenuController(callback: callback)
-                          .EditBudgetMenu(context);
-                      setState(() {
-                        totalLimitEdited = true;
-                      });
+                      BudgetMenuController().EditBudgetMenu(context);
                     }
                   },
                   icon: const Icon(
@@ -77,13 +65,13 @@ class BudgetMenuState extends State<BudgetMenu> {
               ),
             ],
           ),
-          if (mounted) buildBody(remoteDBHelper, setState, context),
+          buildBody(remoteDBHelper),
         ]),
       ),
     );
   }
 
-  Widget buildBody(RemoteDBHelper db, Function callBack, BuildContext context) {
+  Widget buildBody(RemoteDBHelper db) {
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,
@@ -128,24 +116,21 @@ class BudgetMenuState extends State<BudgetMenu> {
             double maxY = 0;
             double percentage = 0;
             double currBudgetValSum = 0;
+            double totalBudgetVal = 0;
 
-            snapshot.data!.forEach(
-              (budgetBar) {
-                if (budgetBar.limit! > maxY) {
-                  maxY = budgetBar.limit!;
-                }
-                budgetBar.x = xCoord;
-                xCoord++;
-                budgetBar.y = budgetBar.value;
-                budgetMenuController.checkLimit(budgetBar, 0.05);
-                barData.add(budgetBar);
-                currBudgetValSum += budgetBar.value!;
-                if (!totalLimitEdited) {
-                  totalBudgetVal += budgetBar.limit!;
-                }
-              },
-            );
-
+            for (var budgetBar in snapshot.data!) {
+              if (budgetBar.limit! > maxY) {
+                maxY = budgetBar.limit!;
+              }
+              budgetBar.x = xCoord;
+              xCoord++;
+              budgetBar.y = budgetBar.value;
+              BudgetMenuController().checkLimit(budgetBar, 0.05);
+              barData.add(budgetBar);
+              currBudgetValSum += budgetBar.value!;
+              totalBudgetVal += budgetBar.limit!;
+            }
+            print(totalBudgetVal);
             percentage = totalBudgetVal > currBudgetValSum
                 ? currBudgetValSum / totalBudgetVal
                 : 1;
@@ -163,28 +148,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   height: 20,
                 ),
                 Stack(alignment: AlignmentDirectional.center, children: [
-                  Image.asset(
-                    'assets/img/Luckycat1.png',
-                    width: 180,
-                  ),
-                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    const SizedBox(
-                      height: 120,
-                    ),
-                    Text(
-                      (percentage * 100).toStringAsFixed(0) + '%',
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                                color: Colors.red,
-                                offset: Offset.zero,
-                                blurRadius: 15)
-                          ]),
-                    )
-                  ]),
-                  CircularPercentIndicator(
+                   CircularPercentIndicator(
                     animation: true,
                     animationDuration: 600,
                     radius: 80.0,
@@ -194,6 +158,29 @@ class BudgetMenuState extends State<BudgetMenu> {
                     circularStrokeCap: CircularStrokeCap.round,
                     backgroundColor: Colors.black,
                   ),
+                  Image.asset(
+                    'assets/img/Luckycat1.png',
+                    width: 160,
+                  ),
+                  Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    const SizedBox(
+                      height: 125,
+                    ),
+                    Text(
+                      '${(percentage * 100).toStringAsFixed(0)}%',
+                      style: const TextStyle(
+                          fontSize: 35,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                                color: Colors.red,
+                                offset: Offset.zero,
+                                blurRadius: 16)
+                          ]),
+                    )
+                  ]),
+                 
                 ]),
               ],
             );

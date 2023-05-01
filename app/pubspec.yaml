@@ -51,6 +51,8 @@ dependencies:
 
   mockito: ^5.0.0
   glob: ^2.1.1
+  firebase_auth_mocks: ^0.8.7
+  google_sign_in_mocks: ^0.2.2
 
 
 dev_dependencies:
@@ -68,7 +70,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   google_fonts:
-  
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

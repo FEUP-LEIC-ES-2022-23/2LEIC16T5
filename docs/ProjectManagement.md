@@ -47,7 +47,7 @@ You can find below information and references related with the project managemen
   
   #### End
   
-  
+  <img width="948" alt="Iteration2_End" src="https://user-images.githubusercontent.com/92641892/232920659-21f64140-2bbc-4c8c-a3e0-f062f085cd05.png">
   
   #### Retrospectives
   

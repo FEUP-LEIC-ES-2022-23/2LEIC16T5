@@ -82,6 +82,7 @@ class RemoteDBHelper {
         .map((snapshot) => snapshot.docs
             .map((doc) => TransactionModel.fromMap(doc.data()))
             .toList());
+
     try {
       var firstTransaction = await transactions.first;
       return firstTransaction.isNotEmpty;
@@ -181,6 +182,7 @@ class RemoteDBHelper {
         .map((snapshot) => snapshot.docs
             .map((doc) => CategoryModel.fromMap(doc.data()))
             .toList());
+
     try {
       var firstCategory = await categories.first;
       return firstCategory.isNotEmpty;

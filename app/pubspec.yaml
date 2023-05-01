@@ -38,6 +38,7 @@ dependencies:
   quickalert: ^1.0.1
   simple_circular_progress_bar: ^1.0.2
   percent_indicator: ^4.0.1
+  fl_chart: ^0.60.0
 
   path: ^1.8.0
   # The following adds the Cupertino Icons font to your application.

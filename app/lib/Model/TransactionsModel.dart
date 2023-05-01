@@ -25,16 +25,15 @@ class TransactionModel {
 
   factory TransactionModel.fromMap(Map<String, dynamic> json) =>
       TransactionModel(
-        transactionID: json['transactionID'],
-        userID: json['userID'],
-        categoryID: json['categoryID'],
-        expense: json['expense'],
-        name: json['name'],
-        total: json['total'],
-        date: DateTime.fromMillisecondsSinceEpoch(json['date']),
-        notes: json['notes'],
-        location: json['location']
-      );
+          transactionID: json['transactionID'],
+          userID: json['userID'],
+          categoryID: json['categoryID'],
+          expense: json['expense'],
+          name: json['name'],
+          total: json['total'],
+          date: DateTime.fromMillisecondsSinceEpoch(json['date']),
+          notes: json['notes'],
+          location: json['location']);
 
   Map<String, dynamic> toMap() {
     return {

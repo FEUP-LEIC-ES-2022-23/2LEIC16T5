@@ -91,11 +91,11 @@ class _SavingsMenu extends State<SavingsMenu> {
                 Padding(
                   padding: const EdgeInsets.only(left: 90),
                   child: IconButton(
-                    onPressed: () => {
+                    onPressed: () async => {
                       setInitState(remoteDBHelper.readSavings(), setState),
                       if (selectedVal != "")
                         {
-                          remoteDBHelper.deleteSaving(selectedVal),
+                          await remoteDBHelper.deleteSaving(selectedVal),
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.success,
@@ -169,7 +169,8 @@ class _SavingsMenu extends State<SavingsMenu> {
                               value: e,
                               child: Text(
                                 e!,
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 26),
                               )))
                           .toList(),
                       onChanged: (val) {
@@ -273,7 +274,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                             alignment: Alignment.center,
                             children: [
                               Container(
-                                width: 190,
+                                width: 200,
                                 height: 50,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -372,46 +373,52 @@ class _SavingsMenu extends State<SavingsMenu> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 280,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border:
-                              Border.all(width: 30, color: Colors.transparent),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.deepOrange,
-                              offset: Offset(
-                                0.0,
-                                0.0,
-                              ), //Offset
-                              blurRadius: 10.0,
-                              spreadRadius: 4.0,
-                            )
-                          ],
-                        ),
+                  if (snapshot.data!.first.targetDate != null)
+                    [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 280,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(
+                                  width: 30, color: Colors.transparent),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.deepOrange,
+                                  offset: Offset(
+                                    0.0,
+                                    0.0,
+                                  ), //Offset
+                                  blurRadius: 6.0,
+                                  spreadRadius: 4.0,
+                                )
+                              ],
+                            ),
+                          ),
+                          Row(children: [
+                            const Icon(Icons.warning, size: 20),
+                            const SizedBox(width: 10),
+                            Text(
+                              (snapshot.data!.first.targetDate == null)
+                                  ? ""
+                                  : "Target Date:  " +
+                                      DateFormat('dd-MM-yyyy').format(
+                                          snapshot.data!.first.targetDate!),
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 20),
+                            ),
+                          ]),
+                        ],
                       ),
-                      Row(children: [
-                        const Icon(Icons.warning, size: 20),
-                        const SizedBox(width: 10),
-                        Text(
-                          (snapshot.data!.first.targetDate == null)
-                              ? ""
-                              : "Target Date:  " +
-                                  DateFormat('dd-MM-yyyy')
-                                      .format(snapshot.data!.first.targetDate!),
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 20),
-                        ),
-                      ]),
-                    ],
-                  )
+                    ].first,
                 ],
+              ),
+              const SizedBox(
+                height: 25,
               )
             ]);
           }

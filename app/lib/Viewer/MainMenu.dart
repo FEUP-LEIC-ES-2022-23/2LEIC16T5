@@ -1,3 +1,4 @@
+import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,19 @@ class MainMenu extends StatelessWidget {
                   child:
                       const Text('Categories', style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const BudgetMenu(title: 'Budget')),
+                  );
+                },
+                style:
+                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
+                child: Text('Budget', style: TextStyle(fontSize: 20)),
+              ),
+              ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -83,12 +97,8 @@ class MainMenu extends StatelessWidget {
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
-              /*ElevatedButton(
-                onPressed: () {},
-                child: Text('Goal', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
+
+              /*
               ElevatedButton(
                 onPressed: () {},
                 child: Text('Statistics', style: TextStyle(fontSize: 20)),

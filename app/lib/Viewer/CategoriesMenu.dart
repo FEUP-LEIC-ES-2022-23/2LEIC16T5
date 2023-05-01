@@ -17,7 +17,7 @@ class CategoriesMenu extends StatefulWidget {
 
 class _CategoriesMenuState extends State<CategoriesMenu> {
   RemoteDBHelper remoteDBHelper =
-    RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,79 +44,80 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
       body: Stack(
         children: [
           StreamBuilder<List<c_model.CategoryModel>>(
-            stream: remoteDBHelper.readCategories(),
-            builder: (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
-              print('Length of list: ${snapshot.data?.length}');
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: Text('Loading...',
-                  style: TextStyle(fontSize: 20, color: Colors.white)));
-              }
-              return snapshot.data!.isEmpty
-                  ? const Center(
-                      child: Text("Nothing to show",
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.white)),
-                    )
-                  : ListView(
-                      shrinkWrap: true,
-                      children: snapshot.data!.map((categor) {
-                        return Center(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom:
-                                        BorderSide(color: Colors.white24))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.only(left: 0),
-                                tileColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
+              stream: remoteDBHelper.readCategories(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
+                print('Length of list: ${snapshot.data?.length}');
+                if (!snapshot.hasData) {
+                  return const Center(
+                      child: Text('Loading...',
+                          style: TextStyle(fontSize: 20, color: Colors.white)));
+                }
+                return snapshot.data!.isEmpty
+                    ? const Center(
+                        child: Text("Nothing to show",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
+                      )
+                    : ListView(
+                        shrinkWrap: true,
+                        children: snapshot.data!.map((categor) {
+                          return Center(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Colors.white24))),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.only(left: 0),
+                                  tileColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
                                       Radius.circular(12),
-                                  ),
-                                ),
-                                textColor: Colors.black,
-                                iconColor: Colors.white,
-                                leading: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
                                     ),
-                                    color: Color(categor.color),
                                   ),
-                                  width: 80,
+                                  textColor: Colors.black,
+                                  iconColor: Colors.white,
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        bottomLeft: Radius.circular(12),
+                                      ),
+                                      color: Color(categor.color),
+                                    ),
+                                    width: 80,
+                                  ),
+                                  title: Text(
+                                    categor.name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  onLongPress: () {
+                                    setState(() {
+                                      remoteDBHelper.removeCategory(categor);
+                                      remoteDBHelper
+                                          .removeBudgetBar(categor.name);
+                                    });
+                                  },
                                 ),
-                                title: Text(
-                                  categor.name,
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-
-                                onLongPress: () {
-                                  setState(() {
-                                    remoteDBHelper.removeCategory(categor);
-                                  });
-                                },
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-            }),
+                          );
+                        }).toList(),
+                      );
+              }),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: FloatingActionButton(
-                heroTag: "Add",
-                onPressed: () {
-                  NewCategoryController().newCategory(context);
-                },
-                child: const Icon(Icons.add)
-              ),
+                  heroTag: "Add",
+                  onPressed: () {
+                    NewCategoryController().newCategory(context);
+                  },
+                  child: const Icon(Icons.add)),
             ),
           ),
         ],

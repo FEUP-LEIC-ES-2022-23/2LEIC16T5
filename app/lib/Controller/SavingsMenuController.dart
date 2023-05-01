@@ -209,11 +209,19 @@ class SavingsMenuController {
           builder: (BuildContext context, setState) {
             return SingleChildScrollView(
               child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 insetPadding:
                     const EdgeInsets.symmetric(vertical: 200, horizontal: 10),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Colors.lightBlue,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(32.0),
+                        topRight: (Radius.circular(32.0)),
+                      ),
+                      color: Colors.lightBlue,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -300,26 +308,35 @@ class SavingsMenuController {
                   ],
                 ),
                 actions: <Widget>[
-                  MaterialButton(
-                    color: Colors.lightBlue,
-                    child: const Text('Update',
-                        style: TextStyle(color: Colors.black)),
-                    onPressed: () {
-                      double res =
-                          num.tryParse(textcontrollerValue.text.trim())!
-                              .toDouble();
-                      textcontrollerValue.clear();
-                      Navigator.of(context).pop();
-                      if (res <= totalVal) {
-                        updateSavingValue(context, name, currVal, res, ifAdd);
-                      } else {
-                        QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.error,
-                            text:
-                                "Value needs to be within total saving value! Nothing was done.");
-                      }
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MaterialButton(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
+                        color: Colors.lightBlue,
+                        child: const Text('Update',
+                            style: TextStyle(color: Colors.black)),
+                        onPressed: () {
+                          double res =
+                              num.tryParse(textcontrollerValue.text.trim())!
+                                  .toDouble();
+                          textcontrollerValue.clear();
+                          Navigator.of(context).pop();
+                          if (res <= totalVal) {
+                            updateSavingValue(
+                                context, name, currVal, res, ifAdd);
+                          } else {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.error,
+                                text:
+                                    "Value needs to be within total saving value! Nothing was done.");
+                          }
+                        },
+                      ),
+                    ],
                   )
                 ],
               ),

@@ -224,6 +224,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "fl_chart",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/fl_chart-0.62.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -740,7 +746,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-01T18:02:51.315964Z",
+  "generated": "2023-05-01T18:25:08.888102Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

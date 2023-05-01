@@ -46,7 +46,6 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
           StreamBuilder<List<c_model.CategoryModel>>(
             stream: remoteDBHelper.readCategories(),
             builder: (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
-              print('Length of list: ${snapshot.data?.length}');
               if (!snapshot.hasData) {
                 return const Center(
                   child: Text('Loading...',

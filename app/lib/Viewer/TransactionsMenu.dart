@@ -21,7 +21,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
   RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
-    NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
+  NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
     return Scaffold(
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),

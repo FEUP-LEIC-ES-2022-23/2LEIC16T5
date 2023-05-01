@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
@@ -15,6 +16,7 @@ class NewTransactionController {
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
+  NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
@@ -289,22 +291,12 @@ class NewTransactionController {
   }
 
   void showTransaction(BuildContext context, t_model.TransactionModel transac) {
-    t_model.TransactionModel example = t_model.TransactionModel(
-        userID: '0',
-        categoryID: '1',
-        expense: 0,
-        name: 'expense example',
-        total: 100,
-        date: DateTime(2022, 6, 6),
-        notes: 'example notes',
-        location: const GeoPoint(41, 8.6));
-
     showDialog(
         barrierDismissible: true,
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
-              key: const Key("New Transaction"),
+              key: const Key("Transaction info"),
               builder: (BuildContext context, setState) {
                 return AlertDialog(
                   shape: const RoundedRectangleBorder(
@@ -331,56 +323,138 @@ class NewTransactionController {
                               color: Colors.white,
                             ),
                           ),
-                          const Text(
-                            'Transaction name',
-                            style: TextStyle(
+                          Text(
+                            transac.name,
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
                       )),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [Text(example.total.toString())],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            (example.expense == 0)
-                                ? Text('is expense')
-                                : Text('is income')
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(DateFormat('dd-MM-yyyy').format(example.date))
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              example.notes?.isEmpty ?? true
-                                  ? 'No notes'
-                                  : example.notes!,
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              (example.location != null)
-                                  ? 'Location' //lat and long ?
-                                  : 'No location'
-                            )
-                          ],
-                        ),
-                      ],
+                  content: SizedBox(
+                    height: 300,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                (transac.expense == 1)
+                                    ? const Icon(Icons.money_off)
+                                    : const Icon(Icons.wallet),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      euro.format(transac.total),
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.calendar_today),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                      child: Text(
+                                    DateFormat('dd-MM-yyyy')
+                                        .format(transac.date),
+                                    style: TextStyle(fontSize: 20),
+                                  )),
+                                ),
+                              ],
+                            ),
+                          ),
+                          (transac.notes?.isEmpty ?? true)
+                              ? SizedBox()
+                              : Padding(
+                                padding: EdgeInsets.only(bottom: 20),
+                                child:
+                                  Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Notes:',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            //borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                          padding: EdgeInsets.all(10),
+                                          child: Text(
+                                            transac.notes!,
+                                            style: const TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                
+                              ),
+                          (transac.location != null)
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Location:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
+                                    SizedBox(
+                                      width: 250,
+                                      height: 150,
+                                      child: GoogleMap(
+                                        mapType: MapType.normal,
+                                        initialCameraPosition: CameraPosition(
+                                          target: LatLng(
+                                            transac.location!.latitude,
+                                            transac.location!.longitude,
+                                          ),
+                                          zoom: 14.0,
+                                        ),
+                                        markers: {
+                                          Marker(
+                                            markerId: MarkerId(
+                                                transac.transactionID!),
+                                            position: LatLng(
+                                              transac.location!.latitude,
+                                              transac.location!.longitude,
+                                            ),
+                                          ),
+                                        },
+                                        onMapCreated:
+                                            (GoogleMapController controller) {
+                                          MapMenuController()
+                                              .setMapController(controller);
+                                        },
+                                        myLocationEnabled: true,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
                     ),
                   ),
                 );

@@ -80,7 +80,7 @@ class RemoteDBHelper {
         .where('categoryID',isEqualTo: category.categoryID).get().then((value) {
           value.docs.forEach((doc) {
             doc.reference.update({
-      'categoryID': null,
+      'categoryID': "default",
       'categoryColor': 0xFF808080,
             });
           });

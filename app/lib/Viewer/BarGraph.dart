@@ -30,9 +30,6 @@ class BarGraphState extends State<MyBarGraph> {
             MediaQuery.of(context).size.width
         ? widget.barsData.length * (widget.barWidth + widget.spaceBetweenBars)
         : MediaQuery.of(context).size.width;
-    double spaceBetweenBars =
-        (totalWidth - (widget.barWidth * widget.barsData.length)) /
-            (widget.barsData.length - 1);
 
     return Row(
       children: [

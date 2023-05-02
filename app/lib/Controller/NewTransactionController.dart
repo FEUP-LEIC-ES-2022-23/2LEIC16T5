@@ -99,7 +99,7 @@ class NewTransactionController {
                               style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? Key("Income") :  Key("Expense"),
+                            key: _isIncome? const Key("Income") :  const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -301,11 +301,11 @@ class NewTransactionController {
           if (!snapshot.hasData) {
             return Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.add,
                   color: Colors.grey,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 15,
                 ),
                 DropdownButton(
@@ -327,15 +327,15 @@ class NewTransactionController {
                 builder: (BuildContext context, setState){
                   return Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.add,
                         color: Colors.black54,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: DropdownButton(
                             dropdownColor: Colors.white,
                             value: selected_category,
@@ -347,11 +347,11 @@ class NewTransactionController {
                                       children: [
                                         Text(
                                           c!.name,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.black54,
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Container(

@@ -1,9 +1,10 @@
-//import 'package:es/Viewer/ChartsMenu.dart';
+import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
-import 'CategoriesMenu.dart';
-import 'TransactionsMenu.dart';
+import 'package:es/Viewer/CategoriesMenu.dart';
+import 'package:es/Viewer/ChartsMenu.dart';
+import 'package:es/Viewer/TransactionsMenu.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({super.key});
@@ -84,8 +85,7 @@ class MainMenu extends StatelessWidget {
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
-
-             /* ElevatedButton(
+              ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -98,23 +98,17 @@ class MainMenu extends StatelessWidget {
                   },
                   child: const Text('Charts', style: TextStyle(fontSize: 20))),
               ElevatedButton(
-                onPressed: () {},
-                child: Text('Goal', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Statistics', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('National', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),*/
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          const NationalMenu(title: 'National Comparison')),
+                    );
+                  },
+                  child: const Text('National Comparison', style: TextStyle(fontSize: 20))),
             ],
           ),
         ));

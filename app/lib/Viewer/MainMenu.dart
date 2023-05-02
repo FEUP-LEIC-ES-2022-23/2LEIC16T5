@@ -98,6 +98,19 @@ class MainMenu extends StatelessWidget {
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
 
+              /* ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const ChartsMenu(title: 'Charts')),
+                    );
+                  },
+                  child: const Text('Charts', style: TextStyle(fontSize: 20))),
+              */
               /*
               ElevatedButton(
                 onPressed: () {},

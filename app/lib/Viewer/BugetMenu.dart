@@ -130,10 +130,13 @@ class BudgetMenuState extends State<BudgetMenu> {
               currBudgetValSum += budgetBar.value!;
               totalBudgetVal += budgetBar.limit!;
             }
-            print(totalBudgetVal);
-            percentage = totalBudgetVal > currBudgetValSum
-                ? currBudgetValSum / totalBudgetVal
-                : 1;
+            if (totalBudgetVal > 0) {
+              percentage = totalBudgetVal > currBudgetValSum
+                  ? currBudgetValSum / totalBudgetVal
+                  : 1;
+            } else {
+              percentage = 0;
+            }
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -148,7 +151,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   height: 20,
                 ),
                 Stack(alignment: AlignmentDirectional.center, children: [
-                   CircularPercentIndicator(
+                  CircularPercentIndicator(
                     animation: true,
                     animationDuration: 600,
                     radius: 80.0,
@@ -180,7 +183,6 @@ class BudgetMenuState extends State<BudgetMenu> {
                           ]),
                     )
                   ]),
-                 
                 ]),
               ],
             );

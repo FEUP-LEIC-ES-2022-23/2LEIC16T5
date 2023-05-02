@@ -44,37 +44,35 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
       body: Stack(
         children: [
           StreamBuilder<List<c_model.CategoryModel>>(
-              stream: remoteDBHelper.readCategories(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
-                print('Length of list: ${snapshot.data?.length}');
-                if (!snapshot.hasData) {
-                  return const Center(
-                      child: Text('Loading...',
-                          style: TextStyle(fontSize: 20, color: Colors.white)));
-                }
-                return snapshot.data!.isEmpty
-                    ? const Center(
-                        child: Text("Nothing to show",
-                            style:
-                                TextStyle(fontSize: 20, color: Colors.white)),
-                      )
-                    : ListView(
-                        shrinkWrap: true,
-                        children: snapshot.data!.map((categor) {
-                          return Center(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom:
-                                          BorderSide(color: Colors.white24))),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.only(left: 0),
-                                  tileColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
+            stream: remoteDBHelper.readCategories(),
+            builder: (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: Text('Loading...',
+                  style: TextStyle(fontSize: 20, color: Colors.white)));
+              }
+              return snapshot.data!.isEmpty
+                  ? const Center(
+                      child: Text("Nothing to show",
+                          style:
+                              TextStyle(fontSize: 20, color: Colors.white)),
+                    )
+                  : ListView(
+                      shrinkWrap: true,
+                      children: snapshot.data!.map((categor) {
+                        return Center(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom:
+                                        BorderSide(color: Colors.white24))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.only(left: 0),
+                                tileColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
                                       Radius.circular(12),
                                     ),
                                   ),

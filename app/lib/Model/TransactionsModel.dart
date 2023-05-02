@@ -11,6 +11,7 @@ class TransactionModel {
   DateTime date;
   String? notes;
   GeoPoint? location;
+  int? categoryColor;
 
   TransactionModel(
       {this.transactionID,
@@ -21,19 +22,22 @@ class TransactionModel {
       required this.total,
       required this.date,
       this.notes,
-      this.location});
+      this.location,
+      this.categoryColor});
 
   factory TransactionModel.fromMap(Map<String, dynamic> json) =>
       TransactionModel(
-          transactionID: json['transactionID'],
-          userID: json['userID'],
-          categoryID: json['categoryID'],
-          expense: json['expense'],
-          name: json['name'],
-          total: json['total'],
-          date: DateTime.fromMillisecondsSinceEpoch(json['date']),
-          notes: json['notes'],
-          location: json['location']);
+        transactionID: json['transactionID'],
+        userID: json['userID'],
+        categoryID: json['categoryID'],
+        expense: json['expense'],
+        name: json['name'],
+        total: json['total'],
+        date: DateTime.fromMillisecondsSinceEpoch(json['date']),
+        notes: json['notes'],
+        location: json['location'],
+        categoryColor: json['categoryColor'],
+      );
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,7 +48,8 @@ class TransactionModel {
       'total': total,
       'date': date.millisecondsSinceEpoch,
       'notes': notes,
-      'location': location
+      'location': location,
+      'categoryColor':categoryColor,
     };
   }
 }

@@ -18,7 +18,7 @@ class TransactionsMenu extends StatefulWidget {
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
   RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
@@ -27,7 +27,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
-          title: Text(widget.title,
+          title: Text(widget.title, 
               style: const TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -47,11 +47,14 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
           ),
           actions: [
             IconButton(
-                onPressed: () {Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                        const MapMenu(title: 'Transactions Map',)));},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MapMenu(
+                                title: 'Transactions Map',
+                              )));
+                },
                 icon: const Icon(
                   Icons.map_sharp,
                   color: Colors.white,
@@ -68,57 +71,87 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                     return const Center(
                         child: Text('Loading...',
                             style:
-                            TextStyle(fontSize: 20, color: Colors.white)));
+                                TextStyle(fontSize: 20, color: Colors.white)));
                   }
                   return snapshot.data!.isEmpty
                       ? const Center(
-                    child: Text("Nothing to show",
-                        style:
-                        TextStyle(fontSize: 20, color: Colors.white)),
-                  )
+                          child: Text("Nothing to show",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white)),
+                        )
                       : ListView(
-                    shrinkWrap: true,
-                    children: snapshot.data!.map((transac) {
-                      return Center(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom:
-                                  BorderSide(color: Colors.white24))),
-                          child: ListTile(
-                            key: const Key("Transaction"),
-                            textColor: Colors.white,
-                            iconColor: Colors.white,
-                            leading: (transac.expense == 1)
-                                ? const Icon(Icons.money_off)
-                                : const Icon(Icons.wallet),
-                            title: Text(
-                              transac.name,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            subtitle: Text(DateFormat('dd-MM-yyyy')
-                                .format(transac.date)),
-                            trailing: Text(
-                              (transac.expense == 1 ? '-' : '+') +
-                                  euro.format(transac.total),
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                NewTransactionController()
-                                    .showTransaction(context);
-                              });
-                            },
-                            onLongPress: () {
-                              setState(() {
-                                remoteDBHelper.removeTransaction(transac);
-                              });
-                            },
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  );
+                          shrinkWrap: true,
+                          children: snapshot.data!.map((transac) {
+                            return Center(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    border: Border(
+                                        bottom:
+                                            BorderSide(color: Colors.white24))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 0, right: 10, bottom: 0),
+                                    key: const Key("Transaction"),
+                                    textColor: Colors.black,
+                                    tileColor: Colors.white,
+                                    iconColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12),
+                                      ),
+                                    ),
+                                    leading: Container(
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(12),
+                                            bottomLeft: Radius.circular(12)),
+                                        color: Color(transac.categoryColor!),
+                                      ),
+                                      width: 80,
+                                      child: (transac.expense == 1)
+                                          ? const Icon(Icons.money_off)
+                                          : const Icon(Icons.wallet),
+                                    ),
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          transac.name,
+                                          style: const TextStyle(fontSize: 20),
+                                        ),
+                                        Text(DateFormat('dd-MM-yyyy')
+                                            .format(transac.date)),
+                                      ],
+                                    ),
+                                    trailing: Text(
+                                      (transac.expense == 1 ? '-' : '+') +
+                                          euro.format(transac.total),
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        NewTransactionController()
+                                            .showTransaction(context);
+                                      });
+                                    },
+                                    onLongPress: () {
+                                      setState(() {
+                                        remoteDBHelper.updateBudgetBar(
+                                            transac.transactionID!, false);
+                                        remoteDBHelper
+                                            .removeTransaction(transac);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
                 }),
             Align(
                 alignment: Alignment.bottomLeft,

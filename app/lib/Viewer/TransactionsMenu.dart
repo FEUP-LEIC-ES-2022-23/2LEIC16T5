@@ -24,6 +24,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
   Widget build(BuildContext context) {
     NumberFormat coin = NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
     return Scaffold(
+      key: const Key("Transactions"),
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,

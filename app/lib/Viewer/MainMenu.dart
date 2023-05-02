@@ -31,6 +31,7 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     setSettings(remoteDBHelper.getCurrency(), setState);
     return Scaffold(
+      key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         body: SingleChildScrollView(
           child: Column(

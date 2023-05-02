@@ -25,11 +25,15 @@ class BarGraphState extends State<MyBarGraph> {
 
   @override
   Widget build(BuildContext context) {
-    double totalWidth = MediaQuery.of(context).size.width;
+    double totalWidth = widget.barsData.length *
+                (widget.barWidth + widget.spaceBetweenBars) >
+            MediaQuery.of(context).size.width
+        ? widget.barsData.length * (widget.barWidth + widget.spaceBetweenBars)
+        : MediaQuery.of(context).size.width;
     double spaceBetweenBars =
         (totalWidth - (widget.barWidth * widget.barsData.length)) /
             (widget.barsData.length - 1);
-            
+
     return Row(
       children: [
         Expanded(
@@ -47,7 +51,7 @@ class BarGraphState extends State<MyBarGraph> {
                     BarChartData(
                       alignment: BarChartAlignment.center,
                       maxY: widget.graphMaxY,
-                      groupsSpace: spaceBetweenBars,
+                      groupsSpace: widget.spaceBetweenBars,
                       barTouchData: BarTouchData(
                           enabled: true,
                           touchCallback: (p0, p1) {

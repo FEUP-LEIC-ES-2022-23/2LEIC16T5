@@ -1,3 +1,4 @@
+import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -7,6 +8,10 @@ import 'CategoriesMenu.dart';
 import 'TransactionsMenu.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/foundation.dart';
+import 'package:es/Viewer/CategoriesMenu.dart';
+import 'package:es/Viewer/ChartsMenu.dart';
+import 'package:es/Viewer/TransactionsMenu.dart';
+
 
 
 class MainMenu extends StatefulWidget {
@@ -99,24 +104,30 @@ class _MainMenuState extends State<MainMenu> {
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
-              /*ElevatedButton(
-                onPressed: () {},
-                child: Text('Goal', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
               ElevatedButton(
-                onPressed: () {},
-                child: Text('Statistics', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const ChartsMenu(title: 'Charts')),
+                    );
+                  },
+                  child: const Text('Charts', style: TextStyle(fontSize: 20))),
               ElevatedButton(
-                onPressed: () {},
-                child: Text('National', style: TextStyle(fontSize: 20)),
-                style:
-                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-              ),*/
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NationalMenu(title: 'National Comparison', currency: _currency,)),
+                    );
+                  },
+                  child: const Text('National Comparison', style: TextStyle(fontSize: 20))),
             ],
           ),
         ));

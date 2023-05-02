@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SettingModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
@@ -39,7 +41,8 @@ class RemoteDBHelper {
       'total': transaction.total,
       'date': transaction.date.millisecondsSinceEpoch,
       'notes': transaction.notes,
-      'location': transaction.location
+      'location': transaction.location,
+      'categoryColor': transaction.categoryColor,
     });
   }
 
@@ -71,10 +74,25 @@ class RemoteDBHelper {
 
   Future removeCategory(CategoryModel category) async {
     UserModel user = UserModel(uid: userInstance.currentUser!.uid);
+
+    await FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID',isEqualTo: user.uid)
+        .where('categoryID',isEqualTo: category.categoryID).get().then((value) {
+          value.docs.forEach((doc) {
+            doc.reference.update({
+      'categoryID': "default",
+      'categoryColor': 0xFF808080,
+            });
+          });
+    });
+
+
     await FirebaseFirestore.instance
         .collection('Categories')
         .doc(category.categoryID)
         .delete();
+
   }
 
   Stream<List<TransactionModel>> readTransactions() {
@@ -95,7 +113,6 @@ class RemoteDBHelper {
     });
     return transactions;
   }
-
 
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
@@ -140,6 +157,52 @@ class RemoteDBHelper {
         .map((snapshot) => snapshot.docs
             .map((doc) => CategoryModel.fromMap(doc.data()))
             .toList());
+  }
+
+  Future<CategoryModel> getCategory(String catID) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('categoryID',isEqualTo: catID)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = querySnapshot.docs.first;
+      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      return CategoryModel.fromMap(categoryMap);
+    } else {
+      throw Exception('Category not found');
+    }
+  }
+
+  Future<Stream<List<TransactionModel>>> getTransactionsByCategory(String catName) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('name',isEqualTo: catName)
+        .get();
+
+    var categoryId = '';
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = querySnapshot.docs.first;
+      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      categoryId = CategoryModel
+          .fromMap(categoryMap)
+          .categoryID!;
+    }
+
+    var transactions = FirebaseFirestore.instance
+          .collection('Transactions')
+          .where('userID', isEqualTo: usr.uid)
+          .where('categoryID', isEqualTo: categoryId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+          .map((doc) => TransactionModel.fromMap(doc.data()))
+          .toList());
+      return transactions;
   }
 
   Stream<List<SavingsModel>> readSaving(String? name) {

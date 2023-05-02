@@ -1,4 +1,5 @@
-import 'dart:async';
+@Skip('Cannot run acceptance tests alongside unit tests.')
+
 import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:gherkin/gherkin.dart';
 import 'package:glob/glob.dart';
@@ -11,6 +12,7 @@ import 'steps/see_x.dart';
 import 'steps/select_x_option.dart';
 import 'steps/current_x_is.dart';
 import 'steps/x_is_set_on.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()

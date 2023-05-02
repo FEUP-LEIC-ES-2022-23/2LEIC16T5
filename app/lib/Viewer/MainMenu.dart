@@ -1,4 +1,4 @@
-import 'package:es/Viewer/ChartsMenu.dart';
+//import 'package:es/Viewer/ChartsMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,7 @@ class MainMenu extends StatelessWidget {
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
 
-              ElevatedButton(
+             /* ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -97,7 +97,7 @@ class MainMenu extends StatelessWidget {
                     );
                   },
                   child: const Text('Charts', style: TextStyle(fontSize: 20))),
-              /*ElevatedButton(
+              ElevatedButton(
                 onPressed: () {},
                 child: Text('Goal', style: TextStyle(fontSize: 20)),
                 style:

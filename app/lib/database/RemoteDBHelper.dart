@@ -113,6 +113,26 @@ class RemoteDBHelper {
     return transactions;
   }
 
+  /*Stream<List<TransactionModel>> readTransactionsByCategory(String category) {
+    User? usr = FirebaseAuth.instance.currentUser;
+    var transactions = FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('categoryID',isEqualTo: catID)
+        .where('date', )
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => TransactionModel.fromMap(doc.data()))
+        .toList());
+    transactions.listen((list) {
+      list.forEach((transaction) {
+        if (transaction.transactionID != null && transaction.location != null){
+          MapMenuController().addMarker(transaction);
+        }
+      });
+    });
+    return transactions;
+  }*/
 
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
@@ -174,6 +194,35 @@ class RemoteDBHelper {
     } else {
       throw Exception('Category not found');
     }
+  }
+
+  Future<Stream<List<TransactionModel>>> getCategoryByName(String catName) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('name',isEqualTo: catName)
+        .get();
+
+    var categoryId = '';
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = querySnapshot.docs.first;
+      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      categoryId = CategoryModel
+          .fromMap(categoryMap)
+          .categoryID!;
+    }
+
+    var transactions = FirebaseFirestore.instance
+          .collection('Transactions')
+          .where('userID', isEqualTo: usr.uid)
+          .where('categoryID', isEqualTo: categoryId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+          .map((doc) => TransactionModel.fromMap(doc.data()))
+          .toList());
+      return transactions;
   }
 
   Stream<List<SavingsModel>> readSaving(String? name) {

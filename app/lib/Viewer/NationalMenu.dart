@@ -1,8 +1,11 @@
 import 'package:csv/csv.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:es/Model/CategoryModel.dart';
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Model/TransactionsModel.dart';
 
 class NationalMenu extends StatefulWidget {
   const NationalMenu({super.key, required this.title});
@@ -13,20 +16,25 @@ class NationalMenu extends StatefulWidget {
 }
 
 class _NationalMenuState extends State<NationalMenu> {
+  RemoteDBHelper remoteDBHelper =
+  RemoteDBHelper(userInstance: FirebaseAuth.instance);
   bool _initState = true;
-  List<List<dynamic>> _list = [];
+  List<List<dynamic>> _portugalList = [];
   final List<dynamic> _years = [];
   final List<dynamic> _portugalCategories = ['Portugal'];
   String _selectedPortugalCategory = 'Portugal';
+  final List<String> _userCategories = ['My Data'];
+  final CategoryModel _selectedUserCategory = CategoryModel(categoryID: '',userID: '',name: 'My Data',color: 0);
+  List<TransactionModel> _userList = [];
 
-  String getValue(String year, String category){
+  String getPortugalValue(String year, String category){
     if (category == 'Portugal') return '';
     int pos = 0;
     for (var cat in _portugalCategories){
       if (cat == category) break;
       pos++;
     }
-    for (var line in _list){
+    for (var line in _portugalList){
       if (line[0].toString() == year){
         return line[pos];
       }
@@ -34,8 +42,18 @@ class _NationalMenuState extends State<NationalMenu> {
     return '';
   }
 
+  String getUserValue(String year, String category){
+    if (category == 'My Data') return '';
+    double result = 0;
+    for (final transaction in _userList){
+      if (transaction.expense == 1 && (transaction.date.year.toString() == year)){
+        result += transaction.total;
+      }
+    }
+    return (result == 0)? '' : result.toStringAsFixed(1).replaceAll('.', ',');
+  }
+
   void _loadCSV() async {
-    _initState = false;
     final rawData = await rootBundle.loadString("assets/fortuneko.csv");
     List<List<dynamic>> listData =
     const CsvToListConverter(fieldDelimiter: ';').convert(rawData);
@@ -44,18 +62,30 @@ class _NationalMenuState extends State<NationalMenu> {
       for (final line in listData.sublist(1)){
         _years.add(line[0]);
       }
-      _list = listData;
+      _portugalList = listData;
     });
   }
 
-  List<String> _userCategories = ['My Data', 'category 2', 'category 3'];
-  String _selectedUserCategory = 'My Data';
+  void _loadCategories() async {
+    Stream<List<CategoryModel>> stream = remoteDBHelper.readCategories();
+    stream.listen((categories) {
+      if (mounted) {
+        setState!(() {
+          for (var category in categories) {
+            _userCategories.add(category.name);
+          }
+        });
+      }
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
     if (_initState){
+      _initState = false;
       _loadCSV();
+      _loadCategories();
     }
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
@@ -104,8 +134,8 @@ class _NationalMenuState extends State<NationalMenu> {
                               for (var year in _years)
                                 _buildTableRow([
                                   _buildCell(year.toString()),
-                                  _buildCell(getValue(year.toString(), _selectedPortugalCategory)),
-                                  _buildCell('Total for $_selectedUserCategory'),
+                                  _buildCell(getPortugalValue(year.toString(), _selectedPortugalCategory)),
+                                  _buildCell(getUserValue(year.toString(), _selectedUserCategory.name)),
                                 ]),
 
                             ],
@@ -135,16 +165,6 @@ class _NationalMenuState extends State<NationalMenu> {
                   )
               ),
             )
-    );
-  }
-
-  Widget _buildTableCell(String text) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        color: Colors.white,
-        child: Text(text),
-      )
     );
   }
 
@@ -242,11 +262,14 @@ class _NationalMenuState extends State<NationalMenu> {
           underline: Container(),
           dropdownColor: Colors.lightBlue,
           iconEnabledColor: Colors.white,
-          value: _selectedUserCategory,
-          onChanged: (value) {
+          value: _selectedUserCategory.name,
+          onChanged: (value) async {
             setState(() {
-              _selectedUserCategory = value!;
+              _selectedUserCategory.name = value!;
             });
+            Stream<List<TransactionModel>> stream = await remoteDBHelper.getCategoryByName(_selectedUserCategory.name);
+            _userList = await stream.first;
+            setState(() {});
           },
           items: _userCategories.map((category) {
             return DropdownMenuItem<String>(

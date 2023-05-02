@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class CategoryModel {
   String? categoryID;
   String? userID;
@@ -23,7 +21,6 @@ class CategoryModel {
   }
 
   Map<String, dynamic> toMap() {
-    print(color.toString());
     return {
       'categoryID' : categoryID,
       'userID': userID,

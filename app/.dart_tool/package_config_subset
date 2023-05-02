@@ -78,6 +78,10 @@ crypto
 2.14
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/crypto-3.0.2/
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/crypto-3.0.2/lib/
+csv
+2.12
+file:///Users/Sofia/.pub-cache/hosted/pub.dev/csv-5.0.2/
+file:///Users/Sofia/.pub-cache/hosted/pub.dev/csv-5.0.2/lib/
 cupertino_icons
 2.12
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5/
@@ -142,6 +146,10 @@ fixnum
 2.19
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/fixnum-1.1.0/
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/fixnum-1.1.0/lib/
+fl_chart
+2.17
+file:///Users/Sofia/.pub-cache/hosted/pub.dev/fl_chart-0.62.0/
+file:///Users/Sofia/.pub-cache/hosted/pub.dev/fl_chart-0.62.0/lib/
 flutter_colorpicker
 2.12
 file:///Users/Sofia/.pub-cache/hosted/pub.dev/flutter_colorpicker-1.0.3/

@@ -51,6 +51,7 @@ dependencies:
   glob: ^2.1.1
   firebase_auth_mocks: ^0.8.7
   google_sign_in_mocks: ^0.2.2
+  csv: ^5.0.2
 
 
 dev_dependencies:
@@ -60,6 +61,7 @@ dev_dependencies:
     sdk: flutter
   flutter_gherkin: ^2.0.0
   flutter_colorpicker: ^1.0.3
+  fl_chart: ^0.62.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -112,3 +114,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/img/
+    - assets/fortuneko.csv

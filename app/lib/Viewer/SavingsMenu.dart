@@ -1,5 +1,5 @@
 import 'package:es/Controller/SavingsMenuController.dart';
-import 'package:flutter/foundation.dart';
+import 'package:es/Viewer/MainMenu.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:es/Model/SavingsModel.dart';
@@ -9,8 +9,9 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
 
 class SavingsMenu extends StatefulWidget {
-  const SavingsMenu({super.key, required this.title});
+  const SavingsMenu({super.key, required this.title, required this.currency});
   final String title;
+  final String currency;
 
   @override
   State<SavingsMenu> createState() => _SavingsMenu();
@@ -18,7 +19,6 @@ class SavingsMenu extends StatefulWidget {
 
 class _SavingsMenu extends State<SavingsMenu> {
   List<String?> listitems = ['1'];
-
   String? selectedVal = 'Ola';
   double multiplier = 0;
   double currSliderVal = 0;
@@ -288,7 +288,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                           ),
                           Flexible(
                             child: Padding(
-                              padding: EdgeInsets.all(75),
+                              padding: const EdgeInsets.all(75),
                               child: IconButton(
                                   onPressed: () {
                                     savingsMenuController.changeSavingValue(
@@ -317,22 +317,10 @@ class _SavingsMenu extends State<SavingsMenu> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(snapshot.data!.first.value!.toStringAsFixed(2),
+                  Text("${snapshot.data!.first.value!.toStringAsFixed(2)} ${widget.currency} / ${snapshot.data!.first.total} ${widget.currency}",
                       style: const TextStyle(
                           fontSize: 28,
                           color: Color.fromRGBO(226, 177, 60, 10))),
-                  const Icon(Icons.euro,
-                      size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
-                  const Text("/",
-                      style: TextStyle(
-                          fontSize: 28,
-                          color: Color.fromRGBO(226, 177, 60, 10))),
-                  Text(snapshot.data!.first.total.toString(),
-                      style: const TextStyle(
-                          fontSize: 28,
-                          color: Color.fromRGBO(226, 177, 60, 10))),
-                  const Icon(Icons.euro,
-                      size: 30, color: Color.fromRGBO(226, 177, 60, 10)),
                 ],
               ),
               const SizedBox(

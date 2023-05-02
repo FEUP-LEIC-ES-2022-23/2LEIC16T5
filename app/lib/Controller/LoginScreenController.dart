@@ -16,7 +16,7 @@ class loginScreenController extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const MainMenu();
+              return MainMenu();
             } else {
               return const LoginPage();
             }

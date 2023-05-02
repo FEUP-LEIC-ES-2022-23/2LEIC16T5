@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/MapMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
@@ -15,14 +18,16 @@ class NewTransactionController {
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
+  NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
+  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
 
   RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
-        categoryID: null,
+        categoryID: selected_category.categoryID,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
@@ -32,6 +37,7 @@ class NewTransactionController {
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         location: _isIncome? null : position,
+        categoryColor: selected_category.color,
         notes: textcontrollerNOTES.text);
 
     remoteDBHelper.addTransaction(transaction);
@@ -88,9 +94,12 @@ class NewTransactionController {
                         key: const Key("Switch"),
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text('Expense'),
+                          const Text(
+                              'Expense',
+                              style: TextStyle(color: Colors.black54),
+                          ),
                           Switch(
-                            key: _isIncome? Key("Income") :  Key("Expense"),
+                            key: _isIncome? const Key("Income") :  const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -98,7 +107,10 @@ class NewTransactionController {
                               });
                             },
                           ),
-                          const Text('Income'),
+                          const Text(
+                              'Income',
+                              style: TextStyle(color: Colors.black54),
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -199,6 +211,11 @@ class NewTransactionController {
                       const SizedBox(
                         height: 5,
                       ),
+                      buildDropdownList(remoteDBHelper),
+                      const SizedBox(
+                        height: 5,
+                      ),
+
                       Row(
                         children: [
                           Expanded(
@@ -274,7 +291,268 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
+
+  Widget buildDropdownList(RemoteDBHelper db) {
+    return StreamBuilder<List<c_model.CategoryModel>>(
+        stream: db.readCategories(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
+          List<c_model.CategoryModel?> categories = [];
+          if (!snapshot.hasData) {
+            return Row(
+              children: [
+                const Icon(
+                  Icons.add,
+                  color: Colors.grey,
+                ),
+                const SizedBox(
+                  width: 15,
+                ),
+                DropdownButton(
+                    dropdownColor: Colors.black,
+                    iconEnabledColor: Colors.white,
+                    value: '',
+                    items: const [],
+                    onChanged: (val) {}),
+              ],
+            );
+          }
+          snapshot.data!.forEach((element) {
+            categories.add(element);
+          });
+          categories.add(selected_category);
+
+          return snapshot.hasData
+              ? StatefulBuilder(
+                builder: (BuildContext context, setState){
+                  return Row(
+                    children: [
+                      const Icon(
+                        Icons.add,
+                        color: Colors.black54,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: DropdownButton(
+                            dropdownColor: Colors.white,
+                            value: selected_category,
+                            items: categories
+                                .map((c_model.CategoryModel? c) => DropdownMenuItem(
+                                    value: c,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          c!.name,
+                                          style: const TextStyle(
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(c.color),
+                                          ),
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      ],
+                                    )))
+                                .toList(),
+                            onChanged: (val) {
+                                setState(() {
+                                  selected_category = val as c_model.CategoryModel;
+                                });
+                              }),
+                      ),
+                    ],
+                  );
+                    }
+              )
+              : DropdownButton(
+                  dropdownColor: Colors.black,
+                  iconEnabledColor: Colors.white,
+                  value: '',
+                  items: const [],
+                  onChanged: (val) {});
+        });
+  }
+
+  void showTransaction(BuildContext context, t_model.TransactionModel transac) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              key: const Key("Transaction info"),
+              builder: (BuildContext context, setState) {
+                return AlertDialog(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                  titlePadding: const EdgeInsets.all(0),
+                  title: Container(
+                      decoration: const BoxDecoration(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(32.0)),
+                        color: Colors.lightBlue,
+                      ),
+                      height: 75,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            transac.name,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                  content: SizedBox(
+                    height: 300,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                (transac.expense == 1)
+                                    ? const Icon(Icons.money_off)
+                                    : const Icon(Icons.wallet),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      euro.format(transac.total),
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.calendar_today),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                      child: Text(
+                                    DateFormat('dd-MM-yyyy')
+                                        .format(transac.date),
+                                    style: TextStyle(fontSize: 20),
+                                  )),
+                                ),
+                              ],
+                            ),
+                          ),
+                          (transac.notes?.isEmpty ?? true)
+                              ? SizedBox()
+                              : Padding(
+                                padding: EdgeInsets.only(bottom: 20),
+                                child:
+                                  Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Notes:',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            //borderRadius: BorderRadius.circular(10.0),
+                                          ),
+                                          padding: EdgeInsets.all(10),
+                                          child: Text(
+                                            transac.notes!,
+                                            style: const TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                
+                              ),
+                          (transac.location != null)
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Location:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
+                                    SizedBox(
+                                      width: 250,
+                                      height: 150,
+                                      child: GoogleMap(
+                                        mapType: MapType.normal,
+                                        initialCameraPosition: CameraPosition(
+                                          target: LatLng(
+                                            transac.location!.latitude,
+                                            transac.location!.longitude,
+                                          ),
+                                          zoom: 14.0,
+                                        ),
+                                        markers: {
+                                          Marker(
+                                            markerId: MarkerId(
+                                                transac.transactionID!),
+                                            position: LatLng(
+                                              transac.location!.latitude,
+                                              transac.location!.longitude,
+                                            ),
+                                          ),
+                                        },
+                                        onMapCreated:
+                                            (GoogleMapController controller) {
+                                          MapMenuController()
+                                              .setMapController(controller);
+                                        },
+                                        myLocationEnabled: true,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        });
   }
 }

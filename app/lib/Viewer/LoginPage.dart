@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key("Login"),
       backgroundColor: const Color.fromARGB(255, 12, 18, 50),
       body: Form(
         key: _key,

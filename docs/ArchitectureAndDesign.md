@@ -23,7 +23,7 @@ The *External Services* holds the dependencies of our app, namely the [*Google M
 Our Physical Architecture diagram shows our mobile app, connected to all the dependencies we have identified until now. [Firebase](https://firebase.google.com) is used for authentication, storage, and synchronisation of user data across multiple devices. [Google Maps API](https://developers.google.com/maps) is used for generating a geographical chart of expenses. [PORDATA database](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela) provides the “National Comparison” feature.
 Therefore, this diagram illustrates the communication and data flow between **Fortuneko** app and these external services.
 
-![PhysicalArchitecture](https://user-images.githubusercontent.com/92641892/227900317-3b06c22b-b91a-4f75-be38-2da4c1d0b7c0.jpeg)
+![PhysicalArchitecture](https://user-images.githubusercontent.com/92641892/235796314-d5d13ff9-e637-4d98-86aa-e48c47b4fa7a.jpeg)
 
 ### Vertical prototype
 

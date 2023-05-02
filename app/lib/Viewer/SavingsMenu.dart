@@ -1,5 +1,5 @@
 import 'package:es/Controller/SavingsMenuController.dart';
-import 'package:flutter/foundation.dart';
+import 'package:es/Viewer/MainMenu.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:es/Model/SavingsModel.dart';
@@ -9,8 +9,9 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
 
 class SavingsMenu extends StatefulWidget {
-  const SavingsMenu({super.key, required this.title});
+  const SavingsMenu({super.key, required this.title, required this.currency});
   final String title;
+  final String currency;
 
   @override
   State<SavingsMenu> createState() => _SavingsMenu();

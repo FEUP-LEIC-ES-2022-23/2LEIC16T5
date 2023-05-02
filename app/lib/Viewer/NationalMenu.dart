@@ -8,8 +8,9 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:es/Model/TransactionsModel.dart';
 
 class NationalMenu extends StatefulWidget {
-  const NationalMenu({super.key, required this.title});
+  const NationalMenu({super.key, required this.title, required this.currency});
   final String title;
+  final String currency;
 
   @override
   State<NationalMenu> createState() => _NationalMenuState();
@@ -50,7 +51,7 @@ class _NationalMenuState extends State<NationalMenu> {
         result += transaction.total;
       }
     }
-    return (result == 0)? '' : result.toStringAsFixed(1).replaceAll('.', ',');
+    return (result == 0)? '' : ('${result.toStringAsFixed(1).replaceAll('.', ',')} ${widget.currency}');
   }
 
   void _loadCSV() async {

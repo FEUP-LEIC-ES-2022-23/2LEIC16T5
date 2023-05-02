@@ -113,27 +113,6 @@ class RemoteDBHelper {
     return transactions;
   }
 
-  /*Stream<List<TransactionModel>> readTransactionsByCategory(String category) {
-    User? usr = FirebaseAuth.instance.currentUser;
-    var transactions = FirebaseFirestore.instance
-        .collection('Transactions')
-        .where('userID', isEqualTo: usr!.uid)
-        .where('categoryID',isEqualTo: catID)
-        .where('date', )
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => TransactionModel.fromMap(doc.data()))
-        .toList());
-    transactions.listen((list) {
-      list.forEach((transaction) {
-        if (transaction.transactionID != null && transaction.location != null){
-          MapMenuController().addMarker(transaction);
-        }
-      });
-    });
-    return transactions;
-  }*/
-
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
     var transactions = FirebaseFirestore.instance
@@ -196,7 +175,7 @@ class RemoteDBHelper {
     }
   }
 
-  Future<Stream<List<TransactionModel>>> getCategoryByName(String catName) async {
+  Future<Stream<List<TransactionModel>>> getTransactionsByCategory(String catName) async {
     User? usr = FirebaseAuth.instance.currentUser;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Categories')

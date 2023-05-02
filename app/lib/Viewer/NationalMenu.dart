@@ -23,7 +23,7 @@ class _NationalMenuState extends State<NationalMenu> {
   final List<dynamic> _years = [];
   final List<dynamic> _portugalCategories = ['Portugal'];
   String _selectedPortugalCategory = 'Portugal';
-  final List<String> _userCategories = ['My Data'];
+  final List<String> _userCategories = ['My Data', 'Total'];
   final CategoryModel _selectedUserCategory = CategoryModel(categoryID: '',userID: '',name: 'My Data',color: 0);
   List<TransactionModel> _userList = [];
 
@@ -267,7 +267,12 @@ class _NationalMenuState extends State<NationalMenu> {
             setState(() {
               _selectedUserCategory.name = value!;
             });
-            Stream<List<TransactionModel>> stream = await remoteDBHelper.getCategoryByName(_selectedUserCategory.name);
+            Stream<List<TransactionModel>> stream;
+            if (_selectedUserCategory.name == 'Total') {
+              stream = await remoteDBHelper.readTransactions();
+            } else {
+              stream = await remoteDBHelper.getTransactionsByCategory(_selectedUserCategory.name);
+            }
             _userList = await stream.first;
             setState(() {});
           },

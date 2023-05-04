@@ -7,6 +7,7 @@ class BudgetBarModel {
   double? limit;
   double? value;
   int? color;
+  DateTime? triggerDate;
   int? x;
   double? y;
   bool? onLimit;
@@ -17,7 +18,8 @@ class BudgetBarModel {
       required this.userID,
       this.limit,
       this.value,
-      this.color});
+      this.color,
+      this.triggerDate});
 
   factory BudgetBarModel.fromMap(Map<String, dynamic> json) => BudgetBarModel(
         categoryName: json['categoryName'],
@@ -26,6 +28,7 @@ class BudgetBarModel {
         limit: json['limit'].toDouble(),
         value: json['value'].toDouble(),
         color: json['color'].toInt(),
+        triggerDate: DateTime.fromMillisecondsSinceEpoch(json['triggerDate']),
       );
 
   Map<String, dynamic> toMap() {
@@ -35,7 +38,8 @@ class BudgetBarModel {
       'userID': userID,
       'limit': limit,
       'value': value,
-      'color': color
+      'color': color,
+      'triggerDate':triggerDate!.millisecondsSinceEpoch
     };
   }
 }

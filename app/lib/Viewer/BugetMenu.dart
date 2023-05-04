@@ -6,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../Model/BudgetBarModel.dart';
+import '../Model/TransactionsModel.dart';
 import 'BarGraph.dart';
 
 class BudgetMenu extends StatefulWidget {
@@ -22,6 +23,14 @@ class BudgetMenuState extends State<BudgetMenu> {
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   BudgetMenuController budgetMenuController = BudgetMenuController();
+
+  getTransactions(transacs) {
+    setState(() {
+      transactions = transacs;
+    });
+  }
+
+  List<TransactionModel> transactions = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +81,8 @@ class BudgetMenuState extends State<BudgetMenu> {
   }
 
   Widget buildBody(RemoteDBHelper db) {
+    budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
+    
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,

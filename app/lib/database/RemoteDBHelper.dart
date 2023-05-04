@@ -23,7 +23,7 @@ class RemoteDBHelper {
   }
 
   //Section for Transactions
-  Future<String?> addTransaction(TransactionModel transaction) async {
+  Future<TransactionModel> addTransaction(TransactionModel transaction) async {
     UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
     await firebaseInstance
         .collection('Transactions')
@@ -47,7 +47,7 @@ class RemoteDBHelper {
       'location': transaction.location,
       'categoryColor': transaction.categoryColor,
     });
-    return transaction.transactionID;
+    return transaction;
   }
 
   Future<String?> removeTransaction(TransactionModel transaction) async {
@@ -77,6 +77,7 @@ class RemoteDBHelper {
     });
     return transactions;
   }
+
 
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
@@ -159,7 +160,16 @@ class RemoteDBHelper {
         });
       });
     });
-
+    await firebaseInstance
+        .collection('BudgetBars')
+        .where('userID', isEqualTo: user.uid)
+        .where('categoryID', isEqualTo: category.categoryID)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.reference.delete();
+      });
+    });
     await FirebaseFirestore.instance
         .collection('Categories')
         .doc(category.categoryID)
@@ -294,7 +304,7 @@ class RemoteDBHelper {
         .then((docsQuery) async {
       if (docsQuery.docs.length == 1) {
         Map<String, dynamic> categoryQueryData = docsQuery.docs.first.data();
-  
+
         budgetBarModel = BudgetBarModel(
             categoryName: categoryQueryData['name'],
             categoryID: categoryQueryData['categoryID'],
@@ -393,6 +403,12 @@ class RemoteDBHelper {
       });
     });
   }
+
+  /*Future updateTimeValue(List<BudgetBarModel> barDatas) async{
+    for(BudgetBarModel  bardata in barDatas){
+      await firebaseInstance.collection()
+    }
+  }*/
 
   Future userResetData() async {
     await firebaseInstance

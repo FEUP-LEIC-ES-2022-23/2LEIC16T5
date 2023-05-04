@@ -60,8 +60,8 @@ class BarGraphState extends State<MyBarGraph> {
                           },
                           touchTooltipData: BarTouchTooltipData(
                             tooltipBgColor: Colors.white,
-                            direction: TooltipDirection.auto,
-                            tooltipMargin: -10,
+                            direction: TooltipDirection.bottom,
+                            tooltipMargin: -55,
                             getTooltipItem: (group, groupIndex, rod, rodIndex) {
                               return BarTooltipItem(
                                   'Limit: ',

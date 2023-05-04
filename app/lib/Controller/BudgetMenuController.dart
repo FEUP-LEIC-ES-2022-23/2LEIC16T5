@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:es/Model/BudgetBarModel.dart';
@@ -6,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:quickalert/quickalert.dart';
+
+import '../Model/TransactionsModel.dart';
 
 class BudgetMenuController {
   BudgetMenuController({this.callback});
@@ -71,7 +74,6 @@ class BudgetMenuController {
                           if (context.mounted)
                             buildDropdownList(
                                 remoteDBHelper, context, setState),
-                                
                         ],
                       ),
                       Row(
@@ -129,7 +131,8 @@ class BudgetMenuController {
                             selectedVal,
                             num.parse(textcontrollerCategoryBudgetLimit.text)
                                 .toDouble());
-                        }
+                      }
+
                       textcontrollerCategoryBudgetLimit.clear();
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
@@ -142,16 +145,17 @@ class BudgetMenuController {
           );
         });
   }
-  void _loadBudgetBars(BuildContext context,Function? callback ) async{
-    Stream<List<BudgetBarModel>> stream =  remoteDBHelper.readBudgetBars();
+
+  void _loadBudgetBars(BuildContext context, Function? callback) async {
+    Stream<List<BudgetBarModel>> stream = remoteDBHelper.readBudgetBars();
     stream.listen((budgetBars) {
       if (context.mounted) {
         callback!(() {
-          listitems=[];
+          listitems = [];
           for (var budgetBar in budgetBars) {
             listitems.add(budgetBar.categoryName!);
           }
-          selectedVal=listitems.first;
+          selectedVal = listitems.first;
         });
       }
     });
@@ -159,53 +163,48 @@ class BudgetMenuController {
 
   Widget buildDropdownList(
       RemoteDBHelper db, BuildContext context, Function callback) {
-        
-        if(initState_){
-          _loadBudgetBars(context, callback);
-          callback((){initState_=false;});
-        }  
-        
+    if (initState_) {
+      _loadBudgetBars(context, callback);
+      callback(() {
+        initState_ = false;
+      });
+    }
+
     return DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      dropdownColor: Colors.white,
-                      iconEnabledColor: Colors.black,
-                      value: selectedVal,
-                      items: listitems
-                          .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(
-                                e,
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 15),
-                              )))
-                          .toList(),
-                      onChanged: (val) {
-                        if (context.mounted) {
-                          callback(() {
-                            selectedVal = val as String;
-                            
-                          });
-                        }
-                      }));
-              
+        child: DropdownButton(
+            dropdownColor: Colors.white,
+            iconEnabledColor: Colors.black,
+            value: selectedVal,
+            items: listitems
+                .map((e) => DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: const TextStyle(color: Colors.black, fontSize: 15),
+                    )))
+                .toList(),
+            onChanged: (val) {
+              if (context.mounted) {
+                callback(() {
+                  selectedVal = val as String;
+                });
+              }
+            }));
   }
 
-  void setInitState(Stream<List<BudgetBarModel>> stream, Function? callback) {
-    stream.listen((event) {
-      List<String> temp = [];
-      for (BudgetBarModel element in event) {
-        temp.add(element.categoryName!);
-      }
+ 
 
-      callback!(() {
-        if (event.isNotEmpty) {
-          selectedVal = temp.first;
-          listitems = temp;
-        } else {
-          selectedVal = '';
-          listitems = [''];
+  void getTransactions(RemoteDBHelper db, Function? callback) {
+    Stream<List<TransactionModel>> transacs = db.readTransactions();
+    transacs.listen((transacs) {
+      List<TransactionModel> transactions = [];
+      for (TransactionModel transac in transacs) {
+        if (transac.date.month == DateTime.now().month &&
+            transac.date.year == DateTime.now().year) {
+          transactions.add(transac);
         }
-      });
+      }
+      callback!(transactions);
     });
   }
 

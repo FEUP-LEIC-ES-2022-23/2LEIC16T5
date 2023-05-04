@@ -39,8 +39,8 @@ class NewTransactionController {
         categoryColor: selected_category.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((String? value) {
-      remoteDBHelper.updateBudgetBar(value!, true);
+    remoteDBHelper.addTransaction(transaction).then((value) {
+      remoteDBHelper.updateBudgetBar(value.transactionID!, true);
     });
 
     textcontrollerNAME.clear();

@@ -17,7 +17,7 @@ class CategoriesMenu extends StatefulWidget {
 
 class _CategoriesMenuState extends State<CategoriesMenu> {
   RemoteDBHelper remoteDBHelper =
-    RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,48 +74,48 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(12),
-                                  ),
-                                ),
-                                textColor: Colors.black,
-                                iconColor: Colors.white,
-                                leading: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      bottomLeft: Radius.circular(12),
                                     ),
-                                    color: Color(categor.color),
                                   ),
-                                  width: 80,
+                                  textColor: Colors.black,
+                                  iconColor: Colors.white,
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        bottomLeft: Radius.circular(12),
+                                      ),
+                                      color: Color(categor.color),
+                                    ),
+                                    width: 80,
+                                  ),
+                                  title: Text(
+                                    categor.name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  onLongPress: () {
+                                    setState(() {
+                                      remoteDBHelper.removeCategory(categor);
+                                      remoteDBHelper
+                                          .removeBudgetBar(categor.name);
+                                    });
+                                  },
                                 ),
-                                title: Text(
-                                  categor.name,
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-
-                                onLongPress: () {
-                                  setState(() {
-                                    remoteDBHelper.removeCategory(categor);
-                                  });
-                                },
                               ),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-            }),
+                          );
+                        }).toList(),
+                      );
+              }),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: FloatingActionButton(
-                heroTag: "Add",
-                onPressed: () {
-                  NewCategoryController().newCategory(context);
-                },
-                child: const Icon(Icons.add)
-              ),
+                  heroTag: "Add",
+                  onPressed: () {
+                    NewCategoryController().newCategory(context);
+                  },
+                  child: const Icon(Icons.add)),
             ),
           ),
         ],

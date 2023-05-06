@@ -43,6 +43,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      key: const Key("Settings"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
@@ -65,6 +66,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           ),
           actions: [
             IconButton(
+              key: const Key("Logout"),
                 onPressed: () {
                   SettingsPopUpViewer().sureLogout(context, loginController);
                 },

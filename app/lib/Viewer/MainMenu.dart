@@ -1,4 +1,5 @@
 import 'package:es/Viewer/NationalMenu.dart';
+import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -31,6 +32,7 @@ class _MainMenuState extends State<MainMenu> {
   Widget build(BuildContext context) {
     setSettings(remoteDBHelper.getCurrency(), setState);
     return Scaffold(
+      key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         body: SingleChildScrollView(
           child: Column(
@@ -92,6 +94,19 @@ class _MainMenuState extends State<MainMenu> {
                   },
                   child:
                       const Text('Categories', style: TextStyle(fontSize: 20))),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const BudgetMenu(title: 'Budget')),
+                  );
+                },
+                style:
+                    ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
+                child: Text('Budget', style: TextStyle(fontSize: 20)),
+              ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),

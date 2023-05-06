@@ -19,7 +19,8 @@ class SavingsMenu extends StatefulWidget {
 
 class _SavingsMenu extends State<SavingsMenu> {
   List<String?> listitems = ['1'];
-  String? selectedVal = 'Ola';
+
+  String? selectedVal = '1';
   double multiplier = 0;
   double currSliderVal = 0;
   RemoteDBHelper remoteDBHelper =
@@ -62,39 +63,40 @@ class _SavingsMenu extends State<SavingsMenu> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  //TESTE
-                  onPressed: () => {
-                    if (this.mounted)
-                      {
-                        savingsMenuController.newSavings(context),
-                        setState(() {
-                          initState_ = false;
-                        }),
+                Row(
+                  children: [
+                    IconButton(
+                      //TESTE
+                      onPressed: () => {
+                        if (mounted)
+                          {
+                            savingsMenuController.newSavings(context),
+                            setState(() {
+                              initState_ = false;
+                            }),
+                          },
                       },
-                  },
-                  iconSize: 40,
-                  icon: const Icon(Icons.add),
-                  color: Colors.white,
+                      iconSize: 40,
+                      icon: const Icon(Icons.add),
+                      color: Colors.white,
+                    )
+                  ],
                 )
               ],
             ),
             Stack(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 90),
+                  padding: const EdgeInsets.only(left: 90),
                   child: IconButton(
-                    onPressed: () => {
+                    onPressed: () async => {
                       setInitState(remoteDBHelper.readSavings(), setState),
                       if (selectedVal != "")
                         {
-                          remoteDBHelper.deleteSaving(selectedVal),
+                          await remoteDBHelper.deleteSaving(selectedVal),
                           QuickAlert.show(
                               context: context,
                               type: QuickAlertType.success,
@@ -158,33 +160,36 @@ class _SavingsMenu extends State<SavingsMenu> {
           listitems = temp;
 
           return snapshot.hasData
-              ? DropdownButton(
-                  dropdownColor: const Color.fromRGBO(255, 113, 64, 10),
-                  iconEnabledColor: Colors.white,
-                  value: selectedVal,
-                  items: listitems
-                      .map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(
-                            e!,
-                            style: TextStyle(color: Colors.white),
-                          )))
-                      .toList(),
-                  onChanged: (val) {
-                    if (this.mounted) {
-                      setState(() {
-                        selectedVal = val as String;
-                        savings = remoteDBHelper.readSaving(val);
-                        initState_ = false;
-                      });
-                    }
-                  })
-              : DropdownButton(
-                  dropdownColor: Colors.black,
-                  iconEnabledColor: Colors.white,
-                  value: '',
-                  items: const [],
-                  onChanged: (val) {});
+              ? DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                      dropdownColor: const Color.fromRGBO(255, 113, 64, 10),
+                      iconEnabledColor: Colors.white,
+                      value: selectedVal,
+                      items: listitems
+                          .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(
+                                e!,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 26),
+                              )))
+                          .toList(),
+                      onChanged: (val) {
+                        if (mounted) {
+                          setState(() {
+                            selectedVal = val as String;
+                            savings = remoteDBHelper.readSaving(val);
+                            initState_ = false;
+                          });
+                        }
+                      }))
+              : DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                      dropdownColor: Colors.black,
+                      iconEnabledColor: Colors.white,
+                      value: '',
+                      items: const [],
+                      onChanged: (val) {}));
         });
   }
 
@@ -206,7 +211,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                     height: 90,
                   ),
                   const CircularProgressIndicator(
-                    color: Color.fromRGBO(226, 177, 60, 10),
+                    color: Colors.blue,
                   ),
                   const SizedBox(
                     height: 30,
@@ -234,7 +239,6 @@ class _SavingsMenu extends State<SavingsMenu> {
           } else {
             double percent = snapshot.data!.first.value!.toDouble() /
                 snapshot.data!.first.total!.toDouble();
-            double overflow = 0;
 
             if (percent > 1) {
               // overflow = snapshot.data!.value!.toDouble() -
@@ -254,16 +258,71 @@ class _SavingsMenu extends State<SavingsMenu> {
                     radius: 180.0,
                     lineWidth: 13.0,
                     percent: percent,
-                    progressColor: const Color.fromRGBO(226, 177, 60, 10),
+                    progressColor: Colors.blue,
                     circularStrokeCap: CircularStrokeCap.round,
                     backgroundColor: Colors.white,
                   ),
                   Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
-                      Image.asset(
-                        'assets/img/Luckycat1.png',
-                        width: 250,
+                      Column(
+                        children: [
+                          Image.asset(
+                            'assets/img/Luckycat1.png',
+                            width: 230,
+                          ),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 200,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 30, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.lightBlue,
+                                      offset: Offset(
+                                        0.0,
+                                        0.0,
+                                      ), //Offset
+                                      blurRadius: 10.0,
+                                      spreadRadius: 4.0,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      snapshot.data!.first.value!
+                                          .toStringAsFixed(2),
+                                      style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w800)),
+                                  const Icon(Icons.euro, size: 30),
+                                  const Text("/",
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800,
+                                      )),
+                                  Text(snapshot.data!.first.total.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w800)),
+                                  const Icon(
+                                    Icons.euro,
+                                    size: 24,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -274,12 +333,12 @@ class _SavingsMenu extends State<SavingsMenu> {
                               child: IconButton(
                                   onPressed: () {
                                     savingsMenuController.changeSavingValue(
-                                      context,
-                                      snapshot.data!.first.value!.toDouble(),
-                                      multiplier,
-                                      selectedVal!,
-                                      true,
-                                    );
+                                        context,
+                                        snapshot.data!.first.value!.toDouble(),
+                                        multiplier,
+                                        selectedVal!,
+                                        true,
+                                        snapshot.data!.first.total!.toDouble());
                                   },
                                   iconSize: 50,
                                   color: Colors.white,
@@ -292,12 +351,12 @@ class _SavingsMenu extends State<SavingsMenu> {
                               child: IconButton(
                                   onPressed: () {
                                     savingsMenuController.changeSavingValue(
-                                      context,
-                                      snapshot.data!.first.value!.toDouble(),
-                                      multiplier,
-                                      selectedVal!,
-                                      false,
-                                    );
+                                        context,
+                                        snapshot.data!.first.value!.toDouble(),
+                                        multiplier,
+                                        selectedVal!,
+                                        false,
+                                        snapshot.data!.first.total!.toDouble());
                                   },
                                   iconSize: 50,
                                   color: Colors.white,
@@ -311,33 +370,56 @@ class _SavingsMenu extends State<SavingsMenu> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("${snapshot.data!.first.value!.toStringAsFixed(2)} ${widget.currency} / ${snapshot.data!.first.total} ${widget.currency}",
-                      style: const TextStyle(
-                          fontSize: 28,
-                          color: Color.fromRGBO(226, 177, 60, 10))),
+                  if (snapshot.data!.first.targetDate != null)
+                    [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 280,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              border: Border.all(
+                                  width: 30, color: Colors.transparent),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.deepOrange,
+                                  offset: Offset(
+                                    0.0,
+                                    0.0,
+                                  ), //Offset
+                                  blurRadius: 6.0,
+                                  spreadRadius: 4.0,
+                                )
+                              ],
+                            ),
+                          ),
+                          Row(children: [
+                            const Icon(Icons.warning, size: 20),
+                            const SizedBox(width: 10),
+                            Text(
+                              (snapshot.data!.first.targetDate == null)
+                                  ? ""
+                                  : "Target Date:  " +
+                                      DateFormat('dd-MM-yyyy').format(
+                                          snapshot.data!.first.targetDate!),
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 20),
+                            ),
+                          ]),
+                        ],
+                      ),
+                    ].first,
                 ],
               ),
               const SizedBox(
-                height: 30,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    (snapshot.data!.first.targetDate == null)
-                        ? ""
-                        : "Target Date:  " +
-                            DateFormat('dd-MM-yyyy')
-                                .format(snapshot.data!.first.targetDate!),
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  )
-                ],
+                height: 25,
               )
             ]);
           }
@@ -351,7 +433,7 @@ class _SavingsMenu extends State<SavingsMenu> {
       event.forEach((element) {
         temp.add(element.name);
       });
-      if (this.mounted) {
+      if (mounted) {
         callback!(() {
           if (event.isNotEmpty) {
             selectedVal = selectedVal_;
@@ -369,10 +451,10 @@ class _SavingsMenu extends State<SavingsMenu> {
   void setInitState(Stream<List<SavingsModel>> stream, Function? callback) {
     stream.listen((event) {
       List<String?> temp = [];
-      event.forEach((element) {
+      for (SavingsModel element in event) {
         temp.add(element.name);
-      });
-      if (this.mounted) {
+      }
+      if (mounted) {
         callback!(() {
           if (event.isNotEmpty) {
             selectedVal = temp.first;

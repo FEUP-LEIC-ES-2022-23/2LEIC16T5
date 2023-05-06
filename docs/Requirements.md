@@ -21,4 +21,4 @@ Here we present you our Domain Model, as well as a short description of each cla
 
 **Repeat** - For practical purposes, we consider that transactions may be repeated every X days. This is a user defined time interval, which will then trigger the creation of new transactions, until further notice.
 
-![DomainModel](https://user-images.githubusercontent.com/92641892/228041043-ddb9e85c-e1a8-4eb0-8070-4ae95672c201.jpeg)
+![DomainModel](https://user-images.githubusercontent.com/92641892/235801297-09c25aac-b59d-4b50-a5ec-5ed80b8ef50c.jpeg)

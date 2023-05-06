@@ -1,11 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-<<<<<<< HEAD
-FLUTTER_ROOT=/Users/Sofia/UniProjects/FlutterProjects/flutter
-FLUTTER_APPLICATION_PATH=/Users/Sofia/UniProjects/FlutterProjects/esProj/2LEIC16T5/app
-=======
-FLUTTER_ROOT=C:\src\flutter
-FLUTTER_APPLICATION_PATH=C:\Users\Utilizador\Desktop\2ano2sem\ES\FORTUNEKO\2LEIC16T5\app
->>>>>>> c4ff0fd7e8d2e8983559e6efd8a8d750bffda13c
+FLUTTER_ROOT=C:\ESOF\flutterSrc\flutter
+FLUTTER_APPLICATION_PATH=C:\ESOF\2LEIC16T5\app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0

@@ -72,10 +72,10 @@ class loginScreenController extends StatelessWidget {
   }
 
   String? validateEmail(String? email) {
-    if (email == null || email.isEmpty) return 'Email adress is required!';
+    if (email == null || email.isEmpty) return 'Email address is required!';
     String pattern = r'\w+@\w+\.\w+';
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(email)) return 'Invalid email adress format!';
+    if (!regex.hasMatch(email)) return 'Invalid email address format!';
 
     return null;
   }

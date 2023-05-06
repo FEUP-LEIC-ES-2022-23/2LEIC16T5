@@ -299,25 +299,20 @@ class _SavingsMenu extends State<SavingsMenu> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      snapshot.data!.first.value!
-                                          .toStringAsFixed(2),
+                                      '${snapshot.data!.first.value!
+                                          .toStringAsFixed(2)} ${widget.currency}',
                                       style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.w800)),
-                                  const Icon(Icons.euro, size: 30),
                                   const Text("/",
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w800,
                                       )),
-                                  Text(snapshot.data!.first.total.toString(),
+                                  Text('${snapshot.data!.first.total} ${widget.currency}',
                                       style: const TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.w800)),
-                                  const Icon(
-                                    Icons.euro,
-                                    size: 24,
-                                  ),
                                 ],
                               ),
                             ],

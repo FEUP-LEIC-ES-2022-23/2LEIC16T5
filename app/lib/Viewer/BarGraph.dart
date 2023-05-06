@@ -9,12 +9,14 @@ class MyBarGraph extends StatefulWidget {
       required this.barWidth,
       required this.graphMaxY,
       required this.spaceBetweenBars,
-      required this.graphContainerHeight});
+      required this.graphContainerHeight,
+      required this.currency});
   final List<BudgetBarModel> barsData;
-  final double graphContainerHeight;
   final double barWidth;
-  final double spaceBetweenBars;
   final double graphMaxY;
+  final double spaceBetweenBars;
+  final double graphContainerHeight;
+  final String currency;
 
   @override
   State<MyBarGraph> createState() => BarGraphState();
@@ -72,8 +74,7 @@ class BarGraphState extends State<MyBarGraph> {
                                       fontSize: 18),
                                   children: [
                                     TextSpan(
-                                        text: widget.barsData[group.x!].limit
-                                            .toString(),
+                                        text: '${widget.barsData[group.x].limit} ${widget.currency}',
                                         style: TextStyle(
                                             color: Color(widget
                                                 .barsData[group.x].color!),
@@ -88,8 +89,7 @@ class BarGraphState extends State<MyBarGraph> {
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: widget.barsData[group.x!].value
-                                            .toString(),
+                                        text: '${widget.barsData[group.x].value} ${widget.currency}',
                                         style: TextStyle(
                                             color: Color(widget
                                                 .barsData[group.x].color!),

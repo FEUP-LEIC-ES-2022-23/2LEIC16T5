@@ -132,6 +132,7 @@ class _MainMenuState extends State<MainMenu> {
                   },
                   child: const Text('Charts', style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                  key: const Key("National Comparison"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {

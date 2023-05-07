@@ -403,7 +403,7 @@ class NewTransactionController {
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
-              key: const Key("Transaction info"),
+              key: const Key("Transaction Info"),
               builder: (BuildContext context, setState) {
                 return AlertDialog(
                   shape: const RoundedRectangleBorder(
@@ -432,6 +432,7 @@ class NewTransactionController {
                           ),
                           Text(
                             transac.name,
+                            key: const Key("Name"),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -459,6 +460,7 @@ class NewTransactionController {
                                   child: Center(
                                     child: Text(
                                       euro.format(transac.total),
+                                      key: const Key("Total"),
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
@@ -478,7 +480,8 @@ class NewTransactionController {
                                       child: Text(
                                     DateFormat('dd-MM-yyyy')
                                         .format(transac.date),
-                                    style: TextStyle(fontSize: 20),
+                                        key: const Key("Date"),
+                                        style: TextStyle(fontSize: 20),
                                   )),
                                 ),
                               ],

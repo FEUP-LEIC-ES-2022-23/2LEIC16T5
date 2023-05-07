@@ -8,6 +8,7 @@ class LocalDBHelper {
   static final LocalDBHelper instance = LocalDBHelper._privateConstructor();
 
   static Database? _database;
+
   Future<Database> get database async => _database ??= await initDatabase();
 
   Future<Database> initDatabase() async {

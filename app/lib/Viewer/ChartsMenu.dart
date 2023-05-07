@@ -1,8 +1,13 @@
+import 'package:es/Controller/NewCategoryController.dart';
 import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
+import '../Controller/NewTransactionController.dart';
+import 'package:es/Model/CategoryModel.dart' as c_model;
+import 'package:es/database/LocalDBHelper.dart';
 
 class ChartsMenu extends StatefulWidget {
   const ChartsMenu({Key? key, required this.title}) : super(key: key);
@@ -151,7 +156,6 @@ class _ChartsMenuState extends State<ChartsMenu> {
               }
             ));
 /*  Map<String, List<TransactionModel>> categoryMap = {};
-
     transactionList.forEach((transaction) {
       if (categoryMap.containsKey(transaction.categoryID)) {
         categoryMap[transaction.categoryID]!.add(transaction);
@@ -159,7 +163,6 @@ class _ChartsMenuState extends State<ChartsMenu> {
         categoryMap[transaction.categoryID!] = [transaction];
       }
     });
-
     categoryMap.entries.forEach((entry) {
       print("Category: ${entry.key}");
       entry.value.forEach((transaction) {

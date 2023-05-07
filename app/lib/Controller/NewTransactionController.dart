@@ -36,11 +36,13 @@ class NewTransactionController {
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: _isIncome? null : position,
+        location: _isIncome ? null : position,
         categoryColor: selected_category.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction);
+    remoteDBHelper.addTransaction(transaction).then((String? value) {
+      remoteDBHelper.updateBudgetBar(value!, true);
+    });
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
@@ -58,11 +60,13 @@ class NewTransactionController {
             key: const Key("New Transaction"),
             builder: (BuildContext context, setState) {
               return AlertDialog(
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(32.0)),
                       color: Colors.lightBlue,
                     ),
                     height: 75,
@@ -95,8 +99,8 @@ class NewTransactionController {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text(
-                              'Expense',
-                              style: TextStyle(color: Colors.black54),
+                            'Expense',
+                            style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
                             key: _isIncome? const Key("Income") :  const Key("Expense"),
@@ -108,8 +112,8 @@ class NewTransactionController {
                             },
                           ),
                           const Text(
-                              'Income',
-                              style: TextStyle(color: Colors.black54),
+                            'Income',
+                            style: TextStyle(color: Colors.black54),
                           ),
                         ],
                       ),
@@ -144,8 +148,8 @@ class NewTransactionController {
                                   labelText: 'Total',
                                 ),
                                 keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
                                 validator: (text) {
                                   if (text == null ||
                                       text.isEmpty ||
@@ -186,7 +190,7 @@ class NewTransactionController {
                                             onPrimary: Colors
                                                 .white, // header text color
                                             onSurface:
-                                            Colors.black, // body text color
+                                                Colors.black, // body text color
                                           ),
                                         ),
                                         child: child!,
@@ -215,7 +219,6 @@ class NewTransactionController {
                       const SizedBox(
                         height: 5,
                       ),
-
                       Row(
                         children: [
                           Expanded(
@@ -239,39 +242,51 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome?
-                      FloatingActionButton(
-                          mini: true,
-                          backgroundColor: Colors.lightBlue,
-                          heroTag: "Map",
-                          onPressed: () {
-                            MapMenuController().getCurrentLocation(context).then((value) {
-                              QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.confirm,
-                                  confirmBtnColor: Colors.lightBlue,
-                                  text: "Do you wish to set your current location as this transaction's location?",
-                                  confirmBtnText: "Yes",
-                                  cancelBtnText: "No",
-                                  onConfirmBtnTap: () {
-                                    setState(() {
-                                      position = GeoPoint(double.parse('${value.latitude}'), double.parse('${value.longitude}'));
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                  onCancelBtnTap: () {
-                                    setState(() {
-                                      position = null;
-                                    });
-                                    Navigator.of(context).pop();
-                                  });
-                            });
-                          },
-                          child: (position == null)? const Icon(Icons.pin_drop_rounded) :  const Icon(Icons.done_all_rounded))
-                          : const SizedBox(width: 48.0,),
+                      !_isIncome
+                          ? FloatingActionButton(
+                              mini: true,
+                              backgroundColor: Colors.lightBlue,
+                              heroTag: "Map",
+                              onPressed: () {
+                                MapMenuController()
+                                    .getCurrentLocation(context)
+                                    .then((value) {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      confirmBtnColor: Colors.lightBlue,
+                                      text:
+                                          "Do you wish to set your current location as this transaction's location?",
+                                      confirmBtnText: "Yes",
+                                      cancelBtnText: "No",
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          position = GeoPoint(
+                                              double.parse('${value.latitude}'),
+                                              double.parse(
+                                                  '${value.longitude}'));
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      onCancelBtnTap: () {
+                                        setState(() {
+                                          position = null;
+                                        });
+                                        Navigator.of(context).pop();
+                                      });
+                                });
+                              },
+                              child: (position == null)
+                                  ? const Icon(Icons.pin_drop_rounded)
+                                  : const Icon(Icons.done_all_rounded))
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       MaterialButton(
                         key: const Key("Add"),
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
                         color: Colors.lightBlue,
                         child: const Text('Add',
                             style: TextStyle(color: Colors.white)),
@@ -291,12 +306,11 @@ class NewTransactionController {
         });
   }
 
-
   Widget buildDropdownList(RemoteDBHelper db) {
     return StreamBuilder<List<c_model.CategoryModel>>(
         stream: db.readCategories(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
           List<c_model.CategoryModel?> categories = [];
           if (!snapshot.hasData) {
             return Row(
@@ -323,8 +337,7 @@ class NewTransactionController {
           categories.add(selected_category);
 
           return snapshot.hasData
-              ? StatefulBuilder(
-                builder: (BuildContext context, setState){
+              ? StatefulBuilder(builder: (BuildContext context, setState) {
                   return Row(
                     children: [
                       const Icon(
@@ -366,15 +379,15 @@ class NewTransactionController {
                                     )))
                                 .toList(),
                             onChanged: (val) {
-                                setState(() {
-                                  selected_category = val as c_model.CategoryModel;
-                                });
-                              }),
+                              setState(() {
+                                selected_category =
+                                    val as c_model.CategoryModel;
+                              });
+                            }),
                       ),
                     ],
                   );
-                    }
-              )
+                })
               : DropdownButton(
                   dropdownColor: Colors.black,
                   iconEnabledColor: Colors.white,

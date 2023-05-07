@@ -1,4 +1,3 @@
-
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,27 +5,24 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 
-
-
 class NewCategoryController {
   static final textcontrollerNAME = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  Color color= Colors.red;
+  Color color = Colors.red;
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
 
-
-  void _enterCategory(int c) {
+  Future<void> _enterCategory(int c) async {
     c_model.CategoryModel category = c_model.CategoryModel(
-        userID: FirebaseAuth.instance.currentUser!.uid,
-        name: textcontrollerNAME.text.isEmpty
-            ? "Category"
-            : textcontrollerNAME.text,
-        color: c,
+      userID: FirebaseAuth.instance.currentUser!.uid,
+      name: textcontrollerNAME.text.isEmpty
+          ? "Category"
+          : textcontrollerNAME.text,
+      color: c,
     );
-    remoteDBHelper.addCategory(category);
-
+    await remoteDBHelper.addCategory(category);
+    await remoteDBHelper.addEmptyBudgetBar(category);
     textcontrollerNAME.clear();
   }
 
@@ -65,53 +61,50 @@ class NewCategoryController {
                 content: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  icon: Icon(Icons.category),
-                                  labelText: 'Name',
-                                ),
-                                controller: textcontrollerNAME,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter category name';
-                                  }
-                                  return null;
-                                },
+                    child: Column(children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                icon: Icon(Icons.category),
+                                labelText: 'Name',
                               ),
+                              controller: textcontrollerNAME,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter category name';
+                                }
+                                return null;
+                              },
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: color,
-                              ),
-                              width: 50,
-                              height: 50,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: color,
                             ),
-                            ElevatedButton(
+                            width: 50,
+                            height: 50,
+                          ),
+                          ElevatedButton(
                               child: Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () {
-                                pickColor(context,setState);
-                              }
-                            )
-                          ],
-                        )
-                      ]
-                      ),
+                                pickColor(context, setState);
+                              })
+                        ],
+                      )
+                    ]),
                   ),
                 ),
                 actions: <Widget>[
@@ -132,17 +125,16 @@ class NewCategoryController {
           );
         });
   }
-  
-  Widget buildColorPicker(StateSetter setState) => ColorPicker(
-    pickerColor: this.color,
-    onColorChanged: (color){
-      setState!(()=>this.color=color);
-    }
-  );
 
-  void pickColor(BuildContext context,StateSetter setState) => showDialog(
-    context: context,
-    builder: (context) {
+  Widget buildColorPicker(StateSetter setState) => ColorPicker(
+      pickerColor: this.color,
+      onColorChanged: (color) {
+        setState!(() => this.color = color);
+      });
+
+  void pickColor(BuildContext context, StateSetter setState) => showDialog(
+        context: context,
+        builder: (context) {
           return AlertDialog(
             title: Text('Pick your color'),
             content: Column(
@@ -162,7 +154,6 @@ class NewCategoryController {
           );
         },
       );
-
 
   void showTransaction(BuildContext context) {
     /*TO BE DONE*/

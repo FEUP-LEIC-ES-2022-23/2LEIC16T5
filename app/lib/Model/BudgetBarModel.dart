@@ -35,6 +35,7 @@ class BudgetBarModel {
       'userID': userID,
       'limit': limit,
       'color': color,
+      'value': value
     };
   }
 }

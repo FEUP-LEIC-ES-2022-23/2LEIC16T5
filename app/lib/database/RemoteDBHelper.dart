@@ -348,7 +348,8 @@ class RemoteDBHelper {
     });
   }
 
-  Future updateBudgetBar(String transactionID, bool isAdd) async {
+  Future updateBudgetBarValOnNewTransaction(
+      String transactionID, bool isAdd) async {
     UserModel user = UserModel(uid: userInstance.currentUser!.uid);
 
     await firebaseInstance
@@ -360,36 +361,20 @@ class RemoteDBHelper {
 
       String categoryID_ = doc.data()!['categoryID'];
       dynamic isExpense = doc.data()!['expense'];
-      if (categoryID_ != null) {
-        await firebaseInstance
-            .collection('Categories')
-            .doc(categoryID_)
-            .get()
-            .then((categoryDoc) async {
-          int color_ = categoryDoc.data()!['color'];
-          await firebaseInstance
-              .collection('BudgetBars')
-              .where('categoryName', isEqualTo: categoryDoc.data()!['name'])
-              .get()
-              .then((budgetBar) async {
-            if (budgetBar.docs.length == 1) {
-              double limit = budgetBar.docs.first.data()['limit'].toDouble();
-              if (isExpense.toInt() == 1) {
-                BudgetBarModel temp = BudgetBarModel(
-                    categoryName: categoryDoc.data()!['name'],
-                    categoryID: categoryID_,
-                    userID: user.uid!,
-                    limit: limit,
-                    color: color_);
-                await firebaseInstance
-                    .collection('BudgetBars')
-                    .doc(budgetBar.docs.first.id)
-                    .set(temp.toMap());
-              }
-            }
-          });
-        });
-      }
+
+      await firebaseInstance
+          .collection('BudgetBars')
+          .where('userID', isEqualTo: user.uid)
+          .where('categoryID', isEqualTo: categoryID_)
+          .get()
+          .then((budgetBar) {
+        if (budgetBar.docs.length == 1) {
+          if (isAdd) {
+            double totalVal = budgetBar.docs.first.data()['value'];
+            budgetBar.docs.first.reference.update({'value': totalVal + val});
+          }
+        }
+      });
     });
   }
 

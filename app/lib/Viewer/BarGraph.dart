@@ -72,7 +72,7 @@ class BarGraphState extends State<MyBarGraph> {
                                       fontSize: 18),
                                   children: [
                                     TextSpan(
-                                        text: widget.barsData[group.x!].limit
+                                        text: widget.barsData[group.x].limit
                                             .toString(),
                                         style: TextStyle(
                                             color: Color(widget
@@ -88,7 +88,7 @@ class BarGraphState extends State<MyBarGraph> {
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: widget.barsData[group.x!].value
+                                        text: widget.barsData[group.x].y
                                             .toString(),
                                         style: TextStyle(
                                             color: Color(widget

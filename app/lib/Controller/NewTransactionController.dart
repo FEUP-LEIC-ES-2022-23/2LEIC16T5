@@ -19,7 +19,8 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
+  c_model.CategoryModel selected_category = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
@@ -40,9 +41,7 @@ class NewTransactionController {
         categoryColor: selected_category.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((value) {
-      remoteDBHelper.updateBudgetBar(value.transactionID!, true);
-    });
+    remoteDBHelper.addTransaction(transaction);
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
@@ -103,7 +102,9 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? const Key("Income") :  const Key("Expense"),
+                            key: _isIncome
+                                ? const Key("Income")
+                                : const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -353,30 +354,32 @@ class NewTransactionController {
                             dropdownColor: Colors.white,
                             value: selected_category,
                             items: categories
-                                .map((c_model.CategoryModel? c) => DropdownMenuItem(
-                                    value: c,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          c!.name,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(c.color),
-                                          ),
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )))
+                                .map((c_model.CategoryModel? c) =>
+                                    DropdownMenuItem(
+                                        value: c,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              c!.name,
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(c.color),
+                                              ),
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                          ],
+                                        )))
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
@@ -487,37 +490,36 @@ class NewTransactionController {
                           (transac.notes?.isEmpty ?? true)
                               ? SizedBox()
                               : Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                                child:
-                                  Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Notes:',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Notes:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                      Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          //borderRadius: BorderRadius.circular(10.0),
                                         ),
-                                        Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            //borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: Text(
-                                            transac.notes!,
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.black,
-                                            ),
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          transac.notes!,
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                
-                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                           (transac.location != null)
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,

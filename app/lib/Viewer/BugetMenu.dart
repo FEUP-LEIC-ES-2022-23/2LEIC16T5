@@ -124,7 +124,6 @@ class BudgetMenuState extends State<BudgetMenu> {
               }
               budgetBar.x = xCoord;
               xCoord++;
-              budgetBar.value = categoryValSum;
               budgetBar.y = categoryValSum;
               BudgetMenuController().checkLimit(budgetBar, 0.05);
               barData.add(budgetBar);
@@ -144,7 +143,7 @@ class BudgetMenuState extends State<BudgetMenu> {
             } else {
               percentage = 0;
             }
-              return Column(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(

@@ -208,24 +208,24 @@ class BudgetMenuController {
 
   void checkLimit(BudgetBarModel model, double threshold) {
     if (threshold <= 1) {
-      if (model.value! >=
+      if (model.y! >=
           model.limit!.toDouble() - model.limit!.toDouble() * threshold) {
         model.onLimit = true;
       } else {
         model.onLimit = false;
       }
-      if (model.value! >= model.limit!.toDouble())
+      if (model.y! >= model.limit!.toDouble())
         model.overLimit = true;
       else
         model.overLimit = false;
     } else {
-      /*if (model.value! >=
+      /*if (model.y! >=
           model.limit!.toDouble() - model.limit!.toDouble() * 1) {
         model.onLimit = true;
       } else {
         model.onLimit = false;
       }
-      if (model.value! >= model.limit!.toDouble())
+      if (model.y! >= model.limit!.toDouble())
         model.overLimit = true;
       else
         model.overLimit = false;*/

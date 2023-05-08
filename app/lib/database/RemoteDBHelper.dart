@@ -1,19 +1,20 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:es/Model/SettingModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:es/Controller/MapMenuController.dart';
 import 'package:es/Model/BudgetBarModel.dart';
-
-import '../Model/CategoryModel.dart';
+import 'package:es/Model/CategoryModel.dart';
 
 class RemoteDBHelper {
   FirebaseAuth userInstance;
   FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
   RemoteDBHelper({required this.userInstance});
+
   Future createUser() async {
     UserModel userModel = UserModel(uid: userInstance!.currentUser!.uid);
     await firebaseInstance
@@ -55,7 +56,6 @@ class RemoteDBHelper {
         .collection('Transactions')
         .doc(transaction.transactionID)
         .delete();
-    return transaction.transactionID;
   }
 
   Stream<List<TransactionModel>> readTransactions() {
@@ -77,7 +77,6 @@ class RemoteDBHelper {
     });
     return transactions;
   }
-
 
   Future<bool> hasTransactions() async {
     User? usr = FirebaseAuth.instance.currentUser;
@@ -125,6 +124,7 @@ class RemoteDBHelper {
         });
       } else {
         String categoryID_ = value.docs.first.id;
+        category.categoryID = categoryID_;
         //update Category
         await firebaseInstance
             .collection('Categories')
@@ -222,7 +222,34 @@ class RemoteDBHelper {
     }
   }
 
-//Section for Savings
+  Future<Stream<List<TransactionModel>>> getTransactionsByCategory(
+      String catName) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('name', isEqualTo: catName)
+        .get();
+
+    var categoryId = '';
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = querySnapshot.docs.first;
+      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      categoryId = CategoryModel.fromMap(categoryMap).categoryID!;
+    }
+
+    var transactions = FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr.uid)
+        .where('categoryID', isEqualTo: categoryId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
+    return transactions;
+  }
+
   Stream<List<SavingsModel>> readSaving(String? name) {
     return firebaseInstance
         .collection('Savings')
@@ -312,6 +339,7 @@ class RemoteDBHelper {
             limit: 0,
             value: 0,
             color: categoryQueryData['color']);
+
         await firebaseInstance
             .collection(('BudgetBars'))
             .doc(categoryQueryData['categoryID'])
@@ -332,39 +360,36 @@ class RemoteDBHelper {
 
       String categoryID_ = doc.data()!['categoryID'];
       dynamic isExpense = doc.data()!['expense'];
-      await firebaseInstance
-          .collection('Categories')
-          .doc(categoryID_)
-          .get()
-          .then((categoryDoc) async {
-        int color_ = categoryDoc.data()!['color'];
+      if (categoryID_ != null) {
         await firebaseInstance
-            .collection('BudgetBars')
-            .where('categoryName', isEqualTo: categoryDoc.data()!['name'])
+            .collection('Categories')
+            .doc(categoryID_)
             .get()
-            .then((budgetBar) async {
-          if (budgetBar.docs.length == 1) {
-            double budgetBarVal =
-                budgetBar.docs.first.data()['value'].toDouble();
-            double limit = budgetBar.docs.first.data()['limit'].toDouble();
-            if (isExpense.toInt() == 1) {
-              BudgetBarModel temp = BudgetBarModel(
-                  categoryName: categoryDoc.data()!['name'],
-                  categoryID: categoryID_,
-                  userID: user.uid!,
-                  limit: limit,
-                  value: isAdd
-                      ? val.toDouble() + budgetBarVal
-                      : budgetBarVal - val.toDouble(),
-                  color: color_);
-              await firebaseInstance
-                  .collection('BudgetBars')
-                  .doc(budgetBar.docs.first.id)
-                  .set(temp.toMap());
+            .then((categoryDoc) async {
+          int color_ = categoryDoc.data()!['color'];
+          await firebaseInstance
+              .collection('BudgetBars')
+              .where('categoryName', isEqualTo: categoryDoc.data()!['name'])
+              .get()
+              .then((budgetBar) async {
+            if (budgetBar.docs.length == 1) {
+              double limit = budgetBar.docs.first.data()['limit'].toDouble();
+              if (isExpense.toInt() == 1) {
+                BudgetBarModel temp = BudgetBarModel(
+                    categoryName: categoryDoc.data()!['name'],
+                    categoryID: categoryID_,
+                    userID: user.uid!,
+                    limit: limit,
+                    color: color_);
+                await firebaseInstance
+                    .collection('BudgetBars')
+                    .doc(budgetBar.docs.first.id)
+                    .set(temp.toMap());
+              }
             }
-          }
+          });
         });
-      });
+      }
     });
   }
 
@@ -429,5 +454,68 @@ class RemoteDBHelper {
         ds.reference.delete();
       }
     });
+    FirebaseFirestore.instance
+        .collection('Settings')
+        .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((doc) {
+      for (DocumentSnapshot ds in doc.docs) {
+        ds.reference.delete();
+      }
+    });
+  }
+
+  Stream<String> getCurrency() {
+    User? usr = FirebaseAuth.instance.currentUser;
+    return FirebaseFirestore.instance
+        .collection('Settings')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        final doc = snapshot.docs.first;
+        final settings = SettingsModel.fromMap(doc.data());
+        return settings.currency;
+      } else {
+        return '€';
+      }
+    });
+  }
+
+  /*Future<String> getCurrency() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('Settings')
+        .where('userId', isEqualTo: userInstance.currentUser!.uid)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final doc = snapshot.docs.first;
+      final settings = SettingsModel.fromMap(doc.data());
+      return settings.currency;
+    } else {
+      return '€';
+    }
+  }*/
+
+  Future<void> changeCurrency(Object? newCurrency) async {
+    final userId = userInstance.currentUser!.uid;
+    final settingsQuery = FirebaseFirestore.instance
+        .collection('Settings')
+        .where('userId', isEqualTo: userId);
+    final settingsQueryResult = await settingsQuery.get();
+
+    if (settingsQueryResult.docs.isNotEmpty) {
+      // Update existing settings document
+      final settingsDocRef = settingsQueryResult.docs.first.reference;
+      await settingsDocRef.update({"currency": newCurrency.toString()});
+    } else {
+      // Create new settings document
+      final newSettings =
+          SettingsModel(userID: userId, currency: newCurrency.toString());
+      await FirebaseFirestore.instance
+          .collection('Settings')
+          .doc(userId)
+          .set(newSettings.toMap());
+    }
   }
 }

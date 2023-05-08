@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,9 +27,11 @@ class BudgetMenuState extends State<BudgetMenu> {
   BudgetMenuController budgetMenuController = BudgetMenuController();
 
   getTransactions(transacs) {
-    setState(() {
-      transactions = transacs;
-    });
+    if (mounted) {
+      setState(() {
+        transactions = transacs;
+      });
+    }
   }
 
   List<TransactionModel> transactions = [];
@@ -54,26 +58,6 @@ class BudgetMenuState extends State<BudgetMenu> {
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: IconButton(
-                  onPressed: () {
-                    if (mounted) {
-                      BudgetMenuController().EditBudgetMenu(context);
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ],
-          ),
           buildBody(remoteDBHelper),
         ]),
       ),
@@ -82,12 +66,13 @@ class BudgetMenuState extends State<BudgetMenu> {
 
   Widget buildBody(RemoteDBHelper db) {
     budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
-    
+
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,
             AsyncSnapshot<List<BudgetBarModel>> snapshot) {
           // bool hasOverflowed = false;
+
           if (!snapshot.hasData) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -105,14 +90,14 @@ class BudgetMenuState extends State<BudgetMenu> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        "Loading...",
+                        "Trying to load...",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       )
                     ],
                   )
                 ]);
           }
-          if (snapshot.data!.isEmpty) {
+          if (snapshot.hasData && snapshot.data!.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
@@ -130,16 +115,27 @@ class BudgetMenuState extends State<BudgetMenu> {
             double totalBudgetVal = 0;
 
             for (var budgetBar in snapshot.data!) {
-              if (budgetBar.limit! > maxY) {
-                maxY = budgetBar.limit!;
+              double categoryValSum = 0;
+
+              for (TransactionModel transac in transactions) {
+                if (transac.categoryID == budgetBar.categoryID) {
+                  categoryValSum += transac.total;
+                }
               }
               budgetBar.x = xCoord;
               xCoord++;
-              budgetBar.y = budgetBar.value;
+              budgetBar.value = categoryValSum;
+              budgetBar.y = categoryValSum;
               BudgetMenuController().checkLimit(budgetBar, 0.05);
               barData.add(budgetBar);
-              currBudgetValSum += budgetBar.value!;
+              currBudgetValSum += categoryValSum;
               totalBudgetVal += budgetBar.limit!;
+              if (budgetBar.limit! > maxY) {
+                maxY = budgetBar.limit!;
+              }
+              if (budgetBar.limit! < currBudgetValSum) {
+                maxY = currBudgetValSum;
+              }
             }
             if (totalBudgetVal > 0) {
               percentage = totalBudgetVal > currBudgetValSum
@@ -148,9 +144,29 @@ class BudgetMenuState extends State<BudgetMenu> {
             } else {
               percentage = 0;
             }
-            return Column(
+              return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: IconButton(
+                        onPressed: () {
+                          if (mounted) {
+                            BudgetMenuController().EditBudgetMenu(context);
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 MyBarGraph(
                   barsData: barData,
                   graphMaxY: maxY,

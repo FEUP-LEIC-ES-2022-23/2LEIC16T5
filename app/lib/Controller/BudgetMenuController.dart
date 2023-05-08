@@ -192,8 +192,6 @@ class BudgetMenuController {
             }));
   }
 
- 
-
   void getTransactions(RemoteDBHelper db, Function? callback) {
     Stream<List<TransactionModel>> transacs = db.readTransactions();
     transacs.listen((transacs) {
@@ -216,21 +214,22 @@ class BudgetMenuController {
       } else {
         model.onLimit = false;
       }
-      if (model.value! > model.limit!.toDouble())
+      if (model.value! >= model.limit!.toDouble())
         model.overLimit = true;
       else
         model.overLimit = false;
     } else {
-      if (model.value! >=
+      /*if (model.value! >=
           model.limit!.toDouble() - model.limit!.toDouble() * 1) {
         model.onLimit = true;
       } else {
         model.onLimit = false;
       }
-      if (model.value! > model.limit!.toDouble())
+      if (model.value! >= model.limit!.toDouble())
         model.overLimit = true;
       else
-        model.overLimit = false;
+        model.overLimit = false;*/
+      throw 'Threshold bigger than 1';
     }
   }
 }

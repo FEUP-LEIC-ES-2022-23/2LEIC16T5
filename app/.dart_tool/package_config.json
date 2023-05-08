@@ -122,6 +122,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "csv",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/csv-5.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
@@ -692,7 +698,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-02T11:18:50.011146Z",
+  "generated": "2023-05-04T17:59:31.477501Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

@@ -60,19 +60,19 @@ void main() async {
     test('Validate empty email', () {
       String mail = "";
       String? result = loginController.validateEmail(mail);
-      expect(result, 'Email adress is required!');
+      expect(result, 'Email address is required!');
     });
 
     test('Validate null email', () {
       String? mail;
       String? result = loginController.validateEmail(mail);
-      expect(result, 'Email adress is required!');
+      expect(result, 'Email address is required!');
     });
 
     test('Validate bad email', () {
       String mail = "foo";
       String? result = loginController.validateEmail(mail);
-      expect(result, 'Invalid email adress format!');
+      expect(result, 'Invalid email address format!');
     });
 
     test('Validate good email', () {

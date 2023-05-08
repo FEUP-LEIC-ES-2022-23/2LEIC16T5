@@ -6,7 +6,6 @@ import 'package:es/Viewer/MainMenu.dart';
 import 'package:quickalert/quickalert.dart';
 
 class loginScreenController extends StatelessWidget {
-  bool rememberMeChecked = false;
   loginScreenController({Key? key}) : super(key: key);
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
@@ -17,7 +16,7 @@ class loginScreenController extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const MainMenu();
+              return MainMenu();
             } else {
               return const LoginPage();
             }
@@ -73,10 +72,10 @@ class loginScreenController extends StatelessWidget {
   }
 
   String? validateEmail(String? email) {
-    if (email == null || email.isEmpty) return 'Email adress is required!';
+    if (email == null || email.isEmpty) return 'Email address is required!';
     String pattern = r'\w+@\w+\.\w+';
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(email)) return 'Invalid email adress format!';
+    if (!regex.hasMatch(email)) return 'Invalid email address format!';
 
     return null;
   }

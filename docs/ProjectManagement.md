@@ -4,7 +4,7 @@
 You can find below information and references related with the project management in our team: 
 
 * Backlog management: Product backlog and Iteration backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2022-23/projects/30);
-* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), [v1](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v1), v2, v3, v4;
+* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), [v1](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v1), [v2](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v2), v3, v4;
 * Iteration planning and retrospectives: 
 
   ### Iteration 0
@@ -47,7 +47,7 @@ You can find below information and references related with the project managemen
   
   #### End
   
-  
+  <img width="948" alt="Iteration2_End" src="https://user-images.githubusercontent.com/92641892/232920659-21f64140-2bbc-4c8c-a3e0-f062f085cd05.png">
   
   #### Retrospectives
   
@@ -62,5 +62,30 @@ You can find below information and references related with the project managemen
 
   * What is still a problem
     * Accomplishing to implement all the features we initially planned
+    
+### Iteration 3
+
+  This time, we managed to set realistic expectations, which allowed us to get all the user stories for this iteration to the DoneDoneDone✅. Our users are now able to check their monthly statistics, compare their yearly spendings with the National average, set budget limits for their categories, and see all the data associated with each transaction they have created. 
+  
+  #### Begin
+ 
+  <img width="1440" alt="Iteration3_Begin" src="https://user-images.githubusercontent.com/92641892/235792767-8d54bf9d-a4ac-4405-b2bd-63b341aae1a1.png">
+  
+  #### End
+  
+  <img width="939" alt="Iteration3_End" src="https://user-images.githubusercontent.com/92641892/235792769-33cfbb6f-a9df-47ce-8819-1b66519a4e35.png">
+  
+  #### Retrospectives
+  
+  * What went well
+    * We were finally able to fulfil all our expectations in terms os user stories 
+
+  * What went wrong
+    * It turned out impossible to get the data we needed directly from [PORDATA](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela). Instead, we chose to export it as a cvs file, and then read it from there in the app
+    * Since we focused on accomplishing all the user stories for this iteration, we ended up misprizing the Unit Tests (which we hope to balance on the next iteration)
+
+  * What is still a problem
+    * Time managing. We tend to leave everything to the last minute
+
 
  

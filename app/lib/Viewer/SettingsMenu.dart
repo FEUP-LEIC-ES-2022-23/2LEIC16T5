@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
+import 'package:es/database/RemoteDBHelper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +18,14 @@ class SettingsMenu extends StatefulWidget {
 
 
 class _SettingsMenuState extends State<SettingsMenu> {
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
+
   loginScreenController loginController = loginScreenController();
-  List listItems = ["€", "\$", "£"];
-  String valCurrency = "€";
+
+  List listItems = ["€", "\$", "£", "₣", "¥", "₽", "₹"];
+
   bool valMode = true;
   bool valNotifications = true;
-  changeCurrency(String newCurrency) {
-    setState(() {
-      valCurrency = newCurrency;
-    });
-  }
 
   changeMode(bool newMode) {
     setState(() {
@@ -39,7 +41,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      key: const Key("Settings"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
@@ -62,6 +66,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           ),
           actions: [
             IconButton(
+              key: const Key("Logout"),
                 onPressed: () {
                   SettingsPopUpViewer().sureLogout(context, loginController);
                 },
@@ -75,18 +80,56 @@ class _SettingsMenuState extends State<SettingsMenu> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              /*const SizedBox(height: 40),
-              buildDropDownBox(
-                "Currency",
-                listItems,
-                valCurrency,
-                changeCurrency,
+              const SizedBox(height: 40),
+
+              StreamBuilder(
+                stream: remoteDBHelper.getCurrency(),
+                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const LinearProgressIndicator();
+                  }
+                  return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Currency",
+                              style:
+                              TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                          Transform.scale(
+                            scale: 1.3,
+                            child: DropdownButton(
+                              key: Key('DropDown'),
+                              underline: const SizedBox(),
+                              borderRadius: BorderRadius.circular(12),
+                              value: snapshot.data,
+                              dropdownColor: Colors.lightBlue,
+                              iconEnabledColor: Colors.white,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  remoteDBHelper.changeCurrency(newValue);
+                                });
+                              },
+                              items: listItems.map((dynamic valueItem) {
+                                return DropdownMenuItem(
+                                  key: Key(valueItem),
+                                  value: valueItem,
+                                  child: valueItem == snapshot.data? Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.black),),
+                                );
+                              }).toList(),
+                            ),
+                          )
+                        ],
+                      ));
+                },
               ),
+
+              /*
               buildSwitch("Mode", valMode, changeMode),
               buildSwitch(
                   "Notifications", valNotifications, changeNotifications),
               const SizedBox(height: 10),*/
-              const SizedBox(height: 200),
+              const SizedBox(height: 40),
               SizedBox(
                 height: 200,
                 child: Image.asset('assets/img/Luckycat1.png'),
@@ -110,43 +153,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
               )
             ],
           ),
-        ));
-  }
-
-  Padding buildDropDownBox(
-      String title, List listItems, String value, Function changeValue) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title,
-
-                style:
-                const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
-            Transform.scale(
-              scale: 1.3,
-              child: DropdownButton(
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(12),
-                value: value,
-                dropdownColor: Colors.blue,
-                iconEnabledColor: Colors.white,
-                onChanged: (newValue) {
-                  setState(() {
-                    changeValue(newValue);
-                  });
-                },
-                items: listItems.map((valueItem) {
-                  return DropdownMenuItem(
-                    value: valueItem,
-
-                    child: valueItem == value? Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.black),),
-                  );
-                }).toList(),
-              ),
-            )
-          ],
         ));
   }
 

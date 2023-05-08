@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: ^3.3.13
   quickalert: ^1.0.1
   simple_circular_progress_bar: ^1.0.2
+  percent_indicator: ^4.0.1
 
   path: ^1.8.0
   # The following adds the Cupertino Icons font to your application.
@@ -49,6 +50,9 @@ dependencies:
 
   mockito: ^5.0.0
   glob: ^2.1.1
+  firebase_auth_mocks: ^0.8.7
+  google_sign_in_mocks: ^0.2.2
+  csv: ^5.0.2
 
 
 dev_dependencies:
@@ -58,6 +62,7 @@ dev_dependencies:
     sdk: flutter
   flutter_gherkin: ^2.0.0
   flutter_colorpicker: ^1.0.3
+  fl_chart: ^0.62.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -66,7 +71,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   google_fonts:
-  
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -110,3 +115,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/img/
+    - assets/fortuneko.csv

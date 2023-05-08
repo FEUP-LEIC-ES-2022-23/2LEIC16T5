@@ -1,8 +1,7 @@
 Feature: Reset Data
 
 	Background:
-		Given the user presses the "Settings" button
-		And the user is in the "Settings" menu
+		Given the user is in the "Settings" menu
 
 	Scenario: User accidentally pressed the “Reset Data” button
 		Given the user presses the "Reset Data" button

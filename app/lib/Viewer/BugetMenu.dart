@@ -9,7 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../Model/BudgetBarModel.dart';
 import '../Model/TransactionsModel.dart';
-import 'BarGraph.dart';
+import 'Elements/BarGraph.dart';
 
 class BudgetMenu extends StatefulWidget {
   const BudgetMenu({super.key, required this.title});

@@ -51,7 +51,7 @@ class RemoteDBHelper {
     return transaction;
   }
 
-  Future<String?> removeTransaction(TransactionModel transaction) async {
+  Future removeTransaction(TransactionModel transaction) async {
     await firebaseInstance
         .collection('Transactions')
         .doc(transaction.transactionID)
@@ -348,7 +348,7 @@ class RemoteDBHelper {
     });
   }
 
-  Future updateBudgetBarValOnNewTransaction(
+  Future updateBudgetBarValOnChangedTransaction(
       String transactionID, bool isAdd) async {
     UserModel user = UserModel(uid: userInstance.currentUser!.uid);
 
@@ -369,10 +369,11 @@ class RemoteDBHelper {
           .get()
           .then((budgetBar) {
         if (budgetBar.docs.length == 1) {
-          if (isAdd) {
-            double totalVal = budgetBar.docs.first.data()['value'];
-            budgetBar.docs.first.reference.update({'value': totalVal + val});
-          }
+          double totalVal = budgetBar.docs.first.data()['value'].toDouble();
+          budgetBar.docs.first.reference.update({
+            'value':
+                isAdd ? totalVal + val.toDouble() : totalVal - val.toDouble()
+          });
         }
       });
     });
@@ -398,6 +399,16 @@ class RemoteDBHelper {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => BudgetBarModel.fromMap(doc.data()))
+            .toList());
+  }
+
+  Stream<List<BudgetBarModel>> readBudgetBarsWithValue() {
+    return firebaseInstance
+        .collection('BudgetBars')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => BudgetBarModel.fromMapWithValue(doc.data()))
             .toList());
   }
 

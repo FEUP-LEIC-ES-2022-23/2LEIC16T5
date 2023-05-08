@@ -145,6 +145,9 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                     onLongPress: () {
                                       setState(() {
                                         remoteDBHelper
+                                            .updateBudgetBarValOnChangedTransaction(
+                                                transac.transactionID!, false);
+                                        remoteDBHelper
                                             .removeTransaction(transac);
                                       });
                                     },

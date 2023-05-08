@@ -2,11 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../Model/BudgetBarModel.dart';
 import '../database/RemoteDBHelper.dart';
+import 'Elements/PieChart.dart';
 
 class StatiscticsMenu extends StatefulWidget {
-  const StatiscticsMenu(
-      {super.key, required this.title, required this.currency});
+  const StatiscticsMenu({
+    super.key,
+    required this.title,
+    required this.currency,
+  });
   final String currency;
   final String title;
 
@@ -41,9 +46,77 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
           ),
         ),
         body: SingleChildScrollView(
-          child:Column(mainAxisAlignment: MainAxisAlignment.center,children: [
-              
-          ],)
-        ));
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+            ),
+            buildPieChart(remoteDBHelper, context),
+          ],
+        )));
+  }
+
+  Widget buildPieChart(RemoteDBHelper db, BuildContext context) {
+    return StreamBuilder<List<BudgetBarModel>>(
+        stream: db.readBudgetBarsWithValue(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<BudgetBarModel>> snapshot) {
+          if (!snapshot.hasData) {
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 90,
+                  ),
+                  const CircularProgressIndicator(
+                    color: Colors.blue,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Trying to load...",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    ],
+                  )
+                ]);
+          }
+          if (snapshot.hasData && snapshot.data!.isEmpty) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                SizedBox(height: 150),
+                Center(
+                    child: Text("Nothing to show",
+                        style: TextStyle(fontSize: 20, color: Colors.white)))
+              ],
+            );
+          } else {
+            //aqui para editar algumas propriedades do grafico em geral, passando os valores.
+            return Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Image.asset(
+                  'assets/img/Luckycat1.png',
+                  width: 230,
+                ),
+                MyPieChart(
+                  barsData: snapshot.data!,
+                  graphHeight: 300,
+                  spaceBetweenSections: 0,
+                  strokeWidth: 35,
+                  fontSize: 16,
+                  size: 125,
+                ),
+              ],
+            );
+          }
+        });
+    // bool hasOverflowed = false;
   }
 }

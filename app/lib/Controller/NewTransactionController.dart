@@ -42,7 +42,7 @@ class NewTransactionController {
         notes: textcontrollerNOTES.text);
 
     remoteDBHelper.addTransaction(transaction).then((transac) {
-      remoteDBHelper.updateBudgetBarValOnNewTransaction(
+      remoteDBHelper.updateBudgetBarValOnChangedTransaction(
           transac.transactionID!, _isIncome ? false : true);
     });
 

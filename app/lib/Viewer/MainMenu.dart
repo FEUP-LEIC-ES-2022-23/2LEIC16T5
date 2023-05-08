@@ -14,26 +14,23 @@ import 'package:es/Viewer/CategoriesMenu.dart';
 import 'package:es/Viewer/ChartsMenu.dart';
 import 'package:es/Viewer/TransactionsMenu.dart';
 
-
-
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
 
   @override
   State<MainMenu> createState() => _MainMenuState();
-
 }
 
 class _MainMenuState extends State<MainMenu> {
   RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance);
   static String _currency = '';
 
   @override
   Widget build(BuildContext context) {
     setSettings(remoteDBHelper.getCurrency(), setState);
     return Scaffold(
-      key: const Key("Main"),
+        key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         body: SingleChildScrollView(
           child: Column(
@@ -76,8 +73,10 @@ class _MainMenuState extends State<MainMenu> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              TransactionsMenu(title: 'Transactions', currency: _currency,)),
+                          builder: (context) => TransactionsMenu(
+                                title: 'Transactions',
+                                currency: _currency,
+                              )),
                     );
                   },
                   child: const Text('Transactions',
@@ -115,8 +114,10 @@ class _MainMenuState extends State<MainMenu> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SavingsMenu(title: 'Savings', currency: _currency,)),
+                          builder: (context) => SavingsMenu(
+                                title: 'Savings',
+                                currency: _currency,
+                              )),
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
@@ -139,23 +140,29 @@ class _MainMenuState extends State<MainMenu> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              NationalMenu(title: 'National Comparison', currency: _currency,)),
+                          builder: (context) => NationalMenu(
+                                title: 'National Comparison',
+                                currency: _currency,
+                              )),
                     );
                   },
-                  child: const Text('National Comparison', style: TextStyle(fontSize: 20))),
-            ElevatedButton(
+                  child: const Text('National Comparison',
+                      style: TextStyle(fontSize: 20))),
+              ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              StatiscticsMenu(title: 'Statistics',currency: _currency,)),
+                          builder: (context) => StatiscticsMenu(
+                                title: 'Statistics',
+                                currency: _currency,
+                              )),
                     );
                   },
-                  child: const Text('Statistics', style: TextStyle(fontSize: 20))),
+                  child:
+                      const Text('Statistics', style: TextStyle(fontSize: 20))),
             ],
           ),
         ));

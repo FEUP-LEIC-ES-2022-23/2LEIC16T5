@@ -41,7 +41,9 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Text("ola!"),
+          child:Column(mainAxisAlignment: MainAxisAlignment.center,children: [
+              
+          ],)
         ));
   }
 }

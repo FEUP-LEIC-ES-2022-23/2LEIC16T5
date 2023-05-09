@@ -66,6 +66,7 @@ class NewCategoryController {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              key: const Key("Name"),
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.category),
                                 labelText: 'Name',
@@ -111,6 +112,7 @@ class NewCategoryController {
                   MaterialButton(
                     color: Colors.lightBlue,
                     child: const Text('Add',
+                        key: Key("Add"),
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

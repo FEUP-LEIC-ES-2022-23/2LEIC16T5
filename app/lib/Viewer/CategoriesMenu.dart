@@ -23,6 +23,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
       appBar: AppBar(
+        key: const Key("Categories"),
         title: Text(widget.title,
             style: const TextStyle(
                 fontSize: 35,
@@ -69,6 +70,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
+                                key: const Key("Category"),
                                 contentPadding: EdgeInsets.only(left: 0),
                                 tileColor: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -111,7 +113,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: FloatingActionButton(
-                  heroTag: "Add",
+                  key: const Key("Plus"),
                   onPressed: () {
                     NewCategoryController().newCategory(context);
                   },

@@ -82,6 +82,7 @@ class _MainMenuState extends State<MainMenu> {
                   child: const Text('Transactions',
                       style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                  key: const Key("Categories"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {

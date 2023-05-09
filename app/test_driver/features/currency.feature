@@ -1,8 +1,7 @@
 Feature: Currency Setting
 
   Background:
-    Given the user presses the "Settings" button
-    And the user is in the "Settings" menu
+    Given the user is in the "Settings" menu
 
   Scenario: Switching currency from Euro to Dollar
     Given current "currency" is "€"

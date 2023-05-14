@@ -13,6 +13,18 @@ class UserHasData extends AndWithWorld<FlutterWorld> {
 
     final locatorHome = find.byValueKey("Home");
     await FlutterDriverUtils.tap(world.driver, locatorHome);
+
+    if (!isSettings){
+      await FlutterDriverUtils.tap(world.driver, locatorSettings);
+      final locatorResetData = find.byValueKey("Reset Data");
+      await FlutterDriverUtils.tap(world.driver, locatorResetData);
+      final locatorYes = find.text("Yes");
+      await FlutterDriverUtils.tap(world.driver, locatorYes);
+      final locatorOkay = find.text("Okay");
+      await FlutterDriverUtils.tap(world.driver, locatorOkay);
+      await FlutterDriverUtils.tap(world.driver, locatorHome);
+    }
+
     final locatorTransactions = find.byValueKey("Transactions");
     await FlutterDriverUtils.tap(world.driver, locatorTransactions);
     final locatorPlus = find.byValueKey("Plus");

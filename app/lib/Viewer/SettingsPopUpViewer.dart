@@ -66,7 +66,8 @@ class SettingsPopUpViewer {
         loginController.toLogInScreen(context);
         QuickAlert.show(
             context: context,
-            text: "Sucessfully logged out!",
+            title: 'Miau miau!',
+            text: "Successfully logged out!",
             type: QuickAlertType.success,
             confirmBtnColor: Colors.lightBlue,);
       },

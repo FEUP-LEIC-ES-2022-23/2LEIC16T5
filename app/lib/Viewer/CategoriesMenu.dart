@@ -110,6 +110,12 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                           if (Navigator.canPop(context)) {
                                             Navigator.pop(context);
                                           }
+                                          QuickAlert.show(
+                                              context: context,
+                                              title: 'Miau miau!',
+                                              text: "Category successfully deleted!",
+                                              type: QuickAlertType.success,
+                                              confirmBtnColor: Colors.lightBlue);
                                         });
                                       },
                                     );

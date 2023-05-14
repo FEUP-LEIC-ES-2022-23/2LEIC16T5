@@ -158,6 +158,12 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                             if (Navigator.canPop(context)) {
                                               Navigator.pop(context);
                                             }
+                                            QuickAlert.show(
+                                                context: context,
+                                                title: 'Miau miau!',
+                                                text: "Transaction successfully deleted!",
+                                                type: QuickAlertType.success,
+                                                confirmBtnColor: Colors.lightBlue);
                                           });
                                         },
                                       );

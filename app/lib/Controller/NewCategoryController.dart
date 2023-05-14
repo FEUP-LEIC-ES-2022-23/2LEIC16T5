@@ -96,6 +96,7 @@ class NewCategoryController {
                             height: 50,
                           ),
                           ElevatedButton(
+                            key: const Key('Pick Color'),
                               child: Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
@@ -129,6 +130,7 @@ class NewCategoryController {
   }
 
   Widget buildColorPicker(StateSetter setState) => ColorPicker(
+    key: const Key("Color Picker"),
       pickerColor: this.color,
       onColorChanged: (color) {
         setState!(() => this.color = color);
@@ -143,6 +145,7 @@ class NewCategoryController {
               children: [
                 buildColorPicker(setState),
                 TextButton(
+                  key: const Key("Select"),
                   child: Text(
                     'SELECT',
                     style: TextStyle(fontSize: 20),

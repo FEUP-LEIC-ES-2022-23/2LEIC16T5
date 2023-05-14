@@ -6,6 +6,15 @@ Feature: Category creation/assignment
   Scenario: Valid creation of category
     Given the user presses the "Plus" button
     And the user "fills" in "Name" field - ex: "Test"
+    And the user selects a color
+    When the user presses the "Add" button
+    Then the user is in the "Categories" menu
+    And the user sees the "Category"
+
+  Scenario: Valid creation of category with same name but different color
+    Given the user presses the "Plus" button
+    And the user "fills" in "Name" field - ex: "Test"
+    And the user selects a different a color
     When the user presses the "Add" button
     Then the user is in the "Categories" menu
     And the user sees the "Category"

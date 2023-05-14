@@ -1,8 +1,8 @@
-import 'dart:ui';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
@@ -35,7 +35,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                   fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
-            key: Key("Home"),
+            key: const Key("Home"),
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -140,12 +140,27 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                       });
                                     },
                                     onLongPress: () {
-                                      setState(() {
-                                        remoteDBHelper.updateBudgetBar(
-                                            transac.transactionID!, false);
-                                        remoteDBHelper
-                                            .removeTransaction(transac);
-                                      });
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.warning,
+                                        title: 'WARNING',
+                                        text: 'Are you sure you want to permanently delete this transaction?',
+                                        confirmBtnText: 'Yes',
+                                        cancelBtnText: 'No',
+                                        showCancelBtn: true,
+                                        confirmBtnColor: Colors.lightBlue,
+                                        onConfirmBtnTap: () {
+                                          setState(() {
+                                            remoteDBHelper.updateBudgetBar(
+                                                transac.transactionID!, false);
+                                            remoteDBHelper
+                                                .removeTransaction(transac);
+                                            if (Navigator.canPop(context)) {
+                                              Navigator.pop(context);
+                                            }
+                                          });
+                                        },
+                                      );
                                     },
                                   ),
                                 ),

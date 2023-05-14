@@ -2,10 +2,8 @@ import 'package:es/Controller/NewCategoryController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:es/database/LocalDBHelper.dart';
+import 'package:quickalert/quickalert.dart';
 
 class CategoriesMenu extends StatefulWidget {
   const CategoriesMenu({Key? key, required this.title}) : super(key: key);
@@ -95,11 +93,26 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                   onLongPress: () {
-                                    setState(() {
-                                      remoteDBHelper.removeCategory(categor);
-                                      remoteDBHelper
-                                          .removeBudgetBar(categor.name);
-                                    });
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.warning,
+                                      title: 'WARNING',
+                                      text: 'Are you sure you want to permanently delete this category?',
+                                      confirmBtnText: 'Yes',
+                                      cancelBtnText: 'No',
+                                      showCancelBtn: true,
+                                      confirmBtnColor: Colors.lightBlue,
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          remoteDBHelper.removeCategory(categor);
+                                          remoteDBHelper
+                                              .removeBudgetBar(categor.name);
+                                          if (Navigator.canPop(context)) {
+                                            Navigator.pop(context);
+                                          }
+                                        });
+                                      },
+                                    );
                                   },
                                 ),
                               ),

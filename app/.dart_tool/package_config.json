@@ -284,6 +284,30 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "geocoding",
+      "rootUri": "file:///C:/Users/athos/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_android",
+      "rootUri": "file:///C:/Users/athos/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_android-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_ios",
+      "rootUri": "file:///C:/Users/athos/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_ios-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_platform_interface",
+      "rootUri": "file:///C:/Users/athos/AppData/Local/Pub/Cache/hosted/pub.dev/geocoding_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "geoflutterfire",
       "rootUri": "file:///C:/Users/athos/AppData/Local/Pub/Cache/hosted/pub.dev/geoflutterfire-3.0.2",
       "packageUri": "lib/",
@@ -698,7 +722,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-02T22:43:02.564220Z",
+  "generated": "2023-05-18T15:10:26.515367Z",
   "generator": "pub",
   "generatorVersion": "2.19.5"
 }

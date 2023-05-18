@@ -9,22 +9,30 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart' as Geocoding;
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
+  static final textcontrollerADDRESS = TextEditingController();
+
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
+  c_model.CategoryModel selected_category = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
-  void _enterTransaction() {
+  void _enterTransaction() async {
+    if (textcontrollerADDRESS.text != '' && position == null) {
+      await getGeoPointFromAddress(textcontrollerADDRESS.text);
+    }
+
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selected_category.categoryID,
@@ -48,6 +56,7 @@ class NewTransactionController {
     textcontrollerTOTAL.clear();
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
+    textcontrollerADDRESS.clear();
     position = null;
   }
 
@@ -103,7 +112,9 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? const Key("Income") :  const Key("Expense"),
+                            key: _isIncome
+                                ? const Key("Income")
+                                : const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -232,6 +243,20 @@ class NewTransactionController {
                           ),
                         ],
                       ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText:
+                                    'Address: "Street, Number, City, State, Country"',
+                              ),
+                              controller: textcontrollerADDRESS,
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(
                         height: 5,
                       ),
@@ -353,30 +378,32 @@ class NewTransactionController {
                             dropdownColor: Colors.white,
                             value: selected_category,
                             items: categories
-                                .map((c_model.CategoryModel? c) => DropdownMenuItem(
-                                    value: c,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          c!.name,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(c.color),
-                                          ),
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )))
+                                .map((c_model.CategoryModel? c) =>
+                                    DropdownMenuItem(
+                                        value: c,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              c!.name,
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(c.color),
+                                              ),
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                          ],
+                                        )))
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
@@ -487,37 +514,36 @@ class NewTransactionController {
                           (transac.notes?.isEmpty ?? true)
                               ? SizedBox()
                               : Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                                child:
-                                  Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Notes:',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Notes:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                      Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          //borderRadius: BorderRadius.circular(10.0),
                                         ),
-                                        Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            //borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: Text(
-                                            transac.notes!,
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.black,
-                                            ),
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          transac.notes!,
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                
-                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                           (transac.location != null)
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -547,6 +573,11 @@ class NewTransactionController {
                                               transac.location!.latitude,
                                               transac.location!.longitude,
                                             ),
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(
+                                                    HSVColor.fromColor(Color(
+                                                            transac.categoryColor!))
+                                                        .hue),
                                           ),
                                         },
                                         onMapCreated:
@@ -567,5 +598,15 @@ class NewTransactionController {
                 );
               });
         });
+  }
+
+  Future<void> getGeoPointFromAddress(String address) async {
+    List<Geocoding.Location> locations =
+        await Geocoding.locationFromAddress(address);
+    if (locations.isNotEmpty) {
+      double latitude = locations[0].latitude;
+      double longitude = locations[0].longitude;
+      position = GeoPoint(latitude, longitude);
+    }
   }
 }

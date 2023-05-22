@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +24,7 @@ class BudgetMenuState extends State<BudgetMenu> {
   bool totalLimitEdited = false;
 
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   BudgetMenuController budgetMenuController = BudgetMenuController();
 
   getTransactions(transacs) {

@@ -12,8 +12,8 @@ import 'package:es/Model/CategoryModel.dart';
 
 class RemoteDBHelper {
   FirebaseAuth userInstance;
-  FirebaseFirestore firebaseInstance = FirebaseFirestore.instance;
-  RemoteDBHelper({required this.userInstance});
+  FirebaseFirestore firebaseInstance;
+  RemoteDBHelper({required this.userInstance, required this.firebaseInstance});
 
   Future createUser() async {
     UserModel userModel = UserModel(uid: userInstance!.currentUser!.uid);

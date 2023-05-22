@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
@@ -23,7 +24,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   static String _currency = '';
 
   @override

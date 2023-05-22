@@ -14,7 +14,7 @@ class BudgetMenuController {
   BudgetMenuController({this.callback});
 
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   FirebaseAuth userInstance = FirebaseAuth.instance;
   static final textcontrollerTotalBudgetLimit = TextEditingController();
   static final textcontrollerCategoryBudgetLimit = TextEditingController();
@@ -146,8 +146,8 @@ class BudgetMenuController {
         });
   }
 
-  void _loadBudgetBars(BuildContext context, Function? callback) async {
-    Stream<List<BudgetBarModel>> stream = remoteDBHelper.readBudgetBars();
+  void loadBudgetBars(RemoteDBHelper db,BuildContext context, Function? callback) async {
+    Stream<List<BudgetBarModel>> stream = db.readBudgetBars();
     stream.listen((budgetBars) {
       if (context.mounted) {
         callback!(() {
@@ -164,7 +164,7 @@ class BudgetMenuController {
   Widget buildDropdownList(
       RemoteDBHelper db, BuildContext context, Function callback) {
     if (initState_) {
-      _loadBudgetBars(context, callback);
+      loadBudgetBars(db,context, callback);
       callback(() {
         initState_ = false;
       });

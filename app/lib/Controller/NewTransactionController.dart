@@ -23,7 +23,7 @@ class NewTransactionController {
       categoryID: '', userID: '', name: 'Category', color: 0);
 
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(

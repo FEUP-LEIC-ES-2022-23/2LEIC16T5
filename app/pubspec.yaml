@@ -48,12 +48,11 @@ dependencies:
   geoflutterfire: ^3.0.2
   location: ^4.4.0
 
-  mockito: ^5.0.0
   glob: ^2.1.1
   firebase_auth_mocks: ^0.8.7
   google_sign_in_mocks: ^0.2.2
   csv: ^5.0.2
-
+  mockito: ^5.4.0
 
 dev_dependencies:
   integration_test:
@@ -63,7 +62,8 @@ dev_dependencies:
   flutter_gherkin: ^2.0.0
   flutter_colorpicker: ^1.0.3
   fl_chart: ^0.62.0
-
+  build_runner: ^2.2.0 
+  
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

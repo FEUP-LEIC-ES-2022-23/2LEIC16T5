@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class BudgetBarModel {
   String? categoryName;
   String categoryID;
@@ -11,6 +9,7 @@ class BudgetBarModel {
   double? y;
   bool? onLimit;
   bool? overLimit;
+  
   BudgetBarModel({
     this.categoryName,
     required this.categoryID,

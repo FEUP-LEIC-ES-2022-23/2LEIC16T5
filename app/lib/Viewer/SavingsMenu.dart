@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/SavingsMenuController.dart';
 import 'package:es/Viewer/MainMenu.dart';
 import 'package:intl/intl.dart';
@@ -24,12 +25,12 @@ class _SavingsMenu extends State<SavingsMenu> {
   double multiplier = 0;
   double currSliderVal = 0;
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
 
   SavingsMenuController savingsMenuController = SavingsMenuController();
 
   Stream<List<SavingsModel>> savings =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance).readSaving('1');
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).readSaving('1');
   bool initState_ = true;
 
   @override

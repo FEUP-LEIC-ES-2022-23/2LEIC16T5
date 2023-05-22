@@ -59,7 +59,7 @@ class RemoteDBHelper {
   }
 
   Stream<List<TransactionModel>> readTransactions() {
-    User? usr = FirebaseAuth.instance.currentUser;
+    User? usr = userInstance.currentUser;
     var transactions = firebaseInstance
         .collection('Transactions')
         .where('userID', isEqualTo: usr!.uid)

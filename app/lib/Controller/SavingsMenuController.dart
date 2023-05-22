@@ -9,9 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 
 class SavingsMenuController {
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
-  FirebaseAuth userInstance = FirebaseAuth.instance;
+  SavingsMenuController(
+      {required this.remoteDBHelper, required this.userInstance});
+  RemoteDBHelper remoteDBHelper;
+  FirebaseAuth userInstance ;
   static double totalSliderVal = 0;
 
   static final textcontrollerNAME = TextEditingController();

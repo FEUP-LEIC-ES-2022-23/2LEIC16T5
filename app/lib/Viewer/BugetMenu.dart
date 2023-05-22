@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,8 +24,9 @@ class BudgetMenu extends StatefulWidget {
 class BudgetMenuState extends State<BudgetMenu> {
   bool totalLimitEdited = false;
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
   BudgetMenuController budgetMenuController = BudgetMenuController();
 
   getTransactions(transacs) {
@@ -67,14 +69,14 @@ class BudgetMenuState extends State<BudgetMenu> {
 
   Widget buildBody(RemoteDBHelper db) {
     budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
-
+    Timer timer = Timer(const Duration(seconds: 30), () {});
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,
             AsyncSnapshot<List<BudgetBarModel>> snapshot) {
           // bool hasOverflowed = false;
 
-          if (!snapshot.hasData) {
+          if (!snapshot.hasData && timer.isActive) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -98,7 +100,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   )
                 ]);
           }
-          if (snapshot.hasData && snapshot.data!.isEmpty) {
+          if (snapshot.hasData && snapshot.data!.isEmpty || !snapshot.hasData) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [

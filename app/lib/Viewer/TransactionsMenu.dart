@@ -20,8 +20,9 @@ class TransactionsMenu extends StatefulWidget {
 }
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
   @override
   Widget build(BuildContext context) {
@@ -143,14 +144,14 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                             .showTransaction(context, transac);
                                       });
                                     },
-                                    onLongPress: () {
-                                      setState(() {
-                                        remoteDBHelper
-                                            .updateBudgetBarValOnChangedTransaction(
-                                                transac.transactionID!, false);
-                                        remoteDBHelper
-                                            .removeTransaction(transac);
-                                      });
+                                    onLongPress: () async {
+                                      //setState(() async {
+                                      await remoteDBHelper
+                                          .updateBudgetBarValOnChangedTransaction(
+                                              transac.transactionID!, false);
+                                      await remoteDBHelper
+                                          .removeTransaction(transac);
+                                      //});
                                     },
                                   ),
                                 ),

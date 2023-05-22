@@ -33,6 +33,9 @@ class BarGraphState extends State<MyPieChart> {
     }
     double graphWidth = MediaQuery.of(context).size.width;
 
+    List<BudgetBarModel> nonEmptySections =
+        NonEmptyPieChartSections(widget.barsData);
+    bool hasSections = nonEmptySections.isNotEmpty;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -44,31 +47,35 @@ class BarGraphState extends State<MyPieChart> {
             height: widget.graphHeight,
             child: PieChart(PieChartData(
                 startDegreeOffset: 90,
-                pieTouchData:
-                    PieTouchData(touchCallback: (event, pieTouchResponse) {
-                  if (event is FlLongPressEnd || event is FlPanEndEvent) {
-                    if (mounted) {
-                      setState(() {
-                        touchedIdx = -1;
-                      });
-                    }
-                  } else {
-                    if (mounted) {
-                      if (pieTouchResponse != null &&
-                          pieTouchResponse.touchedSection != null) {
-                        setState(() {
-                          touchedIdx = pieTouchResponse
-                              .touchedSection!.touchedSectionIndex;
-                        });
-                      }
-                    }
-                  }
-                }),
+                pieTouchData: hasSections
+                    ? PieTouchData(touchCallback: (event, pieTouchResponse) {
+                        if (!hasSections) {
+                          return;
+                        }
+                        if (event is FlLongPressEnd || event is FlPanEndEvent) {
+                          if (mounted) {
+                            setState(() {
+                              touchedIdx = -1;
+                            });
+                          }
+                        } else {
+                          if (mounted) {
+                            if (pieTouchResponse != null &&
+                                pieTouchResponse.touchedSection != null) {
+                              setState(() {
+                                touchedIdx = pieTouchResponse
+                                    .touchedSection!.touchedSectionIndex;
+                              });
+                            }
+                          }
+                        }
+                      })
+                    : null,
                 centerSpaceRadius: widget.size,
                 borderData: FlBorderData(show: false),
                 sectionsSpace: widget.spaceBetweenSections,
-                sections: getChartSections(
-                    NonEmptyPieChartSections(widget.barsData)))),
+                sections:
+                    hasSections ? getChartSections(nonEmptySections) : [])),
           ),
         ),
       ],
@@ -82,9 +89,9 @@ class BarGraphState extends State<MyPieChart> {
         temp.add(bar);
       }
     }
-    if (temp.isEmpty) {
+    /*if (temp.isEmpty) {
       temp.add(BudgetBarModel(categoryID: '', userID: '', value: 0, color: 0));
-    }
+    }*/
     return temp;
   }
 
@@ -96,13 +103,15 @@ class BarGraphState extends State<MyPieChart> {
         .map<int, PieChartSectionData>((idx, data) {
           final bool isTouched = idx == touchedIdx;
           final double percentage = data.value! / total;
-          final bool nullValue = (data.value == 0 && total == 0);
+          final bool nullValue =
+              (data.value == 0 && total == 0 || data.value == 0 && total != 0);
 
           final section = PieChartSectionData(
               radius:
                   isTouched ? widget.strokeWidth! * 1.75 : widget.strokeWidth,
               color: nullValue ? Colors.grey[200] : Color(data.color!),
-              value: nullValue ? 1 : percentage,
+              // verificar qnd chegar a casa
+              value: nullValue ? 0 : percentage,
               title: nullValue
                   ? ''
                   : (isTouched

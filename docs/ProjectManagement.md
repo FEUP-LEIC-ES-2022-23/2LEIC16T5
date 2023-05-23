@@ -4,7 +4,7 @@
 You can find below information and references related with the project management in our team: 
 
 * Backlog management: Product backlog and Iteration backlog in a [Github Projects board](https://github.com/orgs/FEUP-LEIC-ES-2022-23/projects/30);
-* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), [v1](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v1), [v2](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v2), v3, v4;
+* Release management: [v0](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v0), [v1](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v1), [v2](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v2), [v3](https://github.com/FEUP-LEIC-ES-2022-23/2LEIC16T5/releases/tag/v3), v4;
 * Iteration planning and retrospectives: 
 
   ### Iteration 0
@@ -88,4 +88,27 @@ You can find below information and references related with the project managemen
     * Time managing. We tend to leave everything to the last minute
 
 
+ ### Iteration 4
+
+  This is our last iteration, which means our app is now totally functional and ready for our users to enjoy. It is also free of bugs, and we have successfully enhanced some of the features we had previously implemented. We even added a new one: the Pie Chart, so users can check their monthly expenses in a friendly way.
+  
+  #### Begin
  
+  <img width="938" alt="Iteration4_Begin" src="https://github.com/SofiaViP/hero/assets/92641892/3919a0d7-f436-44ca-9c62-3b2864724cd2">
+  
+  #### End
+  
+  <img width="936" alt="Iteration4_End" src="https://github.com/SofiaViP/hero/assets/92641892/0d383bf0-3a4b-4949-9d48-b0b63b6d89f7">
+  
+  #### Retrospectives
+  
+  * What went well
+    * Once more, we were able to set realistic expectations, since we fulfilled all the work items we had planned 
+
+  * What went wrong
+    * Mocking Firebase was a pretty hard task to accomplished, but we eventually did it
+
+  * What is still a problem
+    * There are no more problems which could possibly affect our team 
+
+

@@ -360,7 +360,6 @@ class RemoteDBHelper {
       num val = doc.data()!['total'];
 
       String categoryID_ = doc.data()!['categoryID'];
-      dynamic isExpense = doc.data()!['expense'];
 
       await firebaseInstance
           .collection('BudgetBars')

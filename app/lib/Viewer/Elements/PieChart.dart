@@ -28,14 +28,17 @@ class BarGraphState extends State<MyPieChart> {
   @override
   Widget build(BuildContext context) {
     total = 0;
-    for (BudgetBarModel section in widget.barsData) {
-      total += section.value!;
-    }
+
     double graphWidth = MediaQuery.of(context).size.width;
 
     List<BudgetBarModel> nonEmptySections =
         NonEmptyPieChartSections(widget.barsData);
     bool hasSections = nonEmptySections.isNotEmpty;
+    if (hasSections) {
+      for (BudgetBarModel section in widget.barsData) {
+        total += section.value!;
+      }
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

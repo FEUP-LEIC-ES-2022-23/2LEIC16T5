@@ -13,8 +13,9 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:es/database/LocalDBHelper.dart';
 
 class ChartsMenu extends StatefulWidget {
-  const ChartsMenu({Key? key, required this.title}) : super(key: key);
+  const ChartsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
   final String title;
+  final String currency;
 
   @override
   State<ChartsMenu> createState() => _ChartsMenuState();

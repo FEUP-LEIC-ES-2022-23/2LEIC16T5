@@ -110,6 +110,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "cli_util",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/cli_util-0.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/clock-1.1.1",
       "packageUri": "lib/",
@@ -290,6 +296,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_launcher_icons-0.13.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -322,6 +334,30 @@
     {
       "name": "fuchsia_remote_debug_protocol",
       "rootUri": "file:///home/not_real_fu/snap/flutter/common/flutter/packages/fuchsia_remote_debug_protocol",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geocoding",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/geocoding-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_android",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/geocoding_android-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_ios",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/geocoding_ios-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_platform_interface",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/geocoding_platform_interface-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -432,6 +468,12 @@
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "image",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/image-4.0.17",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "integration_test",
@@ -576,6 +618,12 @@
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/percent_indicator-4.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/petitparser-5.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "platform",
@@ -794,6 +842,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/xml-6.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "yaml",
       "rootUri": "file:///home/not_real_fu/.pub-cache/hosted/pub.dev/yaml-3.1.1",
       "packageUri": "lib/",
@@ -806,7 +860,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-23T14:15:56.849695Z",
+  "generated": "2023-05-23T16:45:22.430284Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

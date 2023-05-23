@@ -14,8 +14,9 @@ import '../Model/TransactionsModel.dart';
 import 'Elements/BarGraph.dart';
 
 class BudgetMenu extends StatefulWidget {
-  const BudgetMenu({super.key, required this.title});
+  const BudgetMenu({super.key, required this.title, required this.currency});
   final String title;
+  final String currency;
 
   @override
   State<BudgetMenu> createState() => BudgetMenuState();
@@ -172,6 +173,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   barWidth: 40,
                   spaceBetweenBars: 10,
                   graphContainerHeight: 320,
+                  currency: widget.currency,
                 ),
                 const SizedBox(
                   height: 20,

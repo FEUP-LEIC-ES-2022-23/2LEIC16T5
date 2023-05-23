@@ -12,8 +12,10 @@ class MapMenuController {
   late GoogleMapController mapController;
   Location location = Location();
   static final List<Marker> _markers = [];
+  LatLng? position;
+  String searchAddress = '';
 
-  void setMapController(GoogleMapController controller){
+  void setMapController(GoogleMapController controller) {
     mapController = controller;
   }
 
@@ -21,15 +23,14 @@ class MapMenuController {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
-   _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return Future.error(
-            QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: "Location services are disabled"));
+        return Future.error(QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: "Location services are disabled"));
       }
     }
 
@@ -37,11 +38,10 @@ class MapMenuController {
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        return Future.error(
-            QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                text: "Location permissions are permanently denied"));
+        return Future.error(QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            text: "Location permissions are permanently denied"));
       }
     }
 
@@ -56,11 +56,10 @@ class MapMenuController {
     Marker marker = Marker(
         markerId: MarkerId(t.transactionID!),
         position: LatLng(t.location!.latitude, t.location!.longitude),
-        infoWindow: InfoWindow(
-            title: t.name,
-            snippet: '${t.total} €'
-        )
-    );
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          HSVColor.fromColor(Color(t.categoryColor!)).hue
+        ),
+        infoWindow: InfoWindow(title: t.name, snippet: '${t.total} €'));
     _markers.add(marker);
   }
 

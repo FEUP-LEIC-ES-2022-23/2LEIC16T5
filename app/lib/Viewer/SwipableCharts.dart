@@ -58,7 +58,10 @@ class SwipableChartsState extends State<SwipableCharts> {
                       title: 'statistics',
                       currency: widget.currency,
                       swipped: false),
-              const ChartsMenu(title: 'Charts')
+              ChartsMenu(
+                title: 'Charts',
+                currency: widget.currency,
+              )
             ],
           )),
     );

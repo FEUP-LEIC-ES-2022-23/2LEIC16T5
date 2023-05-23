@@ -55,6 +55,7 @@ dependencies:
   firebase_auth_mocks: ^0.8.7
   google_sign_in_mocks: ^0.2.2
   csv: ^5.0.2
+  geocoding: ^2.0.0
 
 
 dev_dependencies:

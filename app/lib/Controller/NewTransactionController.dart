@@ -9,12 +9,15 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart' as Geocoding;
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
+  static final textcontrollerADDRESS = TextEditingController();
+
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
@@ -25,7 +28,11 @@ class NewTransactionController {
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
-  void _enterTransaction() {
+  void _enterTransaction() async {
+    if (textcontrollerADDRESS.text != '' && position == null) {
+      await getGeoPointFromAddress(textcontrollerADDRESS.text);
+    }
+
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selectedCategory.categoryID,
@@ -49,6 +56,7 @@ class NewTransactionController {
     textcontrollerTOTAL.clear();
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
+    textcontrollerADDRESS.clear();
     position = null;
   }
 
@@ -236,6 +244,66 @@ class NewTransactionController {
                           ),
                         ],
                       ),
+                      !_isIncome
+                          ? Row(
+                              children: [
+                                FloatingActionButton(
+                                    mini: true,
+                                    backgroundColor: Colors.lightBlue,
+                                    heroTag: "Map",
+                                    onPressed: () {
+                                      MapMenuController()
+                                          .getCurrentLocation(context)
+                                          .then((value) {
+                                        QuickAlert.show(
+                                            context: context,
+                                            type: QuickAlertType.confirm,
+                                            confirmBtnColor: Colors.lightBlue,
+                                            text:
+                                                "Do you wish to set your current location as this transaction's location?",
+                                            confirmBtnText: "Yes",
+                                            cancelBtnText: "No",
+                                            onConfirmBtnTap: () {
+                                              Navigator.of(context).pop();
+                                              setState(() async {
+                                                position = GeoPoint(
+                                                    double.parse(
+                                                        '${value.latitude}'),
+                                                    double.parse(
+                                                        '${value.longitude}'));
+                                                textcontrollerADDRESS.text =
+                                                    await getAddressFromGeoPoint(
+                                                        position!);
+                                              });
+                                              
+                                            },
+                                            onCancelBtnTap: () {
+                                              setState(() {
+                                                position = null;
+                                                textcontrollerADDRESS.text = '';
+                                              });
+                                              Navigator.of(context).pop();
+                                            });
+                                      });
+                                    },
+                                    child: (position == null)
+                                        ? const Icon(Icons.pin_drop_rounded)
+                                        : const Icon(Icons.done_all_rounded)),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      //icon: Icon(Icons.map),
+                                      labelText:
+                                          'Address (Street, Number, City, State, Country)',
+                                    ),
+                                    controller: textcontrollerADDRESS,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       const SizedBox(
                         height: 5,
                       ),
@@ -246,46 +314,6 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome
-                          ? FloatingActionButton(
-                              mini: true,
-                              backgroundColor: Colors.lightBlue,
-                              heroTag: "Map",
-                              onPressed: () {
-                                MapMenuController()
-                                    .getCurrentLocation(context)
-                                    .then((value) {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      confirmBtnColor: Colors.lightBlue,
-                                      text:
-                                          "Do you wish to set your current location as this transaction's location?",
-                                      confirmBtnText: "Yes",
-                                      cancelBtnText: "No",
-                                      onConfirmBtnTap: () {
-                                        setState(() {
-                                          position = GeoPoint(
-                                              double.parse('${value.latitude}'),
-                                              double.parse(
-                                                  '${value.longitude}'));
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                      onCancelBtnTap: () {
-                                        setState(() {
-                                          position = null;
-                                        });
-                                        Navigator.of(context).pop();
-                                      });
-                                });
-                              },
-                              child: (position == null)
-                                  ? const Icon(Icons.pin_drop_rounded)
-                                  : const Icon(Icons.done_all_rounded))
-                          : const SizedBox(
-                              width: 48.0,
-                            ),
                       MaterialButton(
                         key: const Key("Add"),
                         shape: const RoundedRectangleBorder(
@@ -591,6 +619,11 @@ class NewTransactionController {
                                               transac.location!.latitude,
                                               transac.location!.longitude,
                                             ),
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(HSVColor
+                                                        .fromColor(Color(transac
+                                                            .categoryColor!))
+                                                    .hue),
                                           ),
                                         },
                                         onMapCreated:
@@ -611,5 +644,31 @@ class NewTransactionController {
                 );
               });
         });
+  }
+
+  Future<void> getGeoPointFromAddress(String address) async {
+    List<Geocoding.Location> locations =
+        await Geocoding.locationFromAddress(address);
+    if (locations.isNotEmpty) {
+      double latitude = locations[0].latitude;
+      double longitude = locations[0].longitude;
+      position = GeoPoint(latitude, longitude);
+    }
+  }
+
+  Future<String> getAddressFromGeoPoint(GeoPoint geoPoint) async {
+    List<Geocoding.Placemark> placemarks =
+        await Geocoding.placemarkFromCoordinates(
+      geoPoint.latitude,
+      geoPoint.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      Geocoding.Placemark placemark = placemarks[0];
+      String address =
+          '${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.postalCode}';
+      return address;
+    }
+    return '';
   }
 }

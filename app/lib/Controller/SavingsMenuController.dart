@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SavingsModel.dart';
-import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -13,11 +11,11 @@ class SavingsMenuController {
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   FirebaseAuth userInstance = FirebaseAuth.instance;
-  static double totalSliderVal = 1000;
+  static double totalSliderVal = 0;
 
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
-  static final textcontrollerDATE= TextEditingController();
+  static final textcontrollerDATE = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String? newSavings(BuildContext context) {
@@ -28,11 +26,13 @@ class SavingsMenuController {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(32.0)),
                       color: Colors.lightBlue,
                     ),
                     height: 60,
@@ -129,7 +129,7 @@ class SavingsMenuController {
                                             onPrimary: Colors
                                                 .white, // header text color
                                             onSurface:
-                                            Colors.black, // body text color
+                                                Colors.black, // body text color
                                           ),
                                         ),
                                         child: child!,
@@ -159,7 +159,8 @@ class SavingsMenuController {
                 ),
                 actions: <Widget>[
                   MaterialButton(
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     color: Colors.lightBlue,
                     child: const Text('Add',
                         style: TextStyle(color: Colors.white)),
@@ -168,9 +169,10 @@ class SavingsMenuController {
                         remoteDBHelper.addSaving(SavingsModel(
                             userID: FirebaseAuth.instance.currentUser!.uid,
                             name: textcontrollerNAME.text,
-                            targetDate: textcontrollerDATE.text.isEmpty?
-                                null
-                                : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+                            targetDate: textcontrollerDATE.text.isEmpty
+                                ? null
+                                : DateFormat('dd-MM-yyyy')
+                                    .parse(textcontrollerDATE.text),
                             value: 0,
                             total: num.tryParse(textcontrollerTOTAL.text)));
 
@@ -198,7 +200,7 @@ class SavingsMenuController {
   final _formKey1 = GlobalKey<FormState>();
 
   void changeSavingValue(BuildContext context, double currVal,
-      double multiplier, String name, bool ifAdd) {
+      double multiplier, String name, bool ifAdd, double totalVal) {
     showDialog(
       barrierDismissible: true,
       context: context,
@@ -207,11 +209,19 @@ class SavingsMenuController {
           builder: (BuildContext context, setState) {
             return SingleChildScrollView(
               child: AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 insetPadding:
-                    EdgeInsets.symmetric(vertical: 200, horizontal: 10),
+                    const EdgeInsets.symmetric(vertical: 200, horizontal: 10),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Color.fromRGBO(226, 177, 60, 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(32.0),
+                        topRight: (Radius.circular(32.0)),
+                      ),
+                      color: Colors.lightBlue,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -242,7 +252,7 @@ class SavingsMenuController {
                           setState(
                             () {
                               textcontrollerValue.text =
-                                  (value_ * totalSliderVal).toStringAsFixed(2);
+                                  (value_ * totalVal).toStringAsFixed(2);
                               multiplier = value_;
                             },
                           );
@@ -267,12 +277,12 @@ class SavingsMenuController {
                                   if (value.isNotEmpty) {
                                     multiplier = (num.tryParse(value.trim())!
                                                     .toDouble() /
-                                                totalSliderVal) >
+                                                totalVal) >
                                             1
                                         ? 1
                                         : (num.tryParse(value.trim())!
                                                 .toDouble() /
-                                            totalSliderVal);
+                                            totalVal);
                                   }
                                 },
                               );
@@ -298,18 +308,35 @@ class SavingsMenuController {
                   ],
                 ),
                 actions: <Widget>[
-                  MaterialButton(
-                    color: Color.fromRGBO(226, 177, 60, 10),
-                    child: const Text('Update',
-                        style: TextStyle(color: Colors.black)),
-                    onPressed: () {
-                      double res =
-                          num.tryParse(textcontrollerValue.text.trim())!
-                              .toDouble();
-                      Navigator.of(context).pop();
-
-                      updateSavingValue(context, name, currVal, res, ifAdd);
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MaterialButton(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
+                        color: Colors.lightBlue,
+                        child: const Text('Update',
+                            style: TextStyle(color: Colors.black)),
+                        onPressed: () {
+                          double res =
+                              num.tryParse(textcontrollerValue.text.trim())!
+                                  .toDouble();
+                          textcontrollerValue.clear();
+                          Navigator.of(context).pop();
+                          if (res <= totalVal) {
+                            updateSavingValue(
+                                context, name, currVal, res, ifAdd);
+                          } else {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.error,
+                                text:
+                                    "Value needs to be within total saving value! Nothing was done.");
+                          }
+                        },
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -323,11 +350,11 @@ class SavingsMenuController {
   Future updateSavingValue(BuildContext context, String? name_, double currVal,
       double valueToAdd, bool ifAdd) async {
     if ((!ifAdd && currVal - valueToAdd >= 0) || (ifAdd)) {
-      await remoteDBHelper.updateSavingValue(name_, currVal, valueToAdd, ifAdd);
       QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
           text: "Item updated successfully!");
+      await remoteDBHelper.updateSavingValue(name_, currVal, valueToAdd, ifAdd);
     } else {
       QuickAlert.show(
           context: context,

@@ -13,6 +13,7 @@ class InputElements {
       BuildContext context,
       f) {
     return Padding(
+        key: Key(text),
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: GestureDetector(
           onTap: () {
@@ -86,6 +87,7 @@ class InputElements {
   Widget inputBox(String? text, TextEditingController textController, validator,
       bool obscure) {
     return Padding(
+      key: (text == null)? null : Key(text),
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Container(
         decoration: BoxDecoration(

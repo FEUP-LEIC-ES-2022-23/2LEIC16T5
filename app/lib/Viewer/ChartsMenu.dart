@@ -102,7 +102,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
                       color: Color(entry.value.toList()[0].categoryColor!),
                     // Set the properties of the line
                     // In this example, the line is set to curve but stop at the x-axis
-                    isCurved: true,
+                    isCurved: false,
                     curveSmoothness: 0.5,
                     preventCurveOverShooting: true,
                       // Use a different color for each line
@@ -111,7 +111,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
                     i++;
                   });
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 40),
                     child: LineChart(
                       LineChartData(
                         lineBarsData: chartDataList,
@@ -120,6 +120,71 @@ class _ChartsMenuState extends State<ChartsMenu> {
                         minX: 1,
                         maxX: 12,
                         minY: 0,
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 50,
+                              getTitlesWidget: (value,titleMeta) {
+                                return Text(
+                                    value.toInt().toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 13,
+                                    ),
+                                );
+                              },
+                            )
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            )
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            )
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value,titleMeta) {
+                                switch (value.toInt()) {
+                                  case 3:
+                                    return Text(
+                                        'MAR',
+                                       style: TextStyle(
+                                        color: Colors.white70,
+                                      ),
+                                    );
+                                  case 6:
+                                    return Text(
+                                        'JUN',
+                                        style: TextStyle(
+                                        color: Colors.white70,
+                                      ),
+                                    );
+                                  case 9:
+                                    return Text(
+                                        'SEP',
+                                        style: TextStyle(
+                                        color: Colors.white70,
+                                      ),
+                                    );
+                                  case 12:
+                                    return Text(
+                                        'DEC',
+                                        style: TextStyle(
+                                        color: Colors.white70,
+                                      ),
+                                    );
+                                }
+                                return Text('');
+                              },
+                            )
+                          ),
+                        ),
                         backgroundColor: Colors.black26,
                         borderData: FlBorderData(
                           border: const Border(
@@ -156,7 +221,6 @@ class _ChartsMenuState extends State<ChartsMenu> {
               }
             ));
 /*  Map<String, List<TransactionModel>> categoryMap = {};
-
     transactionList.forEach((transaction) {
       if (categoryMap.containsKey(transaction.categoryID)) {
         categoryMap[transaction.categoryID]!.add(transaction);
@@ -164,7 +228,6 @@ class _ChartsMenuState extends State<ChartsMenu> {
         categoryMap[transaction.categoryID!] = [transaction];
       }
     });
-
     categoryMap.entries.forEach((entry) {
       print("Category: ${entry.key}");
       entry.value.forEach((transaction) {

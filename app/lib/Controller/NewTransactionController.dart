@@ -19,10 +19,12 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
+
+  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
+
   //Transactions
   void _enterTransaction() {
     t_model.TransactionModel transaction = t_model.TransactionModel(
@@ -36,11 +38,13 @@ class NewTransactionController {
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: _isIncome? null : position,
+        location: _isIncome ? null : position,
         categoryColor: selected_category.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction);
+    remoteDBHelper.addTransaction(transaction).then((String? value) {
+      remoteDBHelper.updateBudgetBar(value!, true);
+    });
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
@@ -58,11 +62,13 @@ class NewTransactionController {
             key: const Key("New Transaction"),
             builder: (BuildContext context, setState) {
               return AlertDialog(
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(32.0)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(32.0)),
                       color: Colors.lightBlue,
                     ),
                     height: 75,
@@ -95,11 +101,11 @@ class NewTransactionController {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Text(
-                              'Expense',
-                              style: TextStyle(color: Colors.black54),
+                            'Expense',
+                            style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? Key("Income") :  Key("Expense"),
+                            key: _isIncome? const Key("Income") :  const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -108,8 +114,8 @@ class NewTransactionController {
                             },
                           ),
                           const Text(
-                              'Income',
-                              style: TextStyle(color: Colors.black54),
+                            'Income',
+                            style: TextStyle(color: Colors.black54),
                           ),
                         ],
                       ),
@@ -144,8 +150,8 @@ class NewTransactionController {
                                   labelText: 'Total',
                                 ),
                                 keyboardType:
-                                const TextInputType.numberWithOptions(
-                                    decimal: true),
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
                                 validator: (text) {
                                   if (text == null ||
                                       text.isEmpty ||
@@ -186,7 +192,7 @@ class NewTransactionController {
                                             onPrimary: Colors
                                                 .white, // header text color
                                             onSurface:
-                                            Colors.black, // body text color
+                                                Colors.black, // body text color
                                           ),
                                         ),
                                         child: child!,
@@ -215,7 +221,6 @@ class NewTransactionController {
                       const SizedBox(
                         height: 5,
                       ),
-
                       Row(
                         children: [
                           Expanded(
@@ -239,39 +244,51 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome?
-                      FloatingActionButton(
-                          mini: true,
-                          backgroundColor: Colors.lightBlue,
-                          heroTag: "Map",
-                          onPressed: () {
-                            MapMenuController().getCurrentLocation(context).then((value) {
-                              QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.confirm,
-                                  confirmBtnColor: Colors.lightBlue,
-                                  text: "Do you wish to set your current location as this transaction's location?",
-                                  confirmBtnText: "Yes",
-                                  cancelBtnText: "No",
-                                  onConfirmBtnTap: () {
-                                    setState(() {
-                                      position = GeoPoint(double.parse('${value.latitude}'), double.parse('${value.longitude}'));
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                  onCancelBtnTap: () {
-                                    setState(() {
-                                      position = null;
-                                    });
-                                    Navigator.of(context).pop();
-                                  });
-                            });
-                          },
-                          child: (position == null)? const Icon(Icons.pin_drop_rounded) :  const Icon(Icons.done_all_rounded))
-                          : const SizedBox(width: 48.0,),
+                      !_isIncome
+                          ? FloatingActionButton(
+                              mini: true,
+                              backgroundColor: Colors.lightBlue,
+                              heroTag: "Map",
+                              onPressed: () {
+                                MapMenuController()
+                                    .getCurrentLocation(context)
+                                    .then((value) {
+                                  QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.confirm,
+                                      confirmBtnColor: Colors.lightBlue,
+                                      text:
+                                          "Do you wish to set your current location as this transaction's location?",
+                                      confirmBtnText: "Yes",
+                                      cancelBtnText: "No",
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          position = GeoPoint(
+                                              double.parse('${value.latitude}'),
+                                              double.parse(
+                                                  '${value.longitude}'));
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      onCancelBtnTap: () {
+                                        setState(() {
+                                          position = null;
+                                        });
+                                        Navigator.of(context).pop();
+                                      });
+                                });
+                              },
+                              child: (position == null)
+                                  ? const Icon(Icons.pin_drop_rounded)
+                                  : const Icon(Icons.done_all_rounded))
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       MaterialButton(
                         key: const Key("Add"),
-                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0))),
                         color: Colors.lightBlue,
                         child: const Text('Add',
                             style: TextStyle(color: Colors.white)),
@@ -291,21 +308,20 @@ class NewTransactionController {
         });
   }
 
-
   Widget buildDropdownList(RemoteDBHelper db) {
     return StreamBuilder<List<c_model.CategoryModel>>(
         stream: db.readCategories(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<c_model.CategoryModel>> snapshot) {
           List<c_model.CategoryModel?> categories = [];
           if (!snapshot.hasData) {
             return Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.add,
                   color: Colors.grey,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 15,
                 ),
                 DropdownButton(
@@ -323,19 +339,18 @@ class NewTransactionController {
           categories.add(selected_category);
 
           return snapshot.hasData
-              ? StatefulBuilder(
-                builder: (BuildContext context, setState){
+              ? StatefulBuilder(builder: (BuildContext context, setState) {
                   return Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.add,
                         color: Colors.black54,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: DropdownButton(
                             dropdownColor: Colors.white,
                             value: selected_category,
@@ -347,11 +362,11 @@ class NewTransactionController {
                                       children: [
                                         Text(
                                           c!.name,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.black54,
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Container(
@@ -366,15 +381,15 @@ class NewTransactionController {
                                     )))
                                 .toList(),
                             onChanged: (val) {
-                                setState(() {
-                                  selected_category = val as c_model.CategoryModel;
-                                });
-                              }),
+                              setState(() {
+                                selected_category =
+                                    val as c_model.CategoryModel;
+                              });
+                            }),
                       ),
                     ],
                   );
-                    }
-              )
+                })
               : DropdownButton(
                   dropdownColor: Colors.black,
                   iconEnabledColor: Colors.white,

@@ -56,6 +56,9 @@ class MapMenuController {
     Marker marker = Marker(
         markerId: MarkerId(t.transactionID!),
         position: LatLng(t.location!.latitude, t.location!.longitude),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          HSVColor.fromColor(Color(t.categoryColor!)).hue
+        ),
         infoWindow: InfoWindow(
             title: t.name,
             snippet: '${t.total} €'

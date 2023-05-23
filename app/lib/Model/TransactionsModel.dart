@@ -33,6 +33,7 @@ abstract class TransactionModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'transactionID': transactionID,
       'userID': userID,
       'categoryID': categoryID,
       'name': name,

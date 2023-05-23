@@ -10,8 +10,9 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:es/database/LocalDBHelper.dart';
 
 class ChartsMenu extends StatefulWidget {
-  const ChartsMenu({Key? key, required this.title}) : super(key: key);
+  const ChartsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
   final String title;
+  final String currency;
 
   @override
   State<ChartsMenu> createState() => _ChartsMenuState();
@@ -51,8 +52,8 @@ class _ChartsMenuState extends State<ChartsMenu> {
                   return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CircularProgressIndicator(),
+                        children: const [
+                          CircularProgressIndicator(),
                           SizedBox(
                             height: 10,
                           ),
@@ -114,6 +115,15 @@ class _ChartsMenuState extends State<ChartsMenu> {
                     padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 40),
                     child: LineChart(
                       LineChartData(
+                        lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          getTooltipItems: (value) {
+                            return value.map((e) => LineTooltipItem(
+                              "${e.y.toStringAsFixed(2)} ${widget.currency}",
+                              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17)))
+                                .toList();
+                            },
+                        ),),
                         lineBarsData: chartDataList,
                         baselineX: 0,
                         baselineY: 0,

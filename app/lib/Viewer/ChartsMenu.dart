@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/NewCategoryController.dart';
 import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -19,7 +20,7 @@ class ChartsMenu extends StatefulWidget {
 
 class _ChartsMenuState extends State<ChartsMenu> {
   RemoteDBHelper remoteDBHelper =
-    RemoteDBHelper(userInstance: FirebaseAuth.instance);
+    RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
     List<TransactionModel> transactionList = <TransactionModel>[];

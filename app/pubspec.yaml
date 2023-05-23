@@ -65,6 +65,8 @@ dev_dependencies:
   flutter_gherkin: ^2.0.0
   flutter_colorpicker: ^1.0.3
   fl_chart: ^0.62.0
+  flutter_launcher_icons: "^0.13.1"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -76,6 +78,23 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/img/FortunekoIcon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/img/FortunekoIcon.png"
+    background_color: "#111850"
+    theme_color: "#111850"
+  windows:
+    generate: true
+    image_path: "assets/img/FortunekoIcon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/img/FortunekoIcon.png"
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -84,6 +103,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

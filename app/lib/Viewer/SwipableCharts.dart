@@ -1,19 +1,6 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/Viewer/ChartsMenu.dart';
 import 'package:es/Viewer/StatisticsMenu.dart';
-import 'package:es/database/RemoteDBHelper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-
-import '../Model/BudgetBarModel.dart';
-import '../Model/TransactionsModel.dart';
-import 'Elements/BarGraph.dart';
 
 class SwipableCharts extends StatefulWidget {
   const SwipableCharts(

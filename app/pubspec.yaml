@@ -33,6 +33,8 @@ dependencies:
 
   intl:
   firebase_auth: ^3.3.14
+  firebase_auth_platform_interface: ^6.10.0
+  cloud_firestore_platform_interface: ^5.7.6
   firebase_core_platform_interface: 4.5.1
   cloud_firestore: ^3.3.13
   quickalert: ^1.0.1

@@ -1,3 +1,4 @@
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
@@ -53,7 +54,8 @@ class MapMenuController {
   }
 
   void addMarker(TransactionModel t) {
-    Marker marker = Marker(
+    if(t is ExpenseModel){
+      Marker marker = Marker(
         markerId: MarkerId(t.transactionID!),
         position: LatLng(t.location!.latitude, t.location!.longitude),
         infoWindow: InfoWindow(
@@ -62,6 +64,7 @@ class MapMenuController {
         )
     );
     _markers.add(marker);
+    }
   }
 
 }

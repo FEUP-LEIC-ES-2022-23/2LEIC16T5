@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:es/database/LocalDBHelper.dart';
 
 class CategoriesMenu extends StatefulWidget {
   const CategoriesMenu({Key? key, required this.title}) : super(key: key);

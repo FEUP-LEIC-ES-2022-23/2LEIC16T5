@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SettingModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Model/IncomeModel.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +26,7 @@ class RemoteDBHelper {
   }
 
   //Section for Transactions
-  Future<String?> addTransaction(TransactionModel transaction) async {
+  /* Future<String?> addTransaction(TransactionModel transaction) async {
     UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
     await firebaseInstance
         .collection('Transactions')
@@ -49,9 +51,25 @@ class RemoteDBHelper {
       'categoryColor': transaction.categoryColor,
     });
     return transaction.transactionID;
+  }*/
+
+  Future<String?> addTransaction(TransactionModel transaction) async {
+    UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
+    DocumentReference transactionRef = await firebaseInstance
+        .collection('Transactions')
+        .add(transaction.toMap());
+
+    transaction.transactionID = transactionRef.id;
+
+    await firebaseInstance
+        .collection('Transactions')
+        .doc(transaction.transactionID)
+        .update(transaction.toMap());
+
+    return transaction.transactionID;
   }
 
-  Future<String?> removeTransaction(TransactionModel transaction) async {
+  Future<void> removeTransaction(TransactionModel transaction) async {
     await firebaseInstance
         .collection('Transactions')
         .doc(transaction.transactionID)
@@ -63,25 +81,25 @@ class RemoteDBHelper {
 
     await FirebaseFirestore.instance
         .collection('Transactions')
-        .where('userID',isEqualTo: user.uid)
-        .where('categoryID',isEqualTo: category.categoryID).get().then((value) {
-          value.docs.forEach((doc) {
-            doc.reference.update({
-      'categoryID': "default",
-      'categoryColor': 0xFF808080,
-            });
-          });
+        .where('userID', isEqualTo: user.uid)
+        .where('categoryID', isEqualTo: category.categoryID)
+        .get()
+        .then((value) {
+      value.docs.forEach((doc) {
+        doc.reference.update({
+          'categoryID': "default",
+          'categoryColor': 0xFF808080,
+        });
+      });
     });
-
 
     await FirebaseFirestore.instance
         .collection('Categories')
         .doc(category.categoryID)
         .delete();
-
   }
 
-  Stream<List<TransactionModel>> readTransactions() {
+  /*Stream<List<TransactionModel>> readTransactions() {
     User? usr = FirebaseAuth.instance.currentUser;
     var transactions = firebaseInstance
         .collection('Transactions')
@@ -98,6 +116,34 @@ class RemoteDBHelper {
         }
       });
     });
+    return transactions;
+  }*/
+
+  Stream<List<TransactionModel>> readTransactions() {
+    User? usr = FirebaseAuth.instance.currentUser;
+    var transactions = firebaseInstance
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr!.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              final data = doc.data();
+              if (data.containsKey('location')) {
+                return ExpenseModel.fromMap(data);
+              } else {
+                return IncomeModel.fromMap(data);
+              }
+            }).toList());
+
+    transactions.listen((list) {
+      list.forEach((transaction) {
+        if (transaction.transactionID != null &&
+            transaction is ExpenseModel &&
+            transaction.location != null) {
+          MapMenuController().addMarker(transaction);
+        }
+      });
+    });
+
     return transactions;
   }
 
@@ -166,7 +212,6 @@ class RemoteDBHelper {
     });
   }
 
-
   Future<bool> hasCategories() async {
     User? usr = FirebaseAuth.instance.currentUser;
     var categories = firebaseInstance
@@ -213,12 +258,13 @@ class RemoteDBHelper {
     }
   }
 
-  Future<Stream<List<TransactionModel>>> getTransactionsByCategory(String catName) async {
+  Future<Stream<List<TransactionModel>>> getTransactionsByCategory(
+      String catName) async {
     User? usr = FirebaseAuth.instance.currentUser;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Categories')
         .where('userID', isEqualTo: usr!.uid)
-        .where('name',isEqualTo: catName)
+        .where('name', isEqualTo: catName)
         .get();
 
     var categoryId = '';
@@ -226,20 +272,18 @@ class RemoteDBHelper {
     if (querySnapshot.docs.isNotEmpty) {
       final docSnapshot = querySnapshot.docs.first;
       final categoryMap = docSnapshot.data() as Map<String, dynamic>;
-      categoryId = CategoryModel
-          .fromMap(categoryMap)
-          .categoryID!;
+      categoryId = CategoryModel.fromMap(categoryMap).categoryID!;
     }
 
     var transactions = FirebaseFirestore.instance
-          .collection('Transactions')
-          .where('userID', isEqualTo: usr.uid)
-          .where('categoryID', isEqualTo: categoryId)
-          .snapshots()
-          .map((snapshot) => snapshot.docs
-          .map((doc) => TransactionModel.fromMap(doc.data()))
-          .toList());
-      return transactions;
+        .collection('Transactions')
+        .where('userID', isEqualTo: usr.uid)
+        .where('categoryID', isEqualTo: categoryId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => TransactionModel.fromMap(doc.data()))
+            .toList());
+    return transactions;
   }
 
   Stream<List<SavingsModel>> readSaving(String? name) {
@@ -323,7 +367,7 @@ class RemoteDBHelper {
         .then((docsQuery) async {
       if (docsQuery.docs.length == 1) {
         Map<String, dynamic> categoryQueryData = docsQuery.docs.first.data();
-  
+
         budgetBarModel = BudgetBarModel(
             categoryName: categoryQueryData['name'],
             categoryID: categoryQueryData['categoryID'],
@@ -460,14 +504,14 @@ class RemoteDBHelper {
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
         .map((snapshot) {
-      if (snapshot.docs.isNotEmpty){
-          final doc = snapshot.docs.first;
-          final settings = SettingsModel.fromMap(doc.data());
-          return settings.currency;}
-      else {
+      if (snapshot.docs.isNotEmpty) {
+        final doc = snapshot.docs.first;
+        final settings = SettingsModel.fromMap(doc.data());
+        return settings.currency;
+      } else {
         return '€';
       }
-        });
+    });
   }
 
   /*Future<String> getCurrency() async {
@@ -487,7 +531,9 @@ class RemoteDBHelper {
 
   Future<void> changeCurrency(Object? newCurrency) async {
     final userId = userInstance.currentUser!.uid;
-    final settingsQuery = FirebaseFirestore.instance.collection('Settings').where('userId', isEqualTo: userId);
+    final settingsQuery = FirebaseFirestore.instance
+        .collection('Settings')
+        .where('userId', isEqualTo: userId);
     final settingsQueryResult = await settingsQuery.get();
 
     if (settingsQueryResult.docs.isNotEmpty) {
@@ -496,9 +542,12 @@ class RemoteDBHelper {
       await settingsDocRef.update({"currency": newCurrency.toString()});
     } else {
       // Create new settings document
-      final newSettings = SettingsModel(userID: userId, currency: newCurrency.toString());
-      await FirebaseFirestore.instance.collection('Settings').doc(userId).set(newSettings.toMap());
+      final newSettings =
+          SettingsModel(userID: userId, currency: newCurrency.toString());
+      await FirebaseFirestore.instance
+          .collection('Settings')
+          .doc(userId)
+          .set(newSettings.toMap());
     }
   }
-
 }

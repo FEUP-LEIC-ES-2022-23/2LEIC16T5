@@ -4,7 +4,9 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Model/IncomeModel.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
@@ -15,17 +17,69 @@ class NewTransactionController {
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
-  GeoPoint? position;
+  GeoPoint? position = null;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
+  c_model.CategoryModel selected_category = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
   //Transactions
-  void _enterTransaction() {
-    t_model.TransactionModel transaction = t_model.TransactionModel(
+  void _enterExpense() {
+    ExpenseModel expense = ExpenseModel(
+        userID: FirebaseAuth.instance.currentUser!.uid,
+        categoryID: selected_category.categoryID,
+        name: textcontrollerNAME.text.isEmpty
+            ? "Transaction"
+            : textcontrollerNAME.text,
+        total: num.parse(textcontrollerTOTAL.text),
+        date: textcontrollerDATE.text.isEmpty
+            ? DateTime.now()
+            : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+        location: position,
+        categoryColor: selected_category.color,
+        notes: textcontrollerNOTES.text);
+
+    remoteDBHelper.addTransaction(expense).then((String? value) {
+      remoteDBHelper.updateBudgetBar(value!, true);
+    });
+
+    textcontrollerNAME.clear();
+    textcontrollerTOTAL.clear();
+    textcontrollerDATE.clear();
+    textcontrollerNOTES.clear();
+    position = null;
+  }
+
+  void _enterIncome() {
+    IncomeModel income = IncomeModel(
+        userID: FirebaseAuth.instance.currentUser!.uid,
+        categoryID: selected_category.categoryID,
+        name: textcontrollerNAME.text.isEmpty
+            ? "Transaction"
+            : textcontrollerNAME.text,
+        total: num.parse(textcontrollerTOTAL.text),
+        date: textcontrollerDATE.text.isEmpty
+            ? DateTime.now()
+            : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+        categoryColor: selected_category.color,
+        notes: textcontrollerNOTES.text);
+
+    remoteDBHelper.addTransaction(income).then((String? value) {
+      remoteDBHelper.updateBudgetBar(value!, true);
+    });
+
+    textcontrollerNAME.clear();
+    textcontrollerTOTAL.clear();
+    textcontrollerDATE.clear();
+    textcontrollerNOTES.clear();
+    position = null;
+  }
+
+  /*void _enterTransaction() {
+    TransactionModel transaction = TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selected_category.categoryID,
         name: textcontrollerNAME.text.isEmpty
@@ -49,7 +103,7 @@ class NewTransactionController {
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
     position = null;
-  }
+  }*/
 
   void newTransaction(BuildContext context) {
     showDialog(
@@ -103,7 +157,9 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? const Key("Income") :  const Key("Expense"),
+                            key: _isIncome
+                                ? const Key("Income")
+                                : const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -292,7 +348,7 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.white)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _enterTransaction();
+                            _isIncome ? _enterIncome() : _enterExpense();
                             Navigator.of(context).pop();
                           }
                         },
@@ -353,30 +409,32 @@ class NewTransactionController {
                             dropdownColor: Colors.white,
                             value: selected_category,
                             items: categories
-                                .map((c_model.CategoryModel? c) => DropdownMenuItem(
-                                    value: c,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          c!.name,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(c.color),
-                                          ),
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )))
+                                .map((c_model.CategoryModel? c) =>
+                                    DropdownMenuItem(
+                                        value: c,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              c!.name,
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(c.color),
+                                              ),
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                          ],
+                                        )))
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
@@ -397,7 +455,7 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context, t_model.TransactionModel transac) {
+  void showTransaction(BuildContext context, TransactionModel transac) {
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -451,7 +509,7 @@ class NewTransactionController {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                (transac.expense == 1)
+                                (transac is ExpenseModel)
                                     ? const Icon(Icons.money_off)
                                     : const Icon(Icons.wallet),
                                 Expanded(
@@ -487,38 +545,37 @@ class NewTransactionController {
                           (transac.notes?.isEmpty ?? true)
                               ? SizedBox()
                               : Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                                child:
-                                  Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Notes:',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Notes:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                      Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          //borderRadius: BorderRadius.circular(10.0),
                                         ),
-                                        Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            //borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: Text(
-                                            transac.notes!,
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.black,
-                                            ),
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          transac.notes!,
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                
-                              ),
-                          (transac.location != null)
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                          (transac is ExpenseModel && transac.location != null)
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,4 +1,5 @@
 import 'package:es/Controller/NewCategoryController.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +8,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:es/database/LocalDBHelper.dart';
+
 
 class ChartsMenu extends StatefulWidget {
   const ChartsMenu({Key? key, required this.title}) : super(key: key);
@@ -83,7 +84,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
                     for (int month = 1; month <= 12; month++) {
                       double totalExpensesForMonth = 0;
                       for (TransactionModel transaction in entry.value) {
-                        if (transaction.date.month == month && transaction.expense==1 && transaction.date.year==2023) {
+                        if (transaction.date.month == month && transaction is ExpenseModel && transaction.date.year==2023) {
                           totalExpensesForMonth += transaction.total;
                         }
                       }
@@ -155,91 +156,5 @@ class _ChartsMenuState extends State<ChartsMenu> {
                 }
               }
             ));
-/*  Map<String, List<TransactionModel>> categoryMap = {};
-    transactionList.forEach((transaction) {
-      if (categoryMap.containsKey(transaction.categoryID)) {
-        categoryMap[transaction.categoryID]!.add(transaction);
-      } else {
-        categoryMap[transaction.categoryID!] = [transaction];
-      }
-    });
-    categoryMap.entries.forEach((entry) {
-      print("Category: ${entry.key}");
-      entry.value.forEach((transaction) {
-        print("  Transaction: ${transaction.name}");
-      });
-    });*/
-
-    return StreamBuilder<List<TransactionModel>>(
-      stream: remoteDBHelper.readTransactions(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title,
-                style: const TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic)),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            ),
-            backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
-            body: const Center(
-                child: Text('Loading...',
-                    style:
-                    TextStyle(fontSize: 20, color: Colors.white))),
-          );
-        }
-        if (snapshot.hasData) {
-          transactionList = snapshot.data!;
-          return Scaffold(
-            backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
-            appBar: AppBar(
-              title: Text(widget.title,
-                style: const TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic)),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.home,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            ),
-            body: LineChart(
-              LineChartData(
-                lineBarsData: [LineChartBarData(
-                    spots: transactionList.map((e) => FlSpot(e.date.month.toDouble(),e.total.toDouble())).toList(),
-                    dotData: FlDotData(show: true),
-                ),],
-              )
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return const CircularProgressIndicator();
-        }
-      },
-    );
     }
 }

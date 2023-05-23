@@ -1,4 +1,5 @@
 import 'package:csv/csv.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,7 +48,7 @@ class _NationalMenuState extends State<NationalMenu> {
     if (category == 'My Data') return '';
     double result = 0;
     for (final transaction in _userList){
-      if (transaction.expense == 1 && (transaction.date.year.toString() == year)){
+      if (transaction is ExpenseModel && (transaction.date.year.toString() == year)){
         result += transaction.total;
       }
     }

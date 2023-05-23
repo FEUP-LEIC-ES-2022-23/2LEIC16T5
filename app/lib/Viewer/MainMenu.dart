@@ -100,7 +100,7 @@ class _MainMenuState extends State<MainMenu> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const BudgetMenu(title: 'Budget')),
+                            BudgetMenu(title: 'Budget', currency: _currency,)),
                   );
                 },
                 style:
@@ -127,7 +127,7 @@ class _MainMenuState extends State<MainMenu> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const ChartsMenu(title: 'Charts')),
+                              ChartsMenu(title: 'Charts', currency: _currency,)),
                     );
                   },
                   child: const Text('Charts', style: TextStyle(fontSize: 20))),

@@ -22,8 +22,8 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel selected_category = c_model.CategoryModel(
-      categoryID: '', userID: '', name: 'Category', color: 0);
+  c_model.CategoryModel emptyCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
+  c_model.CategoryModel selectedCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
 
   RemoteDBHelper remoteDBHelper =
       RemoteDBHelper(userInstance: FirebaseAuth.instance);
@@ -35,7 +35,7 @@ class NewTransactionController {
 
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
-        categoryID: selected_category.categoryID,
+        categoryID: selectedCategory.categoryID,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
@@ -45,7 +45,7 @@ class NewTransactionController {
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         location: _isIncome ? null : position,
-        categoryColor: selected_category.color,
+        categoryColor: selectedCategory.color,
         notes: textcontrollerNOTES.text);
 
     remoteDBHelper.addTransaction(transaction).then((String? value) {
@@ -61,6 +61,7 @@ class NewTransactionController {
   }
 
   void newTransaction(BuildContext context) {
+
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -362,10 +363,15 @@ class NewTransactionController {
               ],
             );
           }
-          snapshot.data!.forEach((element) {
-            categories.add(element);
-          });
-          categories.add(selected_category);
+          else{
+            if (selectedCategory.name != emptyCategory.name) categories.add(emptyCategory);
+            for (var element in snapshot.data!) {
+              if (element.name != selectedCategory.name){
+                categories.add(element);
+              }
+            }
+            categories.add(selectedCategory);
+          }
 
           return snapshot.hasData
               ? StatefulBuilder(builder: (BuildContext context, setState) {
@@ -382,7 +388,7 @@ class NewTransactionController {
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: DropdownButton(
                             dropdownColor: Colors.white,
-                            value: selected_category,
+                            value: selectedCategory,
                             items: categories
                                 .map((c_model.CategoryModel? c) =>
                                     DropdownMenuItem(
@@ -413,8 +419,10 @@ class NewTransactionController {
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
-                                selected_category =
+                                selectedCategory =
                                     val as c_model.CategoryModel;
+                              debugPrint(selectedCategory.name);
+                                debugPrint(selectedCategory.color.toString());
                               });
                             }),
                       ),
@@ -430,7 +438,9 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context, t_model.TransactionModel transac) {
+  void showTransaction(BuildContext context, t_model.TransactionModel transac) async {
+    c_model.CategoryModel category = await remoteDBHelper.getCategory(transac.categoryID!);
+    
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -443,10 +453,10 @@ class NewTransactionController {
                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
                   titlePadding: const EdgeInsets.all(0),
                   title: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(32.0)),
-                        color: Colors.lightBlue,
+                        color: Color(transac.categoryColor!),
                       ),
                       height: 75,
                       child: Row(
@@ -484,9 +494,36 @@ class NewTransactionController {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                const Text('Category:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      category.name,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 (transac.expense == 1)
-                                    ? const Icon(Icons.money_off)
-                                    : const Icon(Icons.wallet),
+                                    ? const Text('Expense:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18))
+                                    : const Text('Income:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
@@ -500,25 +537,28 @@ class NewTransactionController {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(Icons.calendar_today),
+                                const Text('Date:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
                                       child: Text(
                                     DateFormat('dd-MM-yyyy')
                                         .format(transac.date),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
                                   )),
                                 ),
                               ],
                             ),
                           ),
                           (transac.notes?.isEmpty ?? true)
-                              ? SizedBox()
+                              ? const SizedBox()
                               : Padding(
                                   padding: EdgeInsets.only(bottom: 20),
                                   child: Column(
@@ -596,7 +636,7 @@ class NewTransactionController {
                                     ),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                         ],
                       ),
                     ),

@@ -37,7 +37,7 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
           height: 40,
         ),
         widget.swipped
-            ? const Text('')
+            ? const SizedBox.shrink()
             : Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
                 Text(
                   'Swipe Right',
@@ -103,11 +103,10 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
           if (snapshot.hasData && snapshot.data!.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                SizedBox(height: 150),
-                Center(
-                    child: Text("Nothing to show",
-                        style: TextStyle(fontSize: 20, color: Colors.white)))
+                Text("Nothing to show",
+                    style: TextStyle(fontSize: 20, color: Colors.white))
               ],
             );
           } else {

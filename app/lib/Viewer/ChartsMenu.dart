@@ -119,17 +119,15 @@ class _ChartsMenuState extends State<ChartsMenu> {
               ),
             );
           }
-          return Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              SizedBox(
-                height: 10,
-              ),
-              Text('Nothing to show',
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
+              Center(
+                  child: Text("Nothing to show",
+                      style: TextStyle(fontSize: 20, color: Colors.white)))
             ],
-          ));
+          );
         });
 
 /*  Map<String, List<TransactionModel>> categoryMap = {};

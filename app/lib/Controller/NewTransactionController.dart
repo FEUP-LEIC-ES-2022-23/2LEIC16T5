@@ -78,32 +78,6 @@ class NewTransactionController {
     position = null;
   }
 
-  /*void _enterTransaction() {
-    TransactionModel transaction = TransactionModel(
-        userID: FirebaseAuth.instance.currentUser!.uid,
-        categoryID: selected_category.categoryID,
-        name: textcontrollerNAME.text.isEmpty
-            ? "Transaction"
-            : textcontrollerNAME.text,
-        expense: _isIncome ? 0 : 1,
-        total: num.parse(textcontrollerTOTAL.text),
-        date: textcontrollerDATE.text.isEmpty
-            ? DateTime.now()
-            : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: _isIncome ? null : position,
-        categoryColor: selected_category.color,
-        notes: textcontrollerNOTES.text);
-
-    remoteDBHelper.addTransaction(transaction).then((String? value) {
-      remoteDBHelper.updateBudgetBar(value!, true);
-    });
-
-    textcontrollerNAME.clear();
-    textcontrollerTOTAL.clear();
-    textcontrollerDATE.clear();
-    textcontrollerNOTES.clear();
-    position = null;
-  }*/
 
   void newTransaction(BuildContext context) {
     showDialog(

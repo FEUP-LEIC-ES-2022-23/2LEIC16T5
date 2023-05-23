@@ -32,7 +32,7 @@ class NewTransactionController {
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selected_category.categoryID,
         name: textcontrollerNAME.text.isEmpty
-            ? "Transaction"
+            ? "Expense"
             : textcontrollerNAME.text,
         total: num.parse(textcontrollerTOTAL.text),
         date: textcontrollerDATE.text.isEmpty
@@ -58,7 +58,7 @@ class NewTransactionController {
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selected_category.categoryID,
         name: textcontrollerNAME.text.isEmpty
-            ? "Transaction"
+            ? "Income"
             : textcontrollerNAME.text,
         total: num.parse(textcontrollerTOTAL.text),
         date: textcontrollerDATE.text.isEmpty

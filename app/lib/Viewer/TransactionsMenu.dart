@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,9 @@ import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
 
 class TransactionsMenu extends StatefulWidget {
-  const TransactionsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
+  const TransactionsMenu(
+      {Key? key, required this.title, required this.currency})
+      : super(key: key);
   final String title;
   final String currency;
 
@@ -17,18 +20,20 @@ class TransactionsMenu extends StatefulWidget {
 }
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
-  RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
   @override
   Widget build(BuildContext context) {
-    NumberFormat coin = NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
+    NumberFormat coin =
+        NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
     return Scaffold(
-      key: const Key("Transactions"),
+        key: const Key("Transactions"),
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
-          title: Text(widget.title, 
+          title: Text(widget.title,
               style: const TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -139,13 +144,14 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                             .showTransaction(context, transac);
                                       });
                                     },
-                                    onLongPress: () {
-                                      setState(() {
-                                        remoteDBHelper.updateBudgetBar(
-                                            transac.transactionID!, false);
-                                        remoteDBHelper
-                                            .removeTransaction(transac);
-                                      });
+                                    onLongPress: () async {
+                                      //setState(() async {
+                                      await remoteDBHelper
+                                          .updateBudgetBarValOnChangedTransaction(
+                                              transac.transactionID!, false);
+                                      await remoteDBHelper
+                                          .removeTransaction(transac);
+                                      //});
                                     },
                                   ),
                                 ),

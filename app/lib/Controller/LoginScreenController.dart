@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Viewer/LoginPage.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,7 +9,7 @@ import 'package:quickalert/quickalert.dart';
 class loginScreenController extends StatelessWidget {
   loginScreenController({Key? key}) : super(key: key);
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +49,7 @@ class loginScreenController extends StatelessWidget {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text.trim(), password: password.text.trim());
       if (FirebaseAuth.instance != null) {
+        
         remoteDBHelper.createUser();
       }
       QuickAlert.show(
@@ -84,4 +86,4 @@ class loginScreenController extends StatelessWidget {
     if (password == null || password.isEmpty) return 'Password is empty!';
     return null;
   }
-}
+} 

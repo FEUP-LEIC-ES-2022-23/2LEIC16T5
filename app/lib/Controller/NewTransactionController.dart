@@ -22,11 +22,14 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel emptyCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
-  c_model.CategoryModel selectedCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
+  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
+  c_model.CategoryModel selectedCategory = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
   //Transactions
   void _enterTransaction() async {
     if (textcontrollerADDRESS.text != '' && position == null) {
@@ -48,8 +51,11 @@ class NewTransactionController {
         categoryColor: selectedCategory.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((String? value) {
-      remoteDBHelper.updateBudgetBar(value!, true);
+    remoteDBHelper.addTransaction(transaction).then((transac) {
+      if (!_isIncome) {
+        remoteDBHelper.updateBudgetBarValOnChangedTransaction(
+            transac.transactionID!, true);
+      }
     });
 
     textcontrollerNAME.clear();
@@ -61,7 +67,6 @@ class NewTransactionController {
   }
 
   void newTransaction(BuildContext context) {
-
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -275,7 +280,6 @@ class NewTransactionController {
                                                     await getAddressFromGeoPoint(
                                                         position!);
                                               });
-                                              
                                             },
                                             onCancelBtnTap: () {
                                               setState(() {
@@ -362,11 +366,11 @@ class NewTransactionController {
                     onChanged: (val) {}),
               ],
             );
-          }
-          else{
-            if (selectedCategory.name != emptyCategory.name) categories.add(emptyCategory);
+          } else {
+            if (selectedCategory.name != emptyCategory.name)
+              categories.add(emptyCategory);
             for (var element in snapshot.data!) {
-              if (element.name != selectedCategory.name){
+              if (element.name != selectedCategory.name) {
                 categories.add(element);
               }
             }
@@ -419,9 +423,8 @@ class NewTransactionController {
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
-                                selectedCategory =
-                                    val as c_model.CategoryModel;
-                              debugPrint(selectedCategory.name);
+                                selectedCategory = val as c_model.CategoryModel;
+                                debugPrint(selectedCategory.name);
                                 debugPrint(selectedCategory.color.toString());
                               });
                             }),
@@ -438,9 +441,11 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context, t_model.TransactionModel transac) async {
-    c_model.CategoryModel category = await remoteDBHelper.getCategory(transac.categoryID!);
-    
+  void showTransaction(
+      BuildContext context, t_model.TransactionModel transac) async {
+    c_model.CategoryModel category =
+        await remoteDBHelper.getCategory(transac.categoryID!);
+
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -495,9 +500,9 @@ class NewTransactionController {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('Category:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
@@ -542,9 +547,9 @@ class NewTransactionController {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('Date:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(

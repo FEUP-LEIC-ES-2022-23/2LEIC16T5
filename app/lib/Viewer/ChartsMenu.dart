@@ -26,7 +26,6 @@ class _ChartsMenuState extends State<ChartsMenu> {
       firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
-    Timer timer = Timer(const Duration(seconds: 3), () {});
     List<TransactionModel> transactionList = <TransactionModel>[];
     return StreamBuilder<List<TransactionModel>>(
         stream: remoteDBHelper.readTransactions(),

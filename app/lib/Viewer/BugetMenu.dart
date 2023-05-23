@@ -38,6 +38,7 @@ class BudgetMenuState extends State<BudgetMenu> {
   }
 
   List<TransactionModel> transactions = [];
+  Timer timer = Timer(const Duration(seconds: 10), () {});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +70,7 @@ class BudgetMenuState extends State<BudgetMenu> {
 
   Widget buildBody(RemoteDBHelper db) {
     budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
-    Timer timer = Timer(const Duration(seconds: 15), () {});
+
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,
@@ -101,14 +102,10 @@ class BudgetMenuState extends State<BudgetMenu> {
                 ]);
           }
           if (snapshot.hasData && snapshot.data!.isEmpty || !snapshot.hasData) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                SizedBox(height: 150),
-                Text("Nothing to show",
-                    style: TextStyle(fontSize: 20, color: Colors.white))
-              ],
-            );
+            return const Center(
+                heightFactor: 25,
+                child: Text("Nothing to show",
+                    style: TextStyle(fontSize: 20, color: Colors.white)));
           } else {
             List<BudgetBarModel> barData = [];
             int xCoord = 0;

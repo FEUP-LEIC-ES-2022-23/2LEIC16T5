@@ -69,7 +69,7 @@ class BudgetMenuState extends State<BudgetMenu> {
 
   Widget buildBody(RemoteDBHelper db) {
     budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
-    Timer timer = Timer(const Duration(seconds: 30), () {});
+    Timer timer = Timer(const Duration(seconds: 15), () {});
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,

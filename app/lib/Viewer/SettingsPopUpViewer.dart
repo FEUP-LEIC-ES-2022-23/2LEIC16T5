@@ -43,6 +43,7 @@ class SettingsPopUpViewer {
                       try {
                         RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance)
                             .userResetData();
+                            
                         Navigator.of(context).pop();
                         deletdData(context);
                       } catch (e) {

@@ -12,9 +12,11 @@ class StatiscticsMenu extends StatefulWidget {
     super.key,
     required this.title,
     required this.currency,
+    required this.swipped,
   });
   final String currency;
   final String title;
+  final bool swipped;
 
   @override
   State<StatiscticsMenu> createState() => StatiscticsMenuState();
@@ -23,39 +25,51 @@ class StatiscticsMenu extends StatefulWidget {
 class StatiscticsMenuState extends State<StatiscticsMenu> {
   bool totalLimitEdited = false;
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 12, 18, 50),
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue,
-          title: Text(widget.title,
-              style: const TextStyle(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic)),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-            },
-            icon: const Icon(Icons.home, color: Colors.white, size: 25),
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        buildPieChart(remoteDBHelper, context),
+        const SizedBox(
+          height: 40,
         ),
-        body: SingleChildScrollView(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 60,
-            ),
-            buildPieChart(remoteDBHelper, context),
-          ],
-        )));
+        widget.swipped
+            ? const Text('')
+            : Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                Text(
+                  'Swipe Right',
+                  style: TextStyle(color: Colors.white, fontSize: 40),
+                ),
+                Icon(
+                  Icons.swipe_right,
+                  size: 40,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                        // bottomLeft
+                        offset: Offset(-1.5, -1.5),
+                        color: Colors.blue),
+                    Shadow(
+                        // bottomRight
+                        offset: Offset(1.5, -1.5),
+                        color: Colors.blue),
+                    Shadow(
+                        // topRight
+                        offset: Offset(1.5, 1.5),
+                        color: Colors.blue),
+                    Shadow(
+                        // topLeft
+                        offset: Offset(-1.5, 1.5),
+                        color: Colors.blue),
+                  ],
+                )
+              ]),
+      ],
+    );
   }
 
   Widget buildPieChart(RemoteDBHelper db, BuildContext context) {

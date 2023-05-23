@@ -4,6 +4,7 @@ import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
 import 'package:es/Viewer/StatisticsMenu.dart';
+import 'package:es/Viewer/SwipableCharts.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,9 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
   static String _currency = '';
 
   @override
@@ -122,7 +124,7 @@ class _MainMenuState extends State<MainMenu> {
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
-              ElevatedButton(
+              /*  ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -133,7 +135,7 @@ class _MainMenuState extends State<MainMenu> {
                               const ChartsMenu(title: 'Charts')),
                     );
                   },
-                  child: const Text('Charts', style: TextStyle(fontSize: 20))),
+                  child: const Text('Charts', style: TextStyle(fontSize: 20))),*/
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
@@ -156,7 +158,7 @@ class _MainMenuState extends State<MainMenu> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => StatiscticsMenu(
+                          builder: (context) => SwipableCharts(
                                 title: 'Statistics',
                                 currency: _currency,
                               )),

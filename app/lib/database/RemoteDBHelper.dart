@@ -450,12 +450,30 @@ class RemoteDBHelper {
         ds.reference.delete();
       }
     });
-    FirebaseFirestore.instance
+    firebaseInstance
         .collection('Settings')
         .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((doc) {
       for (DocumentSnapshot ds in doc.docs) {
+        ds.reference.delete();
+      }
+    });
+    firebaseInstance
+        .collection('BudgetBars')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .get()
+        .then((value) {
+      for (DocumentSnapshot ds in value.docs) {
+        ds.reference.delete();
+      }
+    });
+    firebaseInstance
+        .collection('Savings')
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
+        .get()
+        .then((value) {
+      for (DocumentSnapshot ds in value.docs) {
         ds.reference.delete();
       }
     });

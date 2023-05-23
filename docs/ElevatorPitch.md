@@ -1,7 +1,17 @@
 ## Elevator Pitch
-Draft a small text to help you quickly introduce and describe your product in a short time and a few words (~800 characters), a technique usually known as elevator pitch.
 
-Take a look at the following links to learn some techniques:
-* [Crafting an Elevator Pitch](https://www.mindtools.com/pages/article/elevator-pitch.htm)
-* [The Best Elevator Pitch Examples, Templates, and Tactics - A Guide to Writing an Unforgettable Elevator Speech, by strategypeak.com](https://strategypeak.com/elevator-pitch-examples/)
-* [Top 7 Killer Elevator Pitch Examples, by toggl.com](https://blog.toggl.com/elevator-pitch-examples/)
+"Bom dia,
+
+Eu sou o João, e estou aqui para vos apresentar a nossa nova aplicação incrivelmente útil e conveniente, e é com um grande entusiasmo que partilho com vocês esta nova solução para um problema comum que todos nós enfrentamos no nosso dia à dia: gerir o nosso dinheiro de forma eficaz e eficiente.
+
+Num mundo cada vez mais acelerado e com tantas opções onde gastar o nosso dinheiro, controlar as nossas finanças nunca foi uma tarefa tão desafiadora. É muito fácil uma pessoa perder-se nas suas despesas e não conseguir identificar quando e onde gastou maior parte do seu dinheiro.
+
+A gestão eficaz das nossas finanças é essencial para uma vida tranquila e estável e foi a pensar exatamente nisto que desenvolvemos a nossa app. O Fortuneko, a nossa mascote, nasceu da necessidade de simplificar e agilizar este prrocesso de registo de despesas, fornecende uma análise clara e detalhada dos nossos hábitos para tomar decisões financeiras mais inteligentes.
+
+Esta aplicacão é direcionada para qualquer pessoa que deseje ter um melhor controlo sobre o seu dinheiro. Desde jovens profissionais que estão a começar a construir a sua estabilidade financeira a famílias que procuram uma gestão eficiente do seu orçamento.
+
+É verdade que existem outras aplicações no mercado que prometem resolver este problema. Porém, muitas delas são desnecessariamente complicadas de usar ou não oferecem uma análise abrangente dos hábitos do utilizador. E é aqui que nós nos destacamos. A nossa app combina simplicidade e funcionalidade numa interface amigável, tornando este processo intuitivo e eficiente.
+
+Para isto, o Fortuneko fornece uma variedade de gráficos, dividos pelos tipos de despesa e até mesmo um mapa que permite ao utilizador localizar no tempo e no espaço os seus gastos.
+
+Portanto, 'Poupar não precisa de ser aborrecido!'"

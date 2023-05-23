@@ -105,8 +105,10 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                Text("Nothing to show",
-                    style: TextStyle(fontSize: 20, color: Colors.white))
+                
+                   Text("Nothing to show",
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                
               ],
             );
           } else {

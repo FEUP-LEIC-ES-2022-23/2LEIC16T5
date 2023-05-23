@@ -13,7 +13,8 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:es/database/LocalDBHelper.dart';
 
 class ChartsMenu extends StatefulWidget {
-  const ChartsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
+  const ChartsMenu({Key? key, required this.title, required this.currency})
+      : super(key: key);
   final String title;
   final String currency;
 
@@ -126,7 +127,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
             children: const [
               Center(
                   child: Text("Nothing to show",
-                      style: TextStyle(fontSize: 20, color: Colors.white)))
+                      style: TextStyle(fontSize: 20, color: Colors.white))),
             ],
           );
         });

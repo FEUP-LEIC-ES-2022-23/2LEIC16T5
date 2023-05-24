@@ -90,7 +90,7 @@ You can find below information and references related with the project managemen
 
  ### Iteration 4
 
-  This is our last iteration, which means our app is now totally functional and ready for our users to enjoy. It is also free of bugs, and we have successfully enhanced some of the features we had previously implemented. We even added a new one: the Pie Chart, so users can check their monthly expenses in a friendly way.
+  This is our last iteration, which means our app is now totally functional and ready for our users to enjoy. It is also free of bugs, and we have successfully enhanced some of the features we had previously implemented. We even added a new one: the Pie Chart, so users can check their monthly expenses in a friendly way. We made sure to update the app icon as well, in order to improve the user experience.
   
   #### Begin
  
@@ -107,6 +107,7 @@ You can find below information and references related with the project managemen
 
   * What went wrong
     * Mocking Firebase was a pretty hard task to accomplished, but we eventually did it
+    * Automating unit tests on Github became an issue, since the last flutter update seems not to be compatible
 
   * What is still a problem
     * There are no more problems which could possibly affect our team 

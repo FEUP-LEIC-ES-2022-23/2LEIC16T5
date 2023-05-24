@@ -6,17 +6,17 @@ A well written architecture document is brief but reduces the amount of time it 
 
 To document the architecture requires describing the decomposition of the system in their parts (high-level components) and the key behaviors and collaborations between them. 
 
-In this section you should start by briefly describing the overall components of the project and their interrelations. You should also describe how you solved typical problems you may have encountered, pointing to well-known architectural and design patterns, if applicable.
+In this section we briefly describe the overall components of our project and their interrelations.
 
 ### Logical architecture
 
 Our Logical Architecture diagram shows the different layers and packages that compose our app.
 
-The ***Fortuneko** System* contains the core functionality of our app. It is further divided into three other packages: ***Fortuneko** UI*, ***Fortuneko** Business Logic* and ***Fortuneko** database*. The first one handles the UI of our app. The second one, contains the logic that drives our app’s behaviour. The third one, contains the data storage and retrieval logic of our app.
+The ***Fortuneko** System* contains the core functionality of our app. It is further divided into two other packages: ***Fortuneko** UI* and ***Fortuneko** Business Logic*. The first one handles the UI of our app and the second one, contains the logic that drives our app’s behaviour.
 
 The *External Services* holds the dependencies of our app, namely the [*Google Maps API*](https://developers.google.com/maps), [*Firebase*](https://firebase.google.com) and the [*PORDATA database*](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela). 
 
-![LogicalArchitecture](https://user-images.githubusercontent.com/92641892/226919091-170e7fcd-ab76-480a-9cd7-863d7d16b8a8.jpeg)
+![LogicalArchitecture](https://github.com/SofiaViP/hero/assets/92641892/1fa022d2-d220-42a7-88c1-6f8fde7310b2)
 
 ### Physical architecture
 

@@ -56,6 +56,36 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "build_config",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build_config-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "build_daemon",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build_daemon-3.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "build_resolvers",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build_resolvers-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "build_runner",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build_runner-2.3.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "build_runner_core",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/build_runner_core-7.2.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "built_collection",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/built_collection-5.1.1",
       "packageUri": "lib/",
@@ -296,8 +326,38 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "frontend_server_client",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/frontend_server_client-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fuchsia_remote_debug_protocol",
       "rootUri": "file:///Users/Sofia/UniProjects/FlutterProjects/flutter/packages/fuchsia_remote_debug_protocol",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geocoding",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/geocoding-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_android",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/geocoding_android-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_ios",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/geocoding_ios-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "geocoding_platform_interface",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/geocoding_platform_interface-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -386,10 +446,22 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "graphs",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/graphs-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "http",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/http-0.13.5",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "http_multi_server",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/http_multi_server-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "http_parser",
@@ -412,6 +484,12 @@
     {
       "name": "intl",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/intl-0.17.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "io",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -474,6 +552,12 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/meta-1.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "mime",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/mime-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "mockito",
@@ -560,6 +644,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "pool",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/pool-1.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "process",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/process-4.2.4",
       "packageUri": "lib/",
@@ -570,6 +660,12 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/pub_semver-2.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "pubspec_parse",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/pubspec_parse-1.2.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "quickalert",
@@ -588,6 +684,18 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/rxdart-0.27.7",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "shelf",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/shelf-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "shelf_web_socket",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/shelf_web_socket-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "simple_circular_progress_bar",
@@ -674,6 +782,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "timing",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/timing-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/typed_data-1.3.1",
       "packageUri": "lib/",
@@ -702,6 +816,12 @@
       "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/watcher-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "web_socket_channel",
+      "rootUri": "file:///Users/Sofia/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "webdriver",
@@ -740,7 +860,7 @@
       "languageVersion": "2.19"
     }
   ],
-  "generated": "2023-05-23T16:00:31.951198Z",
+  "generated": "2023-05-24T13:45:34.980848Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:intl/intl.dart';
 
 class NewCategoryController {
   static final textcontrollerNAME = TextEditingController();
@@ -11,7 +11,7 @@ class NewCategoryController {
   Color color = Colors.red;
 
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
 
   Future<void> _enterCategory(int c) async {
     c_model.CategoryModel category = c_model.CategoryModel(
@@ -154,8 +154,4 @@ class NewCategoryController {
           );
         },
       );
-
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
-  }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:es/database/RemoteDBHelper.dart';
@@ -18,7 +19,7 @@ class SettingsMenu extends StatefulWidget {
 
 
 class _SettingsMenuState extends State<SettingsMenu> {
-  RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
 
   loginScreenController loginController = loginScreenController();
 
@@ -123,12 +124,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       ));
                 },
               ),
-
-              /*
-              buildSwitch("Mode", valMode, changeMode),
-              buildSwitch(
-                  "Notifications", valNotifications, changeNotifications),
-              const SizedBox(height: 10),*/
               const SizedBox(height: 40),
               SizedBox(
                 height: 200,

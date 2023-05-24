@@ -1,11 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/NewCategoryController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:es/database/LocalDBHelper.dart';
 
 class CategoriesMenu extends StatefulWidget {
   const CategoriesMenu({Key? key, required this.title}) : super(key: key);
@@ -17,7 +15,7 @@ class CategoriesMenu extends StatefulWidget {
 
 class _CategoriesMenuState extends State<CategoriesMenu> {
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

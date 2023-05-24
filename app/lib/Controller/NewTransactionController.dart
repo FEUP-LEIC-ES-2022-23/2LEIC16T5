@@ -9,23 +9,37 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart' as Geocoding;
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
+  static final textcontrollerADDRESS = TextEditingController();
+
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel emptyCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
-  c_model.CategoryModel selectedCategory = c_model.CategoryModel(categoryID: '',userID: '',name: 'Category',color: 0);
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
+
+  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
+  c_model.CategoryModel selectedCategory=c_model.CategoryModel(
+    categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
+
+
+
   //Transactions
-  void _enterTransaction() {
+  void _enterTransaction() async {
+    if (textcontrollerADDRESS.text != '' && position == null) {
+      await getGeoPointFromAddress(textcontrollerADDRESS.text);
+    }
+
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selectedCategory.categoryID,
@@ -41,19 +55,22 @@ class NewTransactionController {
         categoryColor: selectedCategory.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((String? value) {
-      remoteDBHelper.updateBudgetBar(value!, true);
+    remoteDBHelper.addTransaction(transaction).then((transac) {
+      if (!_isIncome) {
+        remoteDBHelper.updateBudgetBarValOnChangedTransaction(
+            transac.transactionID!, true);
+      }
     });
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
+    textcontrollerADDRESS.clear();
     position = null;
   }
 
   void newTransaction(BuildContext context) {
-
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -236,6 +253,65 @@ class NewTransactionController {
                           ),
                         ],
                       ),
+                      !_isIncome
+                          ? Row(
+                              children: [
+                                FloatingActionButton(
+                                    mini: true,
+                                    backgroundColor: Colors.lightBlue,
+                                    heroTag: "Map",
+                                    onPressed: () {
+                                      MapMenuController()
+                                          .getCurrentLocation(context)
+                                          .then((value) {
+                                        QuickAlert.show(
+                                            context: context,
+                                            type: QuickAlertType.confirm,
+                                            confirmBtnColor: Colors.lightBlue,
+                                            text:
+                                                "Do you wish to set your current location as this transaction's location?",
+                                            confirmBtnText: "Yes",
+                                            cancelBtnText: "No",
+                                            onConfirmBtnTap: () {
+                                              Navigator.of(context).pop();
+                                              setState(() async {
+                                                position = GeoPoint(
+                                                    double.parse(
+                                                        '${value.latitude}'),
+                                                    double.parse(
+                                                        '${value.longitude}'));
+                                                textcontrollerADDRESS.text =
+                                                    await getAddressFromGeoPoint(
+                                                        position!);
+                                              });
+                                            },
+                                            onCancelBtnTap: () {
+                                              setState(() {
+                                                position = null;
+                                                textcontrollerADDRESS.text = '';
+                                              });
+                                              Navigator.of(context).pop();
+                                            });
+                                      });
+                                    },
+                                    child: (position == null)
+                                        ? const Icon(Icons.pin_drop_rounded)
+                                        : const Icon(Icons.done_all_rounded)),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      //icon: Icon(Icons.map),
+                                      labelText:
+                                          'Address (Street, Number, City, State, Country)',
+                                    ),
+                                    controller: textcontrollerADDRESS,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       const SizedBox(
                         height: 5,
                       ),
@@ -246,46 +322,6 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome
-                          ? FloatingActionButton(
-                              mini: true,
-                              backgroundColor: Colors.lightBlue,
-                              heroTag: "Map",
-                              onPressed: () {
-                                MapMenuController()
-                                    .getCurrentLocation(context)
-                                    .then((value) {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      confirmBtnColor: Colors.lightBlue,
-                                      text:
-                                          "Do you wish to set your current location as this transaction's location?",
-                                      confirmBtnText: "Yes",
-                                      cancelBtnText: "No",
-                                      onConfirmBtnTap: () {
-                                        setState(() {
-                                          position = GeoPoint(
-                                              double.parse('${value.latitude}'),
-                                              double.parse(
-                                                  '${value.longitude}'));
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                      onCancelBtnTap: () {
-                                        setState(() {
-                                          position = null;
-                                        });
-                                        Navigator.of(context).pop();
-                                      });
-                                });
-                              },
-                              child: (position == null)
-                                  ? const Icon(Icons.pin_drop_rounded)
-                                  : const Icon(Icons.done_all_rounded))
-                          : const SizedBox(
-                              width: 48.0,
-                            ),
                       MaterialButton(
                         key: const Key("Add"),
                         shape: const RoundedRectangleBorder(
@@ -334,11 +370,11 @@ class NewTransactionController {
                     onChanged: (val) {}),
               ],
             );
-          }
-          else{
-            if (selectedCategory.name != emptyCategory.name) categories.add(emptyCategory);
+          } else {
+            if (selectedCategory.name != emptyCategory.name)
+              categories.add(emptyCategory);
             for (var element in snapshot.data!) {
-              if (element.name != selectedCategory.name){
+              if (element.name != selectedCategory.name) {
                 categories.add(element);
               }
             }
@@ -391,9 +427,8 @@ class NewTransactionController {
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
-                                selectedCategory =
-                                    val as c_model.CategoryModel;
-                              debugPrint(selectedCategory.name);
+                                selectedCategory = val as c_model.CategoryModel;
+                                debugPrint(selectedCategory.name);
                                 debugPrint(selectedCategory.color.toString());
                               });
                             }),
@@ -410,9 +445,11 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context, t_model.TransactionModel transac) async {
-    c_model.CategoryModel category = await remoteDBHelper.getCategory(transac.categoryID!);
-    
+  void showTransaction(
+      BuildContext context, t_model.TransactionModel transac) async {
+    c_model.CategoryModel category =
+        await remoteDBHelper.getCategory(transac.categoryID!);
+
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -467,9 +504,9 @@ class NewTransactionController {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('Category:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
@@ -514,9 +551,9 @@ class NewTransactionController {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Text('Date:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18)),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
@@ -591,6 +628,11 @@ class NewTransactionController {
                                               transac.location!.latitude,
                                               transac.location!.longitude,
                                             ),
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(HSVColor
+                                                        .fromColor(Color(transac
+                                                            .categoryColor!))
+                                                    .hue),
                                           ),
                                         },
                                         onMapCreated:
@@ -611,5 +653,31 @@ class NewTransactionController {
                 );
               });
         });
+  }
+
+  Future<void> getGeoPointFromAddress(String address) async {
+    List<Geocoding.Location> locations =
+        await Geocoding.locationFromAddress(address);
+    if (locations.isNotEmpty) {
+      double latitude = locations[0].latitude;
+      double longitude = locations[0].longitude;
+      position = GeoPoint(latitude, longitude);
+    }
+  }
+
+  Future<String> getAddressFromGeoPoint(GeoPoint geoPoint) async {
+    List<Geocoding.Placemark> placemarks =
+        await Geocoding.placemarkFromCoordinates(
+      geoPoint.latitude,
+      geoPoint.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      Geocoding.Placemark placemark = placemarks[0];
+      String address =
+          '${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.postalCode}';
+      return address;
+    }
+    return '';
   }
 }

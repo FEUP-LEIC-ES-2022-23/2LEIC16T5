@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:quickalert/quickalert.dart';
-import '../Controller/LoginScreenController.dart';
+import '../../Controller/LoginScreenController.dart';
 
 class InputElements {
   Widget signInButtonWide(

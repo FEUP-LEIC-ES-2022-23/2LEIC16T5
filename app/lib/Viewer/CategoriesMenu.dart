@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/NewCategoryController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,7 @@ class CategoriesMenu extends StatefulWidget {
 
 class _CategoriesMenuState extends State<CategoriesMenu> {
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,9 +70,9 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
                                 key: const Key("Category"),
-                                contentPadding: EdgeInsets.only(left: 0),
+                                contentPadding: const EdgeInsets.only(left: 0),
                                 tileColor: Colors.white,
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(12),
                                     ),
@@ -80,7 +81,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                   iconColor: Colors.white,
                                   leading: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(12),
                                         bottomLeft: Radius.circular(12),
                                       ),

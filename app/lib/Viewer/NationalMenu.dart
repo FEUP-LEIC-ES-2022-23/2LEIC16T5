@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class NationalMenu extends StatefulWidget {
 
 class _NationalMenuState extends State<NationalMenu> {
   RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   bool _initState = true;
   List<List<dynamic>> _portugalList = [];
   final List<dynamic> _years = [];
@@ -71,7 +72,7 @@ class _NationalMenuState extends State<NationalMenu> {
     Stream<List<CategoryModel>> stream = remoteDBHelper.readCategories();
     stream.listen((categories) {
       if (mounted) {
-        setState!(() {
+        setState(() {
           for (var category in categories) {
             _userCategories.add(category.name);
           }
@@ -270,7 +271,7 @@ class _NationalMenuState extends State<NationalMenu> {
             });
             Stream<List<TransactionModel>> stream;
             if (_selectedUserCategory.name == 'Total') {
-              stream = await remoteDBHelper.readTransactions();
+              stream = remoteDBHelper.readTransactions();
             } else {
               stream = await remoteDBHelper.getTransactionsByCategory(_selectedUserCategory.name);
             }

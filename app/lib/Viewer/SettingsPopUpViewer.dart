@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,14 @@ class SettingsPopUpViewer {
         showCancelBtn: true,
         confirmBtnColor: Colors.lightBlue,
         onConfirmBtnTap: () async{
-          if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())
-          && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasCategories())){
+          if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasTransactions())
+          && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasCategories())){
           Navigator.of(context).pop();
           errorDeleteData(context, 'No data has been inserted into the app');
           }
           else{
           try {
-          RemoteDBHelper(userInstance: FirebaseAuth.instance)
+    await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance)
               .userResetData();
           Navigator.of(context).pop();
           deletedData(context);
@@ -54,7 +55,7 @@ class SettingsPopUpViewer {
         confirmBtnColor: Colors.lightBlue,);
   }
 
-  void sureLogout(BuildContext context, loginScreenController loginController) {
+  void sureLogout(BuildContext context, LoginScreenController loginController) {
     QuickAlert.show(
       context: context,
       type: QuickAlertType.warning,

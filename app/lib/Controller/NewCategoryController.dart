@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:intl/intl.dart';
 
 class NewCategoryController {
   static final textcontrollerNAME = TextEditingController();
@@ -11,7 +11,7 @@ class NewCategoryController {
   Color color = Colors.red;
 
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
 
   Future<void> _enterCategory(int c) async {
     c_model.CategoryModel category = c_model.CategoryModel(
@@ -97,7 +97,7 @@ class NewCategoryController {
                           ),
                           ElevatedButton(
                             key: const Key('Pick Color'),
-                              child: Text(
+                              child: const Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -131,22 +131,22 @@ class NewCategoryController {
 
   Widget buildColorPicker(StateSetter setState) => ColorPicker(
     key: const Key("Color Picker"),
-      pickerColor: this.color,
+      pickerColor: color,
       onColorChanged: (color) {
-        setState!(() => this.color = color);
+        setState(() => this.color = color);
       });
 
   void pickColor(BuildContext context, StateSetter setState) => showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Pick your color'),
+            title: const Text('Pick your color'),
             content: Column(
               children: [
                 buildColorPicker(setState),
                 TextButton(
                   key: const Key("Select"),
-                  child: Text(
+                  child: const Text(
                     'SELECT',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -159,8 +159,4 @@ class NewCategoryController {
           );
         },
       );
-
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
-  }
 }

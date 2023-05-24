@@ -39,7 +39,7 @@ class _MapMenuState extends State<MapMenu> {
     ),),
       body: GoogleMap(
         mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
+        initialCameraPosition: const CameraPosition(
           target: LatLng(40.36206255131749, -7.861238880957604),
           zoom: 14.0),
         markers: Set<Marker>.of(markers),

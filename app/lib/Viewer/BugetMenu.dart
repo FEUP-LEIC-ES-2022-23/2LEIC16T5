@@ -151,7 +151,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                       child: IconButton(
                         onPressed: () {
                           if (mounted) {
-                            BudgetMenuController().EditBudgetMenu(context);
+                            BudgetMenuController().editBudgetMenu(context);
                           }
                         },
                         icon: const Icon(

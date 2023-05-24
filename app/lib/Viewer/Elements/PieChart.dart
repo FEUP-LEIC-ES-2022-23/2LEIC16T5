@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import '../../Model/BudgetBarModel.dart';
+import 'package:es/Model/BudgetBarModel.dart';
 
 class MyPieChart extends StatefulWidget {
   const MyPieChart(

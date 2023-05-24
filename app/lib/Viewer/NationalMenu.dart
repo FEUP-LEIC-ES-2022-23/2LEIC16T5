@@ -72,7 +72,7 @@ class _NationalMenuState extends State<NationalMenu> {
     Stream<List<CategoryModel>> stream = remoteDBHelper.readCategories();
     stream.listen((categories) {
       if (mounted) {
-        setState!(() {
+        setState(() {
           for (var category in categories) {
             _userCategories.add(category.name);
           }
@@ -271,7 +271,7 @@ class _NationalMenuState extends State<NationalMenu> {
             });
             Stream<List<TransactionModel>> stream;
             if (_selectedUserCategory.name == 'Total') {
-              stream = await remoteDBHelper.readTransactions();
+              stream = remoteDBHelper.readTransactions();
             } else {
               stream = await remoteDBHelper.getTransactionsByCategory(_selectedUserCategory.name);
             }

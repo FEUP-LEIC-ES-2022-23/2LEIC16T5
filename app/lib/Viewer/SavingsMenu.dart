@@ -161,9 +161,9 @@ class _SavingsMenu extends State<SavingsMenu> {
                 items: const [],
                 onChanged: (val) {});
           }
-          snapshot.data!.forEach((element) {
+          for (var element in snapshot.data!) {
             temp.add(element.name);
-          });
+          }
           listitems = temp;
 
           return snapshot.hasData
@@ -384,9 +384,8 @@ class _SavingsMenu extends State<SavingsMenu> {
                             Text(
                               (snapshot.data!.first.targetDate == null)
                                   ? ""
-                                  : "Target Date:  " +
-                                      DateFormat('dd-MM-yyyy').format(
-                                          snapshot.data!.first.targetDate!),
+                                  : "Target Date:  ${DateFormat('dd-MM-yyyy').format(
+                                          snapshot.data!.first.targetDate!)}",
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 20),
                             ),
@@ -408,9 +407,9 @@ class _SavingsMenu extends State<SavingsMenu> {
       String? selectedVal_) {
     stream.listen((event) {
       List<String?> temp = [];
-      event.forEach((element) {
+      for (var element in event) {
         temp.add(element.name);
-      });
+      }
       if (mounted) {
         callback!(() {
           if (event.isNotEmpty) {

@@ -7,7 +7,7 @@ class InputElements {
   Widget signInButtonWide(
       String text,
       GlobalKey<FormState> _key,
-      loginScreenController loginController,
+      LoginScreenController loginController,
       TextEditingController usernameController,
       TextEditingController passwordController,
       BuildContext context,
@@ -43,7 +43,7 @@ class InputElements {
   Widget signUpButtonWide(
       String text,
       GlobalKey<FormState> _key,
-      loginScreenController loginController,
+      LoginScreenController loginController,
       TextEditingController usernameController,
       TextEditingController passwordController,
       TextEditingController confirmPasswordController,

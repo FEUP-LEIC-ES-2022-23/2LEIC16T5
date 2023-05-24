@@ -261,7 +261,7 @@ class MockBudgetMenuController extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  void EditBudgetMenu(_i4.BuildContext? context) => super.noSuchMethod(
+  void editBudgetMenu(_i4.BuildContext? context) => super.noSuchMethod(
         Invocation.method(
           #EditBudgetMenu,
           [context],

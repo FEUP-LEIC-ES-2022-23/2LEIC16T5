@@ -16,13 +16,12 @@ class BudgetMenuController {
   static final textcontrollerCategoryBudgetLimit = TextEditingController();
   final Function? callback;
   final _formKey = GlobalKey<FormState>();
-  final _formKey2 = GlobalKey<FormState>();
   String selectedVal = '';
   List<String> listitems = [];
   bool initState_ = true;
   double totalBudgetValue = -1;
 
-  void EditBudgetMenu(BuildContext context) {
+  void editBudgetMenu(BuildContext context) {
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -77,13 +76,13 @@ class BudgetMenuController {
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 224, 224, 224),
+                                  color: const Color.fromARGB(255, 224, 224, 224),
                                   border: Border.all(color: Colors.white),
                                   borderRadius: BorderRadius.circular(12)),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Form(
-                                  key: _formKey2,
+                                  key: _formKey,
                                   child: TextFormField(
                                     decoration: const InputDecoration(
                                         labelText: 'Limit',
@@ -122,7 +121,7 @@ class BudgetMenuController {
                     child: const Text('Add',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      if (_formKey2.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         await remoteDBHelper.updateBudgetBarLimit(
                             selectedVal,
                             num.parse(textcontrollerCategoryBudgetLimit.text)
@@ -210,10 +209,11 @@ class BudgetMenuController {
       } else {
         model.onLimit = false;
       }
-      if (model.y! >= model.limit!.toDouble())
+      if (model.y! >= model.limit!.toDouble()) {
         model.overLimit = true;
-      else
+      } else {
         model.overLimit = false;
+      }
     } else {
       throw 'Threshold bigger than 1';
     }

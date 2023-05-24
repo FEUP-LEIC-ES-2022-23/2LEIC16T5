@@ -66,6 +66,7 @@ class NewCategoryController {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              key: const Key("Name"),
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.category),
                                 labelText: 'Name',
@@ -95,7 +96,8 @@ class NewCategoryController {
                             height: 50,
                           ),
                           ElevatedButton(
-                              child: Text(
+                            key: const Key('Pick Color'),
+                              child: const Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -111,6 +113,7 @@ class NewCategoryController {
                   MaterialButton(
                     color: Colors.lightBlue,
                     child: const Text('Add',
+                        key: Key("Add"),
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -127,21 +130,23 @@ class NewCategoryController {
   }
 
   Widget buildColorPicker(StateSetter setState) => ColorPicker(
-      pickerColor: this.color,
+    key: const Key("Color Picker"),
+      pickerColor: color,
       onColorChanged: (color) {
-        setState!(() => this.color = color);
+        setState(() => this.color = color);
       });
 
   void pickColor(BuildContext context, StateSetter setState) => showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Pick your color'),
+            title: const Text('Pick your color'),
             content: Column(
               children: [
                 buildColorPicker(setState),
                 TextButton(
-                  child: Text(
+                  key: const Key("Select"),
+                  child: const Text(
                     'SELECT',
                     style: TextStyle(fontSize: 20),
                   ),

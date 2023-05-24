@@ -34,17 +34,17 @@ class _ChartsMenuState extends State<ChartsMenu> {
           if (snapshot.data!.isNotEmpty && snapshot.hasData) {
             transactionList = snapshot.data!;
             Map<String, List<TransactionModel>> categoryMap = {};
-            transactionList.forEach((transaction) {
+            for (var transaction in transactionList) {
               if (categoryMap.containsKey(transaction.categoryID)) {
                 categoryMap[transaction.categoryID]!.add(transaction);
               } else {
                 categoryMap[transaction.categoryID!] = [transaction];
               }
-            });
+            }
 
             List<LineChartBarData> chartDataList = [];
             int i = 0;
-            categoryMap.entries.forEach((entry) {
+            for (var entry in categoryMap.entries) {
               Map<int, double> expensesPerMonth = {};
               for (int month = 1; month <= 12; month++) {
                 double totalExpensesForMonth = 0;
@@ -75,7 +75,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
               );
               chartDataList.add(chartData);
               i++;
-            });
+            }
             return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 40),
                     child: LineChart(
@@ -117,35 +117,35 @@ class _ChartsMenuState extends State<ChartsMenu> {
                               getTitlesWidget: (value,titleMeta) {
                                 switch (value.toInt()) {
                                   case 3:
-                                    return Text(
+                                    return const Text(
                                         'MAR',
                                        style: TextStyle(
                                         color: Colors.white70,
                                       ),
                                     );
                                   case 6:
-                                    return Text(
+                                    return const Text(
                                         'JUN',
                                         style: TextStyle(
                                         color: Colors.white70,
                                       ),
                                     );
                                   case 9:
-                                    return Text(
+                                    return const Text(
                                         'SEP',
                                         style: TextStyle(
                                         color: Colors.white70,
                                       ),
                                     );
                                   case 12:
-                                    return Text(
+                                    return const Text(
                                         'DEC',
                                         style: TextStyle(
                                         color: Colors.white70,
                                       ),
                                     );
                                 }
-                                return Text('');
+                                return const Text('');
                               },
                             )
                           ),

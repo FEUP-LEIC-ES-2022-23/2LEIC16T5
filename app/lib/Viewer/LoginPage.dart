@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  loginScreenController loginController = loginScreenController();
+  LoginScreenController loginController = LoginScreenController();
   InputElements inputElements = InputElements();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  _signUpState().build(context))),
+                                  SignUpState().build(context))),
                       child: Text(
                         'Register Now',
                         style: TextStyle(
@@ -100,15 +100,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class _signUpState extends State<LoginPage> {
+class SignUpState extends State<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final confimPasswordController = TextEditingController();
-  loginScreenController loginController = loginScreenController();
+  LoginScreenController loginController = LoginScreenController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   InputElements inputElement = InputElements();
 
-  ValueNotifier<double> ProgressValue = ValueNotifier(0);
+  ValueNotifier<double> progressValue = ValueNotifier(0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,24 +151,24 @@ class _signUpState extends State<LoginPage> {
                             passwordController,
                             loginController.validatePassword,
                             true,
-                            ProgressValue),
+                            progressValue),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 28),
                           child: Align(
+                            alignment: Alignment.topRight,
                             child: SimpleCircularProgressBar(
-                              valueNotifier: ProgressValue,
+                              valueNotifier: progressValue,
                               size: 20,
                               backStrokeWidth: 6,
                               progressStrokeWidth: 6,
                               animationDuration: 1,
-                              progressColors: [
+                              progressColors: const [
                                 Colors.red,
                                 Colors.orange,
                                 Colors.yellow,
                                 Colors.green
                               ],
                             ),
-                            alignment: Alignment.topRight,
                           ),
                         ),
                       ],

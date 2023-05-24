@@ -9,7 +9,7 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoding/geocoding.dart' as Geocoding;
+import 'package:geocoding/geocoding.dart' as geocoding;
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
@@ -32,9 +32,6 @@ class NewTransactionController {
   c_model.CategoryModel selectedCategory=c_model.CategoryModel(
     categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
 
-
-
-  //Transactions
   void _enterTransaction() async {
     if (textcontrollerADDRESS.text != '' && position == null) {
       await getGeoPointFromAddress(textcontrollerADDRESS.text);
@@ -272,18 +269,19 @@ class NewTransactionController {
                                                 "Do you wish to set your current location as this transaction's location?",
                                             confirmBtnText: "Yes",
                                             cancelBtnText: "No",
-                                            onConfirmBtnTap: () {
+                                            onConfirmBtnTap: () async {
                                               Navigator.of(context).pop();
-                                              setState(() async {
+                                              setState(() {
                                                 position = GeoPoint(
                                                     double.parse(
                                                         '${value.latitude}'),
                                                     double.parse(
                                                         '${value.longitude}'));
-                                                textcontrollerADDRESS.text =
-                                                    await getAddressFromGeoPoint(
-                                                        position!);
                                               });
+                                              textcontrollerADDRESS.text =
+                                              await getAddressFromGeoPoint(
+                                                  position!);
+                                              setState(() {});
                                             },
                                             onCancelBtnTap: () {
                                               setState(() {
@@ -300,7 +298,6 @@ class NewTransactionController {
                                 Expanded(
                                   child: TextField(
                                     decoration: const InputDecoration(
-                                      //icon: Icon(Icons.map),
                                       labelText:
                                           'Address (Street, Number, City, State, Country)',
                                     ),
@@ -371,8 +368,9 @@ class NewTransactionController {
               ],
             );
           } else {
-            if (selectedCategory.name != emptyCategory.name)
+            if (selectedCategory.name != emptyCategory.name) {
               categories.add(emptyCategory);
+            }
             for (var element in snapshot.data!) {
               if (element.name != selectedCategory.name) {
                 categories.add(element);
@@ -428,8 +426,6 @@ class NewTransactionController {
                             onChanged: (val) {
                               setState(() {
                                 selectedCategory = val as c_model.CategoryModel;
-                                debugPrint(selectedCategory.name);
-                                debugPrint(selectedCategory.color.toString());
                               });
                             }),
                       ),
@@ -455,7 +451,7 @@ class NewTransactionController {
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
-              key: const Key("Transaction info"),
+              key: const Key("Transaction Info"),
               builder: (BuildContext context, setState) {
                 return AlertDialog(
                   shape: const RoundedRectangleBorder(
@@ -464,7 +460,7 @@ class NewTransactionController {
                   title: Container(
                       decoration: BoxDecoration(
                         borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(32.0)),
+                            const BorderRadius.vertical(top: Radius.circular(32.0)),
                         color: Color(transac.categoryColor!),
                       ),
                       height: 75,
@@ -484,6 +480,7 @@ class NewTransactionController {
                           ),
                           Text(
                             transac.name,
+                            key: const Key("Name"),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -499,7 +496,7 @@ class NewTransactionController {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -520,7 +517,7 @@ class NewTransactionController {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -538,6 +535,7 @@ class NewTransactionController {
                                   child: Center(
                                     child: Text(
                                       euro.format(transac.total),
+                                      key: const Key("Total"),
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ),
@@ -560,7 +558,8 @@ class NewTransactionController {
                                       child: Text(
                                     DateFormat('dd-MM-yyyy')
                                         .format(transac.date),
-                                    style: const TextStyle(fontSize: 20),
+                                        key: const Key("Date"),
+                                        style: const TextStyle(fontSize: 20),
                                   )),
                                 ),
                               ],
@@ -569,7 +568,7 @@ class NewTransactionController {
                           (transac.notes?.isEmpty ?? true)
                               ? const SizedBox()
                               : Padding(
-                                  padding: EdgeInsets.only(bottom: 20),
+                                  padding: const EdgeInsets.only(bottom: 20),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -585,9 +584,8 @@ class NewTransactionController {
                                         width: 250,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[200],
-                                          //borderRadius: BorderRadius.circular(10.0),
                                         ),
-                                        padding: EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(10),
                                         child: Text(
                                           transac.notes!,
                                           style: const TextStyle(
@@ -656,8 +654,8 @@ class NewTransactionController {
   }
 
   Future<void> getGeoPointFromAddress(String address) async {
-    List<Geocoding.Location> locations =
-        await Geocoding.locationFromAddress(address);
+    List<geocoding.Location> locations =
+        await geocoding.locationFromAddress(address);
     if (locations.isNotEmpty) {
       double latitude = locations[0].latitude;
       double longitude = locations[0].longitude;
@@ -666,14 +664,14 @@ class NewTransactionController {
   }
 
   Future<String> getAddressFromGeoPoint(GeoPoint geoPoint) async {
-    List<Geocoding.Placemark> placemarks =
-        await Geocoding.placemarkFromCoordinates(
+    List<geocoding.Placemark> placemarks =
+        await geocoding.placemarkFromCoordinates(
       geoPoint.latitude,
       geoPoint.longitude,
     );
 
     if (placemarks.isNotEmpty) {
-      Geocoding.Placemark placemark = placemarks[0];
+      geocoding.Placemark placemark = placemarks[0];
       String address =
           '${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.postalCode}';
       return address;

@@ -214,7 +214,7 @@ class SavingsMenuController {
                     const EdgeInsets.symmetric(vertical: 200, horizontal: 10),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(32.0),
                         topRight: (Radius.circular(32.0)),

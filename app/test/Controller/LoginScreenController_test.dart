@@ -19,7 +19,7 @@ void main() async {
     accessToken: googleAuth?.accessToken,
     idToken: googleAuth?.idToken,
   );
-  loginScreenController loginController = loginScreenController();
+  LoginScreenController loginController = LoginScreenController();
   MockBuildContext context = MockBuildContext();
   TextEditingController email = TextEditingController(text: "test@test.com");
   TextEditingController password = TextEditingController(text: "password");

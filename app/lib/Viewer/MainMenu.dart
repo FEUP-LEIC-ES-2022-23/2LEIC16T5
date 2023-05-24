@@ -52,17 +52,18 @@ class _MainMenuState extends State<MainMenu> {
                     child: const Icon(Icons.settings),
                   )),
               const SizedBox(height: 20),
-              const Text('FORTUNEKO',
-                  style: TextStyle(
-                      fontSize: 60,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold)),
+              Image.asset(
+                'assets/img/Fortuneko.png',
+                width: 350,
+                alignment: Alignment.center,
+              ),
               const SizedBox(
                 height: 20,
               ),
               Image.asset(
                 'assets/img/Luckycat1.png',
                 width: 250,
+                alignment: Alignment.center,
               ),
               ElevatedButton(
                   key: const Key("Transactions"),
@@ -81,6 +82,7 @@ class _MainMenuState extends State<MainMenu> {
                   child: const Text('Transactions',
                       style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                  key: const Key("Categories"),
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
                   onPressed: () {
@@ -119,7 +121,7 @@ class _MainMenuState extends State<MainMenu> {
                 },
                 style:
                     ElevatedButton.styleFrom(minimumSize: const Size(250, 35)),
-                child: Text('Budget', style: TextStyle(fontSize: 20)),
+                child: const Text('Budget', style: TextStyle(fontSize: 20)),
               ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -148,8 +150,7 @@ class _MainMenuState extends State<MainMenu> {
                               )),
                     );
                   },
-                  child: const Text('National Comparison',
-                      style: TextStyle(fontSize: 20))),
+              child: const Text('National Comparison', style: TextStyle(fontSize: 20)))
             ],
           ),
         ));

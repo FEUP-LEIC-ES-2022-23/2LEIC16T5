@@ -4,6 +4,7 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
@@ -40,7 +41,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                   fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
-            key: Key("Home"),
+            key: const Key("Home"),
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -144,14 +145,33 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                             .showTransaction(context, transac);
                                       });
                                     },
-                                    onLongPress: () async {
-                                      //setState(() async {
-                                      await remoteDBHelper
-                                          .updateBudgetBarValOnChangedTransaction(
-                                              transac.transactionID!, false);
-                                      await remoteDBHelper
-                                          .removeTransaction(transac);
-                                      //});
+                                    onLongPress: () {
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.warning,
+                                        title: 'WARNING',
+                                        text: 'Are you sure you want to permanently delete this transaction?',
+                                        confirmBtnText: 'Yes',
+                                        cancelBtnText: 'No',
+                                        showCancelBtn: true,
+                                        confirmBtnColor: Colors.lightBlue,
+                                        onConfirmBtnTap: () async {
+                                            await remoteDBHelper
+                                                .updateBudgetBarValOnChangedTransaction(
+                                                transac.transactionID!, false);
+                                            remoteDBHelper
+                                                .removeTransaction(transac);
+                                            if (Navigator.canPop(context)) {
+                                              Navigator.pop(context);
+                                            }
+                                            QuickAlert.show(
+                                                context: context,
+                                                title: 'Miau miau!',
+                                                text: "Transaction successfully deleted!",
+                                                type: QuickAlertType.success,
+                                                confirmBtnColor: Colors.lightBlue);
+                                        },
+                                      );
                                     },
                                   ),
                                 ),

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SettingModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
@@ -16,7 +14,7 @@ class RemoteDBHelper {
   RemoteDBHelper({required this.userInstance, required this.firebaseInstance});
 
   Future createUser() async {
-    UserModel userModel = UserModel(uid: userInstance!.currentUser!.uid);
+    UserModel userModel = UserModel(uid: userInstance.currentUser!.uid);
     await firebaseInstance
         .collection('Users')
         .doc(userModel.uid)
@@ -25,7 +23,6 @@ class RemoteDBHelper {
 
   //Section for Transactions
   Future<TransactionModel> addTransaction(TransactionModel transaction) async {
-    UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
     await firebaseInstance
         .collection('Transactions')
         .add(transaction.toMap())
@@ -98,7 +95,7 @@ class RemoteDBHelper {
 
   //Section for Category
   Future addCategory(CategoryModel category) async {
-    UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
+    UserModel user = UserModel(uid: userInstance.currentUser!.uid);
 
     await firebaseInstance
         .collection('Categories')
@@ -106,7 +103,7 @@ class RemoteDBHelper {
         .where('name', isEqualTo: category.name)
         .get()
         .then((value) async {
-      if (value.docs.length < 1) {
+      if (value.docs.isEmpty) {
         await firebaseInstance
             .collection('Categories')
             .add(category.toMap())
@@ -153,12 +150,12 @@ class RemoteDBHelper {
         .where('categoryID', isEqualTo: category.categoryID)
         .get()
         .then((value) {
-      value.docs.forEach((doc) {
+      for (var doc in value.docs) {
         doc.reference.update({
           'categoryID': null,
           'categoryColor': 0xFF808080,
         });
-      });
+      }
     });
     await firebaseInstance
         .collection('BudgetBars')
@@ -215,10 +212,10 @@ class RemoteDBHelper {
 
     if (querySnapshot.docs.isNotEmpty) {
       final docSnapshot = querySnapshot.docs.first;
-      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      final categoryMap = docSnapshot.data();
       return CategoryModel.fromMap(categoryMap);
     } else {
-      throw Exception('Category not found');
+      return CategoryModel(userID: usr.uid, name: "Default", color: 0xFF808080);
     }
   }
 
@@ -235,7 +232,7 @@ class RemoteDBHelper {
 
     if (querySnapshot.docs.isNotEmpty) {
       final docSnapshot = querySnapshot.docs.first;
-      final categoryMap = docSnapshot.data() as Map<String, dynamic>;
+      final categoryMap = docSnapshot.data();
       categoryId = CategoryModel.fromMap(categoryMap).categoryID!;
     }
 
@@ -295,7 +292,7 @@ class RemoteDBHelper {
         .where('name', isEqualTo: saving.name)
         .get()
         .then((value) async {
-      if (value.docs.length < 1) {
+      if (value.docs.isEmpty) {
         await firebaseInstance.collection('Savings').add(saving.toMap());
       } else {
         await firebaseInstance
@@ -418,9 +415,9 @@ class RemoteDBHelper {
         .where('categoryName', isEqualTo: categoryName)
         .get()
         .then((value) {
-      value.docs.forEach((element) {
+      for (var element in value.docs) {
         element.reference.delete();
-      });
+      }
     });
   }
 

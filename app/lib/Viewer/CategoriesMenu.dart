@@ -4,6 +4,7 @@ import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
+import 'package:quickalert/quickalert.dart';
 
 class CategoriesMenu extends StatefulWidget {
   const CategoriesMenu({Key? key, required this.title}) : super(key: key);
@@ -21,6 +22,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
       appBar: AppBar(
+        key: const Key("Categories"),
         title: Text(widget.title,
             style: const TextStyle(
                 fontSize: 35,
@@ -67,9 +69,10 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
-                                contentPadding: EdgeInsets.only(left: 0),
+                                key: const Key("Category"),
+                                contentPadding: const EdgeInsets.only(left: 0),
                                 tileColor: Colors.white,
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(12),
                                     ),
@@ -78,7 +81,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                   iconColor: Colors.white,
                                   leading: Container(
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(12),
                                         bottomLeft: Radius.circular(12),
                                       ),
@@ -91,11 +94,32 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                   onLongPress: () {
-                                    setState(() {
-                                      remoteDBHelper.removeCategory(categor);
-                                      remoteDBHelper
-                                          .removeBudgetBar(categor.name);
-                                    });
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.warning,
+                                      title: 'WARNING',
+                                      text: 'Are you sure you want to permanently delete this category?',
+                                      confirmBtnText: 'Yes',
+                                      cancelBtnText: 'No',
+                                      showCancelBtn: true,
+                                      confirmBtnColor: Colors.lightBlue,
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          remoteDBHelper.removeCategory(categor);
+                                          remoteDBHelper
+                                              .removeBudgetBar(categor.name);
+                                          if (Navigator.canPop(context)) {
+                                            Navigator.pop(context);
+                                          }
+                                          QuickAlert.show(
+                                              context: context,
+                                              title: 'Miau miau!',
+                                              text: "Category successfully deleted!",
+                                              type: QuickAlertType.success,
+                                              confirmBtnColor: Colors.lightBlue);
+                                        });
+                                      },
+                                    );
                                   },
                                 ),
                               ),
@@ -109,7 +133,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: FloatingActionButton(
-                  heroTag: "Add",
+                  key: const Key("Plus"),
                   onPressed: () {
                     NewCategoryController().newCategory(context);
                   },

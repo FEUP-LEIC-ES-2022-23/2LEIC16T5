@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Viewer/LoginPage.dart';
 import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:es/Viewer/MainMenu.dart';
 import 'package:quickalert/quickalert.dart';
 
-class loginScreenController extends StatelessWidget {
-  loginScreenController({Key? key}) : super(key: key);
+class LoginScreenController extends StatelessWidget {
+  LoginScreenController({Key? key}) : super(key: key);
   RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +17,7 @@ class loginScreenController extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return MainMenu();
+              return const MainMenu();
             } else {
               return const LoginPage();
             }
@@ -27,7 +28,7 @@ class loginScreenController extends StatelessWidget {
   toMainMenu(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => loginScreenController()),
+        MaterialPageRoute(builder: (context) => LoginScreenController()),
         (route) => false);
   }
 
@@ -35,7 +36,7 @@ class loginScreenController extends StatelessWidget {
       BuildContext context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim())!;
+          email: email.text.trim(), password: password.text.trim());
     } on FirebaseAuthException catch (e) {
       QuickAlert.show(
           context: context, type: QuickAlertType.error, text: e.message!);
@@ -67,7 +68,7 @@ class loginScreenController extends StatelessWidget {
   toLogInScreen(BuildContext context) {
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => loginScreenController()),
+        MaterialPageRoute(builder: (context) => LoginScreenController()),
         (route) => false);
   }
 
@@ -84,4 +85,4 @@ class loginScreenController extends StatelessWidget {
     if (password == null || password.isEmpty) return 'Password is empty!';
     return null;
   }
-}
+} 

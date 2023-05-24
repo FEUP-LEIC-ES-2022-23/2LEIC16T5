@@ -15,3 +15,6 @@ Esta aplicacão é direcionada para qualquer pessoa que deseje ter um melhor con
 Para isto, o *Fortuneko* fornece uma variedade de gráficos, dividos pelos tipos de despesa e até mesmo um mapa que permite ao utilizador localizar no tempo e no espaço os seus gastos.
 
 Portanto, com o *Fortuneko* ***Poupar não precisa de ser aborrecido!***"
+
+![gif](https://github.com/Oao26/fortuneko/assets/95864480/c04e8b7f-174f-4abd-b7ad-b177f22b7d47)
+![elevator_pitch](https://github.com/Oao26/fortuneko/assets/95864480/79d9ae5b-5fbc-4b31-a2a0-cb37c90c9e8b)

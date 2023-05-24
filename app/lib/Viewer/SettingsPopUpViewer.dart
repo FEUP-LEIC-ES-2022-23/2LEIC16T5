@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,15 +34,16 @@ class SettingsPopUpViewer {
               TextButton(
                   key: const Key("Yes"),
                   onPressed: () async {
-                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())
-                    && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasCategories())){
+                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasTransactions())
+                    && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasCategories())){
                       Navigator.of(context).pop();
                       errorDeleteData(context, 'No data has been inserted into the app');
                     }
                     else{
                       try {
-                        RemoteDBHelper(userInstance: FirebaseAuth.instance)
+                        RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance)
                             .userResetData();
+                            
                         Navigator.of(context).pop();
                         deletdData(context);
                       } catch (e) {

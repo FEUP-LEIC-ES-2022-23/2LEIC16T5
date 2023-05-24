@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/SavingsMenuController.dart';
 import 'package:es/Viewer/MainMenu.dart';
 import 'package:intl/intl.dart';
@@ -23,13 +24,20 @@ class _SavingsMenu extends State<SavingsMenu> {
   String? selectedVal = '1';
   double multiplier = 0;
   double currSliderVal = 0;
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
-  SavingsMenuController savingsMenuController = SavingsMenuController();
+  SavingsMenuController savingsMenuController = SavingsMenuController(
+      remoteDBHelper: RemoteDBHelper(
+          userInstance: FirebaseAuth.instance,
+          firebaseInstance: FirebaseFirestore.instance),
+      userInstance: FirebaseAuth.instance);
 
-  Stream<List<SavingsModel>> savings =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance).readSaving('1');
+  Stream<List<SavingsModel>> savings = RemoteDBHelper(
+          userInstance: FirebaseAuth.instance,
+          firebaseInstance: FirebaseFirestore.instance)
+      .readSaving('1');
   bool initState_ = true;
 
   @override
@@ -130,7 +138,7 @@ class _SavingsMenu extends State<SavingsMenu> {
             ),
 
             const SizedBox(
-              height: 60,
+              height:25,
             ),
             //Builds body according to the database
             buildBody(context, savings),
@@ -171,7 +179,7 @@ class _SavingsMenu extends State<SavingsMenu> {
                               child: Text(
                                 e!,
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 26),
+                                    color: Colors.white, fontSize: 23),
                               )))
                           .toList(),
                       onChanged: (val) {
@@ -274,50 +282,32 @@ class _SavingsMenu extends State<SavingsMenu> {
                           Stack(
                             alignment: Alignment.center,
                             children: [
-                              Container(
-                                width: 200,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      width: 30, color: Colors.white),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.lightBlue,
-                                      offset: Offset(
-                                        0.0,
-                                        0.0,
-                                      ), //Offset
-                                      blurRadius: 10.0,
-                                      spreadRadius: 4.0,
-                                    )
-                                  ],
-                                ),
-                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                      snapshot.data!.first.value!
-                                          .toStringAsFixed(2),
+                                      '${snapshot.data!.first.value!
+                                          .toStringAsFixed(2)} ${widget.currency}',
                                       style: const TextStyle(
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w800)),
-                                  const Icon(Icons.euro, size: 30),
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white,
+                                      )),
                                   const Text("/",
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w800,
+                                        color: Colors.white,
+
+
                                       )),
-                                  Text(snapshot.data!.first.total.toString(),
+                                  Text('${snapshot.data!.first.total} ${widget.currency}',
                                       style: const TextStyle(
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w800)),
-                                  const Icon(
-                                    Icons.euro,
-                                    size: 24,
-                                  ),
+                                          fontWeight: FontWeight.w800,
+                                          color: Colors.white,
+
+                                      )),
                                 ],
                               ),
                             ],
@@ -383,25 +373,14 @@ class _SavingsMenu extends State<SavingsMenu> {
                             width: 280,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: Colors.transparent,
+                              color: Colors.blue,
                               border: Border.all(
                                   width: 30, color: Colors.transparent),
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.deepOrange,
-                                  offset: Offset(
-                                    0.0,
-                                    0.0,
-                                  ), //Offset
-                                  blurRadius: 6.0,
-                                  spreadRadius: 4.0,
-                                )
-                              ],
                             ),
                           ),
                           Row(children: [
-                            const Icon(Icons.warning, size: 20),
+                            const Icon(Icons.warning, size: 30,color: Colors.black),
                             const SizedBox(width: 10),
                             Text(
                               (snapshot.data!.first.targetDate == null)

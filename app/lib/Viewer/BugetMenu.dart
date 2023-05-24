@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,11 +10,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../Model/BudgetBarModel.dart';
-import 'BarGraph.dart';
+import '../Model/TransactionsModel.dart';
+import 'Elements/BarGraph.dart';
 
 class BudgetMenu extends StatefulWidget {
-  const BudgetMenu({super.key, required this.title});
+  const BudgetMenu({super.key, required this.title, required this.currency});
   final String title;
+  final String currency;
 
   @override
   State<BudgetMenu> createState() => BudgetMenuState();
@@ -19,9 +25,21 @@ class BudgetMenu extends StatefulWidget {
 class BudgetMenuState extends State<BudgetMenu> {
   bool totalLimitEdited = false;
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
   BudgetMenuController budgetMenuController = BudgetMenuController();
+
+  getTransactions(transacs) {
+    if (mounted) {
+      setState(() {
+        transactions = transacs;
+      });
+    }
+  }
+
+  List<TransactionModel> transactions = [];
+  Timer timer = Timer(const Duration(seconds: 10), () {});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,26 +63,6 @@ class BudgetMenuState extends State<BudgetMenu> {
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: IconButton(
-                  onPressed: () {
-                    if (mounted) {
-                      BudgetMenuController().EditBudgetMenu(context);
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: 25,
-                  ),
-                ),
-              ),
-            ],
-          ),
           buildBody(remoteDBHelper),
         ]),
       ),
@@ -72,12 +70,15 @@ class BudgetMenuState extends State<BudgetMenu> {
   }
 
   Widget buildBody(RemoteDBHelper db) {
+    budgetMenuController.getTransactions(remoteDBHelper, getTransactions);
+
     return StreamBuilder<List<BudgetBarModel>>(
         stream: db.readBudgetBars(),
         builder: (BuildContext context,
             AsyncSnapshot<List<BudgetBarModel>> snapshot) {
           // bool hasOverflowed = false;
-          if (!snapshot.hasData) {
+
+          if (!snapshot.hasData && timer.isActive) {
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -94,22 +95,18 @@ class BudgetMenuState extends State<BudgetMenu> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Text(
-                        "Loading...",
+                        "Trying to load...",
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       )
                     ],
                   )
                 ]);
           }
-          if (snapshot.data!.isEmpty) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                SizedBox(height: 150),
-                Text("Nothing to show",
-                    style: TextStyle(fontSize: 20, color: Colors.white))
-              ],
-            );
+          if (snapshot.hasData && snapshot.data!.isEmpty || !snapshot.hasData) {
+            return const Center(
+                heightFactor: 25,
+                child: Text("Nothing to show",
+                    style: TextStyle(fontSize: 20, color: Colors.white)));
           } else {
             List<BudgetBarModel> barData = [];
             int xCoord = 0;
@@ -119,16 +116,26 @@ class BudgetMenuState extends State<BudgetMenu> {
             double totalBudgetVal = 0;
 
             for (var budgetBar in snapshot.data!) {
-              if (budgetBar.limit! > maxY) {
-                maxY = budgetBar.limit!;
+              double categoryValSum = 0;
+
+              for (TransactionModel transac in transactions) {
+                if (transac.categoryID == budgetBar.categoryID) {
+                  categoryValSum += transac.total;
+                }
               }
               budgetBar.x = xCoord;
               xCoord++;
-              budgetBar.y = budgetBar.value;
+              budgetBar.y = categoryValSum;
               BudgetMenuController().checkLimit(budgetBar, 0.05);
               barData.add(budgetBar);
-              currBudgetValSum += budgetBar.value!;
+              currBudgetValSum += categoryValSum;
               totalBudgetVal += budgetBar.limit!;
+              if (budgetBar.limit! > maxY) {
+                maxY = budgetBar.limit!;
+              }
+              if (budgetBar.limit! < currBudgetValSum) {
+                maxY = currBudgetValSum;
+              }
             }
             if (totalBudgetVal > 0) {
               percentage = totalBudgetVal > currBudgetValSum
@@ -140,15 +147,36 @@ class BudgetMenuState extends State<BudgetMenu> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: IconButton(
+                        onPressed: () {
+                          if (mounted) {
+                            BudgetMenuController().EditBudgetMenu(context);
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 MyBarGraph(
                   barsData: barData,
                   graphMaxY: maxY,
                   barWidth: 40,
                   spaceBetweenBars: 10,
                   graphContainerHeight: 320,
+                  currency: widget.currency,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 21,
                 ),
                 Stack(alignment: AlignmentDirectional.center, children: [
                   CircularPercentIndicator(
@@ -159,7 +187,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                     percent: percentage,
                     progressColor: Colors.red,
                     circularStrokeCap: CircularStrokeCap.round,
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.black26,
                   ),
                   Image.asset(
                     'assets/img/Luckycat1.png',

@@ -9,27 +9,40 @@ import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart' as Geocoding;
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
   static final textcontrollerTOTAL = TextEditingController();
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
+  static final textcontrollerADDRESS = TextEditingController();
+
   GeoPoint? position;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
-  c_model.CategoryModel selected_category=c_model.CategoryModel(categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
+  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
+  c_model.CategoryModel selectedCategory=c_model.CategoryModel(
+    categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
+
+
 
   //Transactions
-  void _enterTransaction() {
+  void _enterTransaction() async {
+    if (textcontrollerADDRESS.text != '' && position == null) {
+      await getGeoPointFromAddress(textcontrollerADDRESS.text);
+    }
+
     t_model.TransactionModel transaction = t_model.TransactionModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
-        categoryID: selected_category.categoryID,
+        categoryID: selectedCategory.categoryID,
         name: textcontrollerNAME.text.isEmpty
             ? "Transaction"
             : textcontrollerNAME.text,
@@ -39,17 +52,21 @@ class NewTransactionController {
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
         location: _isIncome ? null : position,
-        categoryColor: selected_category.color,
+        categoryColor: selectedCategory.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((String? value) {
-      remoteDBHelper.updateBudgetBar(value!, true);
+    remoteDBHelper.addTransaction(transaction).then((transac) {
+      if (!_isIncome) {
+        remoteDBHelper.updateBudgetBarValOnChangedTransaction(
+            transac.transactionID!, true);
+      }
     });
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
     textcontrollerDATE.clear();
     textcontrollerNOTES.clear();
+    textcontrollerADDRESS.clear();
     position = null;
   }
 
@@ -105,7 +122,9 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.black54),
                           ),
                           Switch(
-                            key: _isIncome? const Key("Income") :  const Key("Expense"),
+                            key: _isIncome
+                                ? const Key("Income")
+                                : const Key("Expense"),
                             value: _isIncome,
                             onChanged: (newValue) {
                               setState(() {
@@ -234,6 +253,65 @@ class NewTransactionController {
                           ),
                         ],
                       ),
+                      !_isIncome
+                          ? Row(
+                              children: [
+                                FloatingActionButton(
+                                    mini: true,
+                                    backgroundColor: Colors.lightBlue,
+                                    heroTag: "Map",
+                                    onPressed: () {
+                                      MapMenuController()
+                                          .getCurrentLocation(context)
+                                          .then((value) {
+                                        QuickAlert.show(
+                                            context: context,
+                                            type: QuickAlertType.confirm,
+                                            confirmBtnColor: Colors.lightBlue,
+                                            text:
+                                                "Do you wish to set your current location as this transaction's location?",
+                                            confirmBtnText: "Yes",
+                                            cancelBtnText: "No",
+                                            onConfirmBtnTap: () {
+                                              Navigator.of(context).pop();
+                                              setState(() async {
+                                                position = GeoPoint(
+                                                    double.parse(
+                                                        '${value.latitude}'),
+                                                    double.parse(
+                                                        '${value.longitude}'));
+                                                textcontrollerADDRESS.text =
+                                                    await getAddressFromGeoPoint(
+                                                        position!);
+                                              });
+                                            },
+                                            onCancelBtnTap: () {
+                                              setState(() {
+                                                position = null;
+                                                textcontrollerADDRESS.text = '';
+                                              });
+                                              Navigator.of(context).pop();
+                                            });
+                                      });
+                                    },
+                                    child: (position == null)
+                                        ? const Icon(Icons.pin_drop_rounded)
+                                        : const Icon(Icons.done_all_rounded)),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      //icon: Icon(Icons.map),
+                                      labelText:
+                                          'Address (Street, Number, City, State, Country)',
+                                    ),
+                                    controller: textcontrollerADDRESS,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(
+                              width: 48.0,
+                            ),
                       const SizedBox(
                         height: 5,
                       ),
@@ -244,46 +322,6 @@ class NewTransactionController {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      !_isIncome
-                          ? FloatingActionButton(
-                              mini: true,
-                              backgroundColor: Colors.lightBlue,
-                              heroTag: "Map",
-                              onPressed: () {
-                                MapMenuController()
-                                    .getCurrentLocation(context)
-                                    .then((value) {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      confirmBtnColor: Colors.lightBlue,
-                                      text:
-                                          "Do you wish to set your current location as this transaction's location?",
-                                      confirmBtnText: "Yes",
-                                      cancelBtnText: "No",
-                                      onConfirmBtnTap: () {
-                                        setState(() {
-                                          position = GeoPoint(
-                                              double.parse('${value.latitude}'),
-                                              double.parse(
-                                                  '${value.longitude}'));
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                      onCancelBtnTap: () {
-                                        setState(() {
-                                          position = null;
-                                        });
-                                        Navigator.of(context).pop();
-                                      });
-                                });
-                              },
-                              child: (position == null)
-                                  ? const Icon(Icons.pin_drop_rounded)
-                                  : const Icon(Icons.done_all_rounded))
-                          : const SizedBox(
-                              width: 48.0,
-                            ),
                       MaterialButton(
                         key: const Key("Add"),
                         shape: const RoundedRectangleBorder(
@@ -332,11 +370,16 @@ class NewTransactionController {
                     onChanged: (val) {}),
               ],
             );
+          } else {
+            if (selectedCategory.name != emptyCategory.name)
+              categories.add(emptyCategory);
+            for (var element in snapshot.data!) {
+              if (element.name != selectedCategory.name) {
+                categories.add(element);
+              }
+            }
+            categories.add(selectedCategory);
           }
-          snapshot.data!.forEach((element) {
-            categories.add(element);
-          });
-          categories.add(selected_category);
 
           return snapshot.hasData
               ? StatefulBuilder(builder: (BuildContext context, setState) {
@@ -353,37 +396,40 @@ class NewTransactionController {
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: DropdownButton(
                             dropdownColor: Colors.white,
-                            value: selected_category,
+                            value: selectedCategory,
                             items: categories
-                                .map((c_model.CategoryModel? c) => DropdownMenuItem(
-                                    value: c,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          c!.name,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color(c.color),
-                                          ),
-                                          width: 20,
-                                          height: 20,
-                                        ),
-                                      ],
-                                    )))
+                                .map((c_model.CategoryModel? c) =>
+                                    DropdownMenuItem(
+                                        value: c,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              c!.name,
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color(c.color),
+                                              ),
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                          ],
+                                        )))
                                 .toList(),
                             onChanged: (val) {
                               setState(() {
-                                selected_category =
-                                    val as c_model.CategoryModel;
+                                selectedCategory = val as c_model.CategoryModel;
+                                debugPrint(selectedCategory.name);
+                                debugPrint(selectedCategory.color.toString());
                               });
                             }),
                       ),
@@ -399,7 +445,11 @@ class NewTransactionController {
         });
   }
 
-  void showTransaction(BuildContext context, t_model.TransactionModel transac) {
+  void showTransaction(
+      BuildContext context, t_model.TransactionModel transac) async {
+    c_model.CategoryModel category =
+        await remoteDBHelper.getCategory(transac.categoryID!);
+
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -412,10 +462,10 @@ class NewTransactionController {
                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
                   titlePadding: const EdgeInsets.all(0),
                   title: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(32.0)),
-                        color: Colors.lightBlue,
+                        color: Color(transac.categoryColor!),
                       ),
                       height: 75,
                       child: Row(
@@ -453,9 +503,36 @@ class NewTransactionController {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                const Text('Category:',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: Text(
+                                      category.name,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
                                 (transac.expense == 1)
-                                    ? const Icon(Icons.money_off)
-                                    : const Icon(Icons.wallet),
+                                    ? const Text('Expense:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18))
+                                    : const Text('Income:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
@@ -469,57 +546,59 @@ class NewTransactionController {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                            padding: const EdgeInsets.only(bottom: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(Icons.calendar_today),
+                                const Text('Date:',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
                                 Expanded(
                                   flex: 1,
                                   child: Center(
                                       child: Text(
                                     DateFormat('dd-MM-yyyy')
                                         .format(transac.date),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
                                   )),
                                 ),
                               ],
                             ),
                           ),
                           (transac.notes?.isEmpty ?? true)
-                              ? SizedBox()
+                              ? const SizedBox()
                               : Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                                child:
-                                  Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Notes:',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Notes:',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                      Container(
+                                        width: 250,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          //borderRadius: BorderRadius.circular(10.0),
                                         ),
-                                        Container(
-                                          width: 250,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            //borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          padding: EdgeInsets.all(10),
-                                          child: Text(
-                                            transac.notes!,
-                                            style: const TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.black,
-                                            ),
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          transac.notes!,
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                
-                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                           (transac.location != null)
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -549,6 +628,11 @@ class NewTransactionController {
                                               transac.location!.latitude,
                                               transac.location!.longitude,
                                             ),
+                                            icon: BitmapDescriptor
+                                                .defaultMarkerWithHue(HSVColor
+                                                        .fromColor(Color(transac
+                                                            .categoryColor!))
+                                                    .hue),
                                           ),
                                         },
                                         onMapCreated:
@@ -561,7 +645,7 @@ class NewTransactionController {
                                     ),
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                         ],
                       ),
                     ),
@@ -569,5 +653,31 @@ class NewTransactionController {
                 );
               });
         });
+  }
+
+  Future<void> getGeoPointFromAddress(String address) async {
+    List<Geocoding.Location> locations =
+        await Geocoding.locationFromAddress(address);
+    if (locations.isNotEmpty) {
+      double latitude = locations[0].latitude;
+      double longitude = locations[0].longitude;
+      position = GeoPoint(latitude, longitude);
+    }
+  }
+
+  Future<String> getAddressFromGeoPoint(GeoPoint geoPoint) async {
+    List<Geocoding.Placemark> placemarks =
+        await Geocoding.placemarkFromCoordinates(
+      geoPoint.latitude,
+      geoPoint.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      Geocoding.Placemark placemark = placemarks[0];
+      String address =
+          '${placemark.street}, ${placemark.locality}, ${placemark.administrativeArea}, ${placemark.postalCode}';
+      return address;
+    }
+    return '';
   }
 }

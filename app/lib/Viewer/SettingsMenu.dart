@@ -124,12 +124,6 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       ));
                 },
               ),
-
-              /*
-              buildSwitch("Mode", valMode, changeMode),
-              buildSwitch(
-                  "Notifications", valNotifications, changeNotifications),
-              const SizedBox(height: 10),*/
               const SizedBox(height: 40),
               SizedBox(
                 height: 200,

@@ -128,20 +128,8 @@ class BarGraphState extends State<MyPieChart> {
                   shadows: const [
                     Shadow(
                         // bottomLeft
-                        offset: Offset(-1.5, -1.5),
-                        color: Colors.black),
-                    Shadow(
-                        // bottomRight
-                        offset: Offset(1.5, -1.5),
-                        color: Colors.black),
-                    Shadow(
-                        // topRight
-                        offset: Offset(1.5, 1.5),
-                        color: Colors.black),
-                    Shadow(
-                        // topLeft
-                        offset: Offset(-1.5, 1.5),
-                        color: Colors.black),
+                        offset: Offset(0, 2.7),
+                        color: Colors.black54),
                   ]));
           return MapEntry(idx, section);
         })

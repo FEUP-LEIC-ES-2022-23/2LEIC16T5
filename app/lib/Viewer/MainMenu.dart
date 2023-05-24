@@ -3,7 +3,6 @@ import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
 import 'package:es/Viewer/SettingsMenu.dart';
-import 'package:es/Viewer/StatisticsMenu.dart';
 import 'package:es/Viewer/SwipableCharts.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,9 +11,6 @@ import 'CategoriesMenu.dart';
 import 'TransactionsMenu.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/foundation.dart';
-import 'package:es/Viewer/CategoriesMenu.dart';
-import 'package:es/Viewer/ChartsMenu.dart';
-import 'package:es/Viewer/TransactionsMenu.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -98,6 +94,21 @@ class _MainMenuState extends State<MainMenu> {
                   child:
                       const Text('Categories', style: TextStyle(fontSize: 20))),
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(250, 35)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SwipableCharts(
+                            title: 'Statistics',
+                            currency: _currency,
+                          )),
+                    );
+                  },
+                  child:
+                  const Text('Statistics', style: TextStyle(fontSize: 20))),
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -124,18 +135,6 @@ class _MainMenuState extends State<MainMenu> {
                     );
                   },
                   child: const Text('Savings', style: TextStyle(fontSize: 20))),
-              /*  ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(250, 35)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ChartsMenu(title: 'Charts', currency: _currency,)),
-                    );
-                  },
-                  child: const Text('Charts', style: TextStyle(fontSize: 20))),*/
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(250, 35)),
@@ -151,21 +150,6 @@ class _MainMenuState extends State<MainMenu> {
                   },
                   child: const Text('National Comparison',
                       style: TextStyle(fontSize: 20))),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(250, 35)),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SwipableCharts(
-                                title: 'Statistics',
-                                currency: _currency,
-                              )),
-                    );
-                  },
-                  child:
-                      const Text('Statistics', style: TextStyle(fontSize: 20))),
             ],
           ),
         ));

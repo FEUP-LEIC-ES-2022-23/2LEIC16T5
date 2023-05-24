@@ -38,7 +38,7 @@ class BarGraphState extends State<MyBarGraph> {
         Expanded(
           child: Card(
             elevation: 4,
-            color: Colors.black,
+            color: Colors.black45,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
@@ -61,44 +61,41 @@ class BarGraphState extends State<MyBarGraph> {
                             }
                           },
                           touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.white,
+                            tooltipBgColor: Colors.blue,
                             direction: TooltipDirection.bottom,
                             tooltipMargin: -55,
                             getTooltipItem: (group, groupIndex, rod, rodIndex) {
                               return BarTooltipItem(
                                   'Limit: ',
                                   TextStyle(
-                                      color: Color(
-                                          widget.barsData[group.x].color!),
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                   children: [
                                     TextSpan(
                                         text: '${widget.barsData[group.x].limit} ${widget.currency}',
                                         style: TextStyle(
-                                            color: Color(widget
-                                                .barsData[group.x].color!),
+                                            color: Colors.white,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500)),
                                     TextSpan(text: '\n'),
                                     TextSpan(
                                         text: 'Value: ',
                                         style: TextStyle(
-                                            color: Color(widget
-                                                .barsData[group.x].color!),
+                                            color: Colors.white,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                        text: '${widget.barsData[group.x].value} ${widget.currency}',
+                                        text: '${rod.toY} ${widget.currency}',
                                         style: TextStyle(
-                                            color: Color(widget
-                                                .barsData[group.x].color!),
+                                            color: Colors.white,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500)),
                                   ]);
                             },
                           )),
-                      gridData: FlGridData(show: false),
+                      gridData: FlGridData(
+                        show: false,),
                       borderData: FlBorderData(show: false),
                       titlesData: FlTitlesData(
                           show: true,
@@ -134,8 +131,7 @@ class BarGraphState extends State<MyBarGraph> {
                                     backDrawRodData: BackgroundBarChartRodData(
                                         color: budgetBarData.onLimit!
                                             ? Color.fromARGB(177, 176, 12, 12)
-                                            : Color.fromARGB(
-                                                152, 224, 224, 224),
+                                            : Color(budgetBarData.color!).withOpacity(0.3),
                                         show: true,
                                         toY: budgetBarData.limit))
                               ]))

@@ -1,5 +1,3 @@
-import 'package:es/database/RemoteDBHelper.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
@@ -8,7 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class MapMenuController {
-  //RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
   late GoogleMapController mapController;
   Location location = Location();
   static final List<Marker> _markers = [];
@@ -59,7 +56,11 @@ class MapMenuController {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           HSVColor.fromColor(Color(t.categoryColor!)).hue
         ),
-        infoWindow: InfoWindow(title: t.name, snippet: '${t.total} €'));
+        infoWindow: InfoWindow(
+            title: t.name,
+            snippet: '${t.total} €'
+        )
+    );
     _markers.add(marker);
   }
 

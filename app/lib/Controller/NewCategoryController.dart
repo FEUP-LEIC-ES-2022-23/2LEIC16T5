@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:intl/intl.dart';
 
 class NewCategoryController {
   static final textcontrollerNAME = TextEditingController();
@@ -155,8 +154,4 @@ class NewCategoryController {
           );
         },
       );
-
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
-  }
 }

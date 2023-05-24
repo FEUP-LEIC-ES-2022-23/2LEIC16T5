@@ -41,30 +41,12 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
             : Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
                 Text(
                   'Swipe Right',
-                  style: TextStyle(color: Colors.white, fontSize: 40),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                 ),
                 Icon(
                   Icons.swipe_right,
                   size: 40,
                   color: Colors.white,
-                  shadows: [
-                    Shadow(
-                        // bottomLeft
-                        offset: Offset(-1.5, -1.5),
-                        color: Colors.blue),
-                    Shadow(
-                        // bottomRight
-                        offset: Offset(1.5, -1.5),
-                        color: Colors.blue),
-                    Shadow(
-                        // topRight
-                        offset: Offset(1.5, 1.5),
-                        color: Colors.blue),
-                    Shadow(
-                        // topLeft
-                        offset: Offset(-1.5, 1.5),
-                        color: Colors.blue),
-                  ],
                 )
               ]),
       ],
@@ -112,7 +94,6 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
               ],
             );
           } else {
-            //aqui para editar algumas propriedades do grafico em geral, passando os valores.
             return Stack(
               alignment: AlignmentDirectional.center,
               children: [
@@ -124,9 +105,9 @@ class StatiscticsMenuState extends State<StatiscticsMenu> {
                   barsData: snapshot.data!,
                   graphHeight: 300,
                   spaceBetweenSections: 0,
-                  strokeWidth: 35,
+                  strokeWidth: 25,
                   fontSize: 16,
-                  size: 125,
+                  size: 130,
                 ),
               ],
             );

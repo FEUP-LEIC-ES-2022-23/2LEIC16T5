@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-
 import '../Model/BudgetBarModel.dart';
 import '../Model/TransactionsModel.dart';
 import 'Elements/BarGraph.dart';
@@ -151,7 +147,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(10),
                       child: IconButton(
                         onPressed: () {
                           if (mounted) {
@@ -176,7 +172,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                   currency: widget.currency,
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 21,
                 ),
                 Stack(alignment: AlignmentDirectional.center, children: [
                   CircularPercentIndicator(
@@ -187,7 +183,7 @@ class BudgetMenuState extends State<BudgetMenu> {
                     percent: percentage,
                     progressColor: Colors.red,
                     circularStrokeCap: CircularStrokeCap.round,
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.black26,
                   ),
                   Image.asset(
                     'assets/img/Luckycat1.png',

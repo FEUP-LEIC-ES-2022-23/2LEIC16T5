@@ -424,12 +424,6 @@ class RemoteDBHelper {
     });
   }
 
-  /*Future updateTimeValue(List<BudgetBarModel> barDatas) async{
-    for(BudgetBarModel  bardata in barDatas){
-      await firebaseInstance.collection()
-    }
-  }*/
-
   Future userResetData() async {
     await firebaseInstance
         .collection('Transactions')
@@ -494,21 +488,6 @@ class RemoteDBHelper {
       }
     });
   }
-
-  /*Future<String> getCurrency() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('Settings')
-        .where('userId', isEqualTo: userInstance.currentUser!.uid)
-        .get();
-
-    if (snapshot.docs.isNotEmpty) {
-      final doc = snapshot.docs.first;
-      final settings = SettingsModel.fromMap(doc.data());
-      return settings.currency;
-    } else {
-      return '€';
-    }
-  }*/
 
   Future<void> changeCurrency(Object? newCurrency) async {
     final userId = userInstance.currentUser!.uid;

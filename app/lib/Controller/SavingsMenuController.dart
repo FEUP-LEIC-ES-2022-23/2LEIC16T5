@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'package:quickalert/quickalert.dart';
 
 class SavingsMenuController {
@@ -363,20 +360,5 @@ class SavingsMenuController {
           type: QuickAlertType.error,
           text: "Value to update leads to a negative saving!");
     }
-    /*if (ifAdd) {
-      await remoteDBHelper.addTransaction(TransactionModel(
-          userID: userInstance.currentUser!.uid,
-          expense: 1,
-          name: name_!,
-          total: valueToAdd,
-          date: DateTime.now()));
-    } else {
-      await remoteDBHelper.addTransaction(TransactionModel(
-          userID: userInstance.currentUser!.uid,
-          expense: 0,
-          name: name_!,
-          total: valueToAdd,
-          date: DateTime.now()));
-    }*/
   }
 }

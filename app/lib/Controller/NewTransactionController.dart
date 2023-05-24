@@ -22,14 +22,18 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
-  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
-      categoryID: '', userID: '', name: 'Category', color: 0);
-  c_model.CategoryModel selectedCategory = c_model.CategoryModel(
-      categoryID: '', userID: '', name: 'Category', color: 0);
 
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
       userInstance: FirebaseAuth.instance,
       firebaseInstance: FirebaseFirestore.instance);
+
+  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
+      categoryID: '', userID: '', name: 'Category', color: 0);
+  c_model.CategoryModel selectedCategory=c_model.CategoryModel(
+    categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
+
+
+
   //Transactions
   void _enterTransaction() async {
     if (textcontrollerADDRESS.text != '' && position == null) {

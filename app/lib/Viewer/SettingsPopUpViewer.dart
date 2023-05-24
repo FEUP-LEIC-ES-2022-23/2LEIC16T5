@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:es/database/LocalDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:es/Controller/LoginScreenController.dart';
 

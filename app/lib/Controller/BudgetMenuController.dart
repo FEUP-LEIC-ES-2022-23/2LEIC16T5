@@ -2,12 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:es/Model/BudgetBarModel.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:quickalert/quickalert.dart';
-
 import '../Model/TransactionsModel.dart';
 
 class BudgetMenuController {
@@ -219,16 +215,6 @@ class BudgetMenuController {
       else
         model.overLimit = false;
     } else {
-      /*if (model.y! >=
-          model.limit!.toDouble() - model.limit!.toDouble() * 1) {
-        model.onLimit = true;
-      } else {
-        model.onLimit = false;
-      }
-      if (model.y! >= model.limit!.toDouble())
-        model.overLimit = true;
-      else
-        model.overLimit = false;*/
       throw 'Threshold bigger than 1';
     }
   }

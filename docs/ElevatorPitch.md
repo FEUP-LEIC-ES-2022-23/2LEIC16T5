@@ -16,5 +16,5 @@ Para isto, o *Fortuneko* fornece uma variedade de gráficos, dividos pelos tipos
 
 Portanto, com o *Fortuneko* ***Poupar não precisa de ser aborrecido!***"
 
-![gif](https://github.com/Oao26/fortuneko/assets/95864480/c04e8b7f-174f-4abd-b7ad-b177f22b7d47)
-![elevator_pitch](https://github.com/Oao26/fortuneko/assets/95864480/79d9ae5b-5fbc-4b31-a2a0-cb37c90c9e8b)
+![ElevatorPitch](https://github.com/SofiaViP/hero/assets/92641892/67ce4ec4-017c-44c1-99bd-902953c74a1d)
+![ElevatorPitch2](https://github.com/SofiaViP/hero/assets/92641892/eb79b48d-c697-4a3d-9d2e-0a8f6b44b6d8)

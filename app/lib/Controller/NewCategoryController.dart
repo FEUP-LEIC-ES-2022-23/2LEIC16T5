@@ -1,17 +1,18 @@
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
-import 'package:intl/intl.dart';
 
 class NewCategoryController {
   static final textcontrollerNAME = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   Color color = Colors.red;
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
   Future<void> _enterCategory(int c) async {
     c_model.CategoryModel category = c_model.CategoryModel(
@@ -34,9 +35,15 @@ class NewCategoryController {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Colors.lightBlue,
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(32.0)),
+                      color: Colors.lightBlue,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -66,6 +73,7 @@ class NewCategoryController {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              key: const Key("Name"),
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.category),
                                 labelText: 'Name',
@@ -74,6 +82,8 @@ class NewCategoryController {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter category name';
+                                } else if (value == 'Default') {
+                                  return 'This name is invalid';
                                 }
                                 return null;
                               },
@@ -95,7 +105,8 @@ class NewCategoryController {
                             height: 50,
                           ),
                           ElevatedButton(
-                              child: Text(
+                              key: const Key('Pick Color'),
+                              child: const Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -109,6 +120,10 @@ class NewCategoryController {
                 ),
                 actions: <Widget>[
                   MaterialButton(
+                    key: const Key("Add"),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(20.0))),
                     color: Colors.lightBlue,
                     child: const Text('Add',
                         style: TextStyle(color: Colors.white)),
@@ -118,7 +133,7 @@ class NewCategoryController {
                         Navigator.of(context).pop();
                       }
                     },
-                  ),
+                  )
                 ],
               );
             },
@@ -127,21 +142,23 @@ class NewCategoryController {
   }
 
   Widget buildColorPicker(StateSetter setState) => ColorPicker(
-      pickerColor: this.color,
+      key: const Key("Color Picker"),
+      pickerColor: color,
       onColorChanged: (color) {
-        setState!(() => this.color = color);
+        setState(() => this.color = color);
       });
 
   void pickColor(BuildContext context, StateSetter setState) => showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Pick your color'),
+            title: const Text('Pick your color'),
             content: Column(
               children: [
                 buildColorPicker(setState),
                 TextButton(
-                  child: Text(
+                  key: const Key("Select"),
+                  child: const Text(
                     'SELECT',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -154,8 +171,4 @@ class NewCategoryController {
           );
         },
       );
-
-  void showTransaction(BuildContext context) {
-    /*TO BE DONE*/
-  }
 }

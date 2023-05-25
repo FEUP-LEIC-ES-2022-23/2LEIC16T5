@@ -1,14 +1,19 @@
 import 'dart:ui';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:quickalert/quickalert.dart';
 import '../Controller/NewTransactionController.dart';
 import 'package:es/Model/TransactionsModel.dart' as t_model;
 import 'package:es/Viewer/MapMenu.dart';
 
 class TransactionsMenu extends StatefulWidget {
-  const TransactionsMenu({Key? key, required this.title, required this.currency}) : super(key: key);
+  const TransactionsMenu(
+      {Key? key, required this.title, required this.currency})
+      : super(key: key);
   final String title;
   final String currency;
 
@@ -17,25 +22,27 @@ class TransactionsMenu extends StatefulWidget {
 }
 
 class _TransactionsMenuState extends State<TransactionsMenu> {
-  RemoteDBHelper remoteDBHelper =
-  RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
   @override
   Widget build(BuildContext context) {
-    NumberFormat coin = NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
+    NumberFormat coin =
+        NumberFormat.currency(locale: 'pt_PT', name: widget.currency);
     return Scaffold(
-      key: const Key("Transactions"),
+        key: const Key("Transactions"),
         backgroundColor: const Color.fromRGBO(20, 25, 46, 1.0),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
-          title: Text(widget.title, 
+          title: Text(widget.title,
               style: const TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
-            key: Key("Home"),
+            key: const Key("Home"),
             icon: const Icon(
               Icons.home,
               color: Colors.white,
@@ -94,7 +101,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.only(
                                         left: 0, right: 10, bottom: 0),
-                                    key: const Key("Transaction"),
+                                    key: Key(transac.name),
                                     textColor: Colors.black,
                                     tileColor: Colors.white,
                                     iconColor: Colors.white,
@@ -112,7 +119,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                         color: Color(transac.categoryColor!),
                                       ),
                                       width: 80,
-                                      child: (transac.expense == 1)
+                                      child: (transac is ExpenseModel)
                                           ? const Icon(Icons.money_off)
                                           : const Icon(Icons.wallet),
                                     ),
@@ -129,7 +136,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                       ],
                                     ),
                                     trailing: Text(
-                                      (transac.expense == 1 ? '-' : '+') +
+                                      (transac is ExpenseModel ? '-' : '+') +
                                           coin.format(transac.total),
                                       style: const TextStyle(fontSize: 20),
                                     ),
@@ -140,12 +147,32 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                       });
                                     },
                                     onLongPress: () {
-                                      setState(() {
-                                        remoteDBHelper.updateBudgetBar(
-                                            transac.transactionID!, false);
-                                        remoteDBHelper
-                                            .removeTransaction(transac);
-                                      });
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.warning,
+                                        title: 'WARNING',
+                                        text: 'Are you sure you want to permanently delete this transaction?',
+                                        confirmBtnText: 'Yes',
+                                        cancelBtnText: 'No',
+                                        showCancelBtn: true,
+                                        confirmBtnColor: Colors.lightBlue,
+                                        onConfirmBtnTap: () async {
+                                            await remoteDBHelper
+                                                .updateBudgetBarValOnChangedTransaction(
+                                                transac.transactionID!, false);
+                                            remoteDBHelper
+                                                .removeTransaction(transac);
+                                            if (Navigator.canPop(context)) {
+                                              Navigator.pop(context);
+                                            }
+                                            QuickAlert.show(
+                                                context: context,
+                                                title: 'Miau miau!',
+                                                text: "Transaction successfully deleted!",
+                                                type: QuickAlertType.success,
+                                                confirmBtnColor: Colors.lightBlue);
+                                        },
+                                      );
                                     },
                                   ),
                                 ),
@@ -154,16 +181,6 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                           }).toList(),
                         );
                 }),
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: FloatingActionButton(
-                      heroTag: "Filter",
-                      onPressed: () {},
-                      backgroundColor: Colors.lightBlue,
-                      child: const Icon(Icons.filter_alt_rounded)),
-                )),
             Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(

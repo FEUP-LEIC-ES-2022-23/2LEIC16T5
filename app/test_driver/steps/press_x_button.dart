@@ -5,7 +5,11 @@ import 'package:gherkin/gherkin.dart';
 class WhenPressXButton extends When1WithWorld<String, FlutterWorld> {
   @override
   Future<void> executeStep(String button) async {
-    final locator = find.byValueKey(button);
+    var locator = find.byValueKey(button);
+    final isPresent = await FlutterDriverUtils.isPresent(world.driver, locator);
+    if (!isPresent){
+      locator = find.text(button);
+    }
     await FlutterDriverUtils.tap(world.driver, locator);
   }
 
@@ -19,7 +23,11 @@ class AndPressXButton extends And1WithWorld<String, FlutterWorld> {
 
   @override
   Future<void> executeStep(String button) async {
-    final locator = find.byValueKey(button);
+    var locator = find.byValueKey(button);
+    final isPresent = await FlutterDriverUtils.isPresent(world.driver, locator);
+    if (!isPresent){
+      locator = find.text(button);
+    }
     await FlutterDriverUtils.tap(world.driver, locator);
   }
 }

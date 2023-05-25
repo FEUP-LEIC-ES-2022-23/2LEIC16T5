@@ -1,8 +1,11 @@
-import 'dart:convert';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/LoginScreenController.dart';
+import 'package:es/Controller/SettingsMenuController.dart';
+import 'package:es/LocalStorage/LocalStorage.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +18,18 @@ class SettingsMenu extends StatefulWidget {
   State<SettingsMenu> createState() => _SettingsMenuState();
 }
 
-
-
 class _SettingsMenuState extends State<SettingsMenu> {
-  RemoteDBHelper remoteDBHelper = RemoteDBHelper(userInstance: FirebaseAuth.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
+  LocalStorage localStorage = LocalStorage();
+  LoginScreenController loginController = LoginScreenController();
 
-  loginScreenController loginController = loginScreenController();
-
-  List listItems = ["€", "\$", "£", "₣", "¥", "₽", "₹"];
-
+  List listItems = [];
   bool valMode = true;
   bool valNotifications = true;
+  bool initialized = false;
+  String selVal = '';
 
   changeMode(bool newMode) {
     setState(() {
@@ -39,11 +43,33 @@ class _SettingsMenuState extends State<SettingsMenu> {
     });
   }
 
+  addCurrency(List items) {
+    setState(() {
+      listItems = items;
+    });
+  }
+
+  initialize() async {
+    localStorage.setDefaultCurrencyValues();
+    setState(() {
+      listItems = localStorage.getCurrencies();
+      selVal = listItems.first;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    if (!initialized) {
+      initialize();
+      setState(() {
+        initialized = true;
+      });
+    }
+    setState(() {
+      listItems = localStorage.getCurrencies();
+    });
     return Scaffold(
-      key: const Key("Settings"),
+        key: const Key("Settings"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
         appBar: AppBar(
           backgroundColor: Colors.lightBlue,
@@ -54,10 +80,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
                   fontStyle: FontStyle.italic)),
           centerTitle: true,
           leading: IconButton(
-            key: Key("Home"),
+            key: const Key("Home"),
             onPressed: () {
               if (Navigator.canPop(context)) {
-                Navigator.pop(context);}
+                Navigator.pop(context);
+              }
             },
             icon: const Icon(
               Icons.home,
@@ -66,7 +93,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           ),
           actions: [
             IconButton(
-              key: const Key("Logout"),
+                key: const Key("Logout"),
                 onPressed: () {
                   SettingsPopUpViewer().sureLogout(context, loginController);
                 },
@@ -81,54 +108,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
           child: ListView(
             children: [
               const SizedBox(height: 40),
-
-              StreamBuilder(
-                stream: remoteDBHelper.getCurrency(),
-                builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const LinearProgressIndicator();
-                  }
-                  return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Currency",
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
-                          Transform.scale(
-                            scale: 1.3,
-                            child: DropdownButton(
-                              key: Key('DropDown'),
-                              underline: const SizedBox(),
-                              borderRadius: BorderRadius.circular(12),
-                              value: snapshot.data,
-                              dropdownColor: Colors.lightBlue,
-                              iconEnabledColor: Colors.white,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  remoteDBHelper.changeCurrency(newValue);
-                                });
-                              },
-                              items: listItems.map((dynamic valueItem) {
-                                return DropdownMenuItem(
-                                  key: Key(valueItem),
-                                  value: valueItem,
-                                  child: valueItem == snapshot.data? Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.white),) : Text(valueItem, style: const TextStyle(fontSize: 20, color: Colors.black),),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                        ],
-                      ));
-                },
-              ),
-
-              /*
-              buildSwitch("Mode", valMode, changeMode),
-              buildSwitch(
-                  "Notifications", valNotifications, changeNotifications),
-              const SizedBox(height: 10),*/
+              buildCurrencyOption(context),
               const SizedBox(height: 40),
               SizedBox(
                 height: 200,
@@ -144,7 +124,9 @@ class _SettingsMenuState extends State<SettingsMenu> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       )),
-                  onPressed: () {SettingsPopUpViewer().resetData(context);},
+                  onPressed: () {
+                    SettingsPopUpViewer().resetData(context);
+                  },
                   child: const Text(
                     "Reset Data",
                     style: TextStyle(fontSize: 40, color: Colors.white),
@@ -163,9 +145,10 @@ class _SettingsMenuState extends State<SettingsMenu> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title,
-
-                style:
-                const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold)),
             Transform.scale(
               scale: 1,
               child: CupertinoSwitch(
@@ -177,6 +160,63 @@ class _SettingsMenuState extends State<SettingsMenu> {
                 },
               ),
             )
+          ],
+        ));
+  }
+
+  Widget buildCurrencyOption(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("Currency",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold)),
+            Transform.scale(
+              scale: 1.3,
+              child: DropdownButton(
+                key: const Key('DropDown'),
+                underline: const SizedBox(),
+                borderRadius: BorderRadius.circular(12),
+                value: selVal,
+                dropdownColor: Colors.lightBlue,
+                iconEnabledColor: Colors.white,
+                onChanged: (newValue) {
+                  setState(() {
+                    selVal = newValue as String;
+                  });
+                },
+                items: listItems.map((dynamic valueItem) {
+                  return DropdownMenuItem(
+                    key: Key(valueItem),
+                    value: valueItem,
+                    child: valueItem == selVal
+                        ? Text(
+                            valueItem,
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.white),
+                          )
+                        : Text(
+                            valueItem,
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black),
+                          ),
+                  );
+                }).toList(),
+              ),
+            ),
+            IconButton(
+                onPressed: () {
+                  SettingsMenuController(
+                          addCurrency: addCurrency, localStorage: localStorage)
+                      .newCurrency(context);
+                },
+                icon: const Icon(Icons.add_circle_outline)),
+            IconButton(
+                onPressed: () {}, icon: Icon(Icons.delete_outline_rounded)),
           ],
         ));
   }

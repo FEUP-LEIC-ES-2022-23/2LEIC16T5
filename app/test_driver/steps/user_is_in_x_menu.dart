@@ -22,7 +22,7 @@ class GivenUserIsInXmenu extends Given1WithWorld<String, FlutterWorld> {
       final isLogInMenu = await FlutterDriverUtils.isPresent(world.driver, loginMenu);
       if (isLogInMenu) {
         final email = find.byValueKey("Email");
-        await FlutterDriverUtils.enterText(world.driver, email, "fortuneko.esof@gmail.com");
+        await FlutterDriverUtils.enterText(world.driver, email, "fortuneko@gmail.com");
         final password = find.byValueKey("Password");
         await FlutterDriverUtils.enterText(world.driver, password, "Fortuneko2023");
         final signIn = find.byValueKey("Sign in");

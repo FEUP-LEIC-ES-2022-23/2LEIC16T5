@@ -1,70 +1,49 @@
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:es/database/LocalDBHelper.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:es/Controller/LoginScreenController.dart';
 
 class SettingsPopUpViewer {
   void resetData(BuildContext context) {
-    showDialog(
+    QuickAlert.show(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("WARNING"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text("All your data will be deleted"),
-                SizedBox(height: 5),
-                Text("This action is irreversible"),
-                SizedBox(height: 5),
-                Text("Do you wish to continue?")
-              ],
-            ),
-            actions: [
-              TextButton(
-                key: Key("No"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("NO",
-                      style: TextStyle(color: Colors.lightBlue))),
-              TextButton(
-                  key: const Key("Yes"),
-                  onPressed: () async {
-                    if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasTransactions())
-                    && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance).hasCategories())){
-                      Navigator.of(context).pop();
-                      errorDeleteData(context, 'No data has been inserted into the app');
-                    }
-                    else{
-                      try {
-                        RemoteDBHelper(userInstance: FirebaseAuth.instance)
-                            .userResetData();
-                        Navigator.of(context).pop();
-                        deletdData(context);
-                      } catch (e) {
-                        Navigator.of(context).pop();
-                        errorDeleteData(context, 'Error deleting data');
-                      }
-                    }
-                  },
-                  child: const Text(
-                    "YES",
-                    style: TextStyle(color: Colors.lightBlue),
-                  ))
-            ],
-          );
-        });
-  }
+        type: QuickAlertType.warning,
+        title: 'WARNING',
+        text: 'All your data will be deleted.\nThis action is irreversible.\nDo you wish to continue?',
+        confirmBtnText: 'Yes',
+        cancelBtnText: 'No',
+        showCancelBtn: true,
+        confirmBtnColor: Colors.lightBlue,
+        onConfirmBtnTap: () async{
+          if (!(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasTransactions())
+          && !(await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance).hasCategories())){
+          Navigator.of(context).pop();
+          errorDeleteData(context, 'No data has been inserted into the app');
+          }
+          else{
+          try {
+    await RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance)
+              .userResetData();
+          Navigator.of(context).pop();
+          deletedData(context);
+          } catch (e) {
+          Navigator.of(context).pop();
+          errorDeleteData(context, 'Error deleting data');
+          }
+          }
+        }
+        );
+    }
 
-  void deletdData(BuildContext context) {
+  void deletedData(BuildContext context) {
     QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
         title: 'Miau miau!',
-        text: 'Your data has been successfully deleted');
+        text: 'Your data has been successfully deleted',
+        confirmBtnColor: Colors.lightBlue,);
   }
 
   void errorDeleteData(BuildContext context, String text) {
@@ -72,10 +51,11 @@ class SettingsPopUpViewer {
         context: context,
         type: QuickAlertType.error,
         title: 'Miau...',
-        text: text);
+        text: text,
+        confirmBtnColor: Colors.lightBlue,);
   }
 
-  void sureLogout(BuildContext context, loginScreenController loginController) {
+  void sureLogout(BuildContext context, LoginScreenController loginController) {
     QuickAlert.show(
       context: context,
       type: QuickAlertType.warning,
@@ -87,8 +67,10 @@ class SettingsPopUpViewer {
         loginController.toLogInScreen(context);
         QuickAlert.show(
             context: context,
-            text: "Sucessfully logged out!",
-            type: QuickAlertType.success);
+            title: 'Miau miau!',
+            text: "Successfully logged out!",
+            type: QuickAlertType.success,
+            confirmBtnColor: Colors.lightBlue,);
       },
     );
   }

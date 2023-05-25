@@ -21,6 +21,7 @@ class NewTransactionController {
   GeoPoint? position = null;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
+  bool _initState = true;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
@@ -88,7 +89,6 @@ class NewTransactionController {
 
 
   void newTransaction(BuildContext context) {
-    setSelectedCategory();
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -365,6 +365,7 @@ class NewTransactionController {
   }
 
   Widget buildDropdownList(RemoteDBHelper db) {
+    if (_initState) setSelectedCategory();
     return StreamBuilder<List<c_model.CategoryModel>>(
         stream: db.readCategories(),
         builder: (BuildContext context,
@@ -699,5 +700,6 @@ class NewTransactionController {
 
   void setSelectedCategory() async {
     selectedCategory = await remoteDBHelper.getCategoryByName('Default');
+    _initState = false;
   }
 }

@@ -57,24 +57,36 @@ class RemoteDBHelper {
   Future removeCategory(CategoryModel category) async {
     UserModel user = UserModel(uid: userInstance.currentUser!.uid);
 
+    var defaultCategory = await getCategoryByName("Default");
+
     await FirebaseFirestore.instance
         .collection('Transactions')
         .where('userID', isEqualTo: user.uid)
         .where('categoryID', isEqualTo: category.categoryID)
         .get()
-        .then((value) {
-      value.docs.forEach((doc) {
-        doc.reference.update({
-          'categoryID': "default",
-          'categoryColor': 0xFF808080,
-        });
-      });
-    });
+        .then((value) async {
+      List<Future<void>> updateTasks = [];
 
-    await FirebaseFirestore.instance
-        .collection('Categories')
-        .doc(category.categoryID)
-        .delete();
+      value.docs.forEach((doc) {
+
+        var transactionRef =
+        FirebaseFirestore.instance.collection('Transactions').doc(doc.id);
+
+        updateTasks.add(transactionRef.update({
+          'categoryID': defaultCategory.categoryID,
+          'categoryName': defaultCategory.name,
+          'color': defaultCategory.color,
+          'categoryColor': defaultCategory.color,
+        }));
+      });
+
+      await Future.wait(updateTasks);
+
+      await FirebaseFirestore.instance
+          .collection('Categories')
+          .doc(category.categoryID)
+          .delete();
+    });
   }
 
 
@@ -177,14 +189,15 @@ class RemoteDBHelper {
     var categories = firebaseInstance
         .collection('Categories')
         .where('userID', isEqualTo: usr!.uid)
+        .where('name', isNotEqualTo: "Default")
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => CategoryModel.fromMap(doc.data()))
             .toList());
 
     try {
-      var firstCategory = await categories.first;
-      return firstCategory.isNotEmpty;
+      var empty = await categories.isEmpty;
+      return !empty;
     } catch (e) {
       return false;
     }
@@ -440,7 +453,7 @@ class RemoteDBHelper {
   Future userResetData() async {
     await firebaseInstance
         .collection('Transactions')
-        .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .get()
         .then((doc) {
       for (DocumentSnapshot ds in doc.docs) {
@@ -449,16 +462,18 @@ class RemoteDBHelper {
     });
     firebaseInstance
         .collection('Categories')
-        .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .get()
         .then((doc) {
       for (DocumentSnapshot ds in doc.docs) {
-        ds.reference.delete();
+        if (ds.get('name') != "Default") {
+          ds.reference.delete();
+        }
       }
     });
     firebaseInstance
         .collection('Settings')
-        .where('userID', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('userID', isEqualTo: userInstance.currentUser!.uid)
         .get()
         .then((doc) {
       for (DocumentSnapshot ds in doc.docs) {

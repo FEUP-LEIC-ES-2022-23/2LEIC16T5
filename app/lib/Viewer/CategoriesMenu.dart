@@ -69,7 +69,7 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
-                                key: const Key("Category"),
+                                key: Key(categor.name),
                                 contentPadding: const EdgeInsets.only(left: 0),
                                 tileColor: Colors.white,
                                 shape: const RoundedRectangleBorder(

@@ -101,7 +101,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                   child: ListTile(
                                     contentPadding: const EdgeInsets.only(
                                         left: 0, right: 10, bottom: 0),
-                                    key: const Key("Transaction"),
+                                    key: Key(transac.name),
                                     textColor: Colors.black,
                                     tileColor: Colors.white,
                                     iconColor: Colors.white,

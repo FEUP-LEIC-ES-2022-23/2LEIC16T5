@@ -114,7 +114,6 @@ class BudgetMenuState extends State<BudgetMenu> {
 
             for (var budgetBar in snapshot.data!) {
               double categoryValSum = 0;
-              debugPrint(budgetBar.categoryID);
 
               for (TransactionModel transac in transactions) {
                 if (transac.categoryID == budgetBar.categoryID &&

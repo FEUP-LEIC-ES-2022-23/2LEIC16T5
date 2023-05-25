@@ -35,9 +35,15 @@ class NewCategoryController {
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 titlePadding: const EdgeInsets.all(0),
                 title: Container(
-                    color: Colors.lightBlue,
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(32.0)),
+                      color: Colors.lightBlue,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -114,16 +120,20 @@ class NewCategoryController {
                 ),
                 actions: <Widget>[
                   MaterialButton(
+                    key: const Key("Add"),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(20.0))),
                     color: Colors.lightBlue,
                     child: const Text('Add',
-                        key: Key("Add"), style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _enterCategory(color.value);
                         Navigator.of(context).pop();
                       }
                     },
-                  ),
+                  )
                 ],
               );
             },

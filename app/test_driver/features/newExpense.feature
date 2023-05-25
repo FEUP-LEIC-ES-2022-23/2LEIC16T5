@@ -10,7 +10,7 @@ Feature: Manually register new expense
       And the user "correctly fills" in "Total" field - ex: "2304"
       When the user presses the "Add" button
       Then the user is in the "Transactions" menu
-      And the user sees the "Transaction"
+      And the user sees the "Expense"
 
     Scenario: Invalid registration of expense - "Total" field is not filled in
       Given the user selects "Expense" option

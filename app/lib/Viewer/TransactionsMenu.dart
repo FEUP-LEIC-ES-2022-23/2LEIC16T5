@@ -1,6 +1,7 @@
 import 'dart:ui';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +119,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                         color: Color(transac.categoryColor!),
                                       ),
                                       width: 80,
-                                      child: (transac.expense == 1)
+                                      child: (transac is ExpenseModel)
                                           ? const Icon(Icons.money_off)
                                           : const Icon(Icons.wallet),
                                     ),
@@ -135,7 +136,7 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                                       ],
                                     ),
                                     trailing: Text(
-                                      (transac.expense == 1 ? '-' : '+') +
+                                      (transac is ExpenseModel ? '-' : '+') +
                                           coin.format(transac.total),
                                       style: const TextStyle(fontSize: 20),
                                     ),
@@ -180,16 +181,6 @@ class _TransactionsMenuState extends State<TransactionsMenu> {
                           }).toList(),
                         );
                 }),
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: FloatingActionButton(
-                      heroTag: "Filter",
-                      onPressed: () {},
-                      backgroundColor: Colors.lightBlue,
-                      child: const Icon(Icons.filter_alt_rounded)),
-                )),
             Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(

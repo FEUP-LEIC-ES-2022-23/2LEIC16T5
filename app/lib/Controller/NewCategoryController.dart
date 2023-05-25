@@ -1,5 +1,5 @@
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -10,8 +10,9 @@ class NewCategoryController {
   final _formKey = GlobalKey<FormState>();
   Color color = Colors.red;
 
-  RemoteDBHelper remoteDBHelper =
-      RemoteDBHelper(userInstance: FirebaseAuth.instance,firebaseInstance: FirebaseFirestore.instance);
+  RemoteDBHelper remoteDBHelper = RemoteDBHelper(
+      userInstance: FirebaseAuth.instance,
+      firebaseInstance: FirebaseFirestore.instance);
 
   Future<void> _enterCategory(int c) async {
     c_model.CategoryModel category = c_model.CategoryModel(
@@ -75,6 +76,8 @@ class NewCategoryController {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter category name';
+                                } else if (value == 'Default') {
+                                  return 'This name is invalid';
                                 }
                                 return null;
                               },
@@ -96,7 +99,7 @@ class NewCategoryController {
                             height: 50,
                           ),
                           ElevatedButton(
-                            key: const Key('Pick Color'),
+                              key: const Key('Pick Color'),
                               child: const Text(
                                 'Pick Color',
                                 style: TextStyle(fontSize: 20),
@@ -113,8 +116,7 @@ class NewCategoryController {
                   MaterialButton(
                     color: Colors.lightBlue,
                     child: const Text('Add',
-                        key: Key("Add"),
-                        style: TextStyle(color: Colors.white)),
+                        key: Key("Add"), style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _enterCategory(color.value);
@@ -130,7 +132,7 @@ class NewCategoryController {
   }
 
   Widget buildColorPicker(StateSetter setState) => ColorPicker(
-    key: const Key("Color Picker"),
+      key: const Key("Color Picker"),
       pickerColor: color,
       onColorChanged: (color) {
         setState(() => this.color = color);

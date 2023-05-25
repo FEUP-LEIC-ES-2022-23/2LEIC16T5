@@ -7,7 +7,7 @@ import 'dart:async' as _i5;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i6;
 import 'package:es/Controller/BudgetMenuController.dart' as _i10;
-import 'package:es/database/RemoteDBHelper.dart' as _i2;
+import 'package:es/Database/RemoteDBHelper.dart' as _i2;
 import 'package:es/Model/BudgetBarModel.dart' as _i11;
 import 'package:es/Model/CategoryModel.dart' as _i8;
 import 'package:es/Model/SavingsModel.dart' as _i12;

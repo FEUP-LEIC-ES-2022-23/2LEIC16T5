@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/BudgetMenuController.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -113,9 +114,11 @@ class BudgetMenuState extends State<BudgetMenu> {
 
             for (var budgetBar in snapshot.data!) {
               double categoryValSum = 0;
+              debugPrint(budgetBar.categoryID);
 
               for (TransactionModel transac in transactions) {
-                if (transac.categoryID == budgetBar.categoryID) {
+                if (transac.categoryID == budgetBar.categoryID &&
+                    transac is ExpenseModel) {
                   categoryValSum += transac.total;
                 }
               }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -50,8 +51,8 @@ class _ChartsMenuState extends State<ChartsMenu> {
                 double totalExpensesForMonth = 0;
                 for (TransactionModel transaction in entry.value) {
                   if (transaction.date.month == month &&
-                      transaction.expense == 1 &&
-                      transaction.date.year == 2023) {
+                      transaction is ExpenseModel &&
+                      transaction.date.year == DateTime.now().year) {
                     totalExpensesForMonth += transaction.total;
                   }
                 }
@@ -77,7 +78,7 @@ class _ChartsMenuState extends State<ChartsMenu> {
               i++;
             }
             return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 60),
                     child: LineChart(
                       LineChartData(
                         lineBarsData: chartDataList,

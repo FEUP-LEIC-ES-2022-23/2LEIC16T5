@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:es/Model/CategoryModel.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:es/Model/TransactionsModel.dart';
 
 class NationalMenu extends StatefulWidget {
@@ -48,7 +49,7 @@ class _NationalMenuState extends State<NationalMenu> {
     if (category == 'My Data') return '';
     double result = 0;
     for (final transaction in _userList){
-      if (transaction.expense == 1 && (transaction.date.year.toString() == year)){
+      if (transaction is ExpenseModel && (transaction.date.year.toString() == year)){
         result += transaction.total;
       }
     }

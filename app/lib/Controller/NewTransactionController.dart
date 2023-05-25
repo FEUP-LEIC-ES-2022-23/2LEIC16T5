@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/MapMenuController.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:es/Model/TransactionsModel.dart' as t_model;
+import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Model/IncomeModel.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
 import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
@@ -17,8 +18,7 @@ class NewTransactionController {
   static final textcontrollerDATE = TextEditingController();
   static final textcontrollerNOTES = TextEditingController();
   static final textcontrollerADDRESS = TextEditingController();
-
-  GeoPoint? position;
+  GeoPoint? position = null;
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
@@ -27,37 +27,33 @@ class NewTransactionController {
       userInstance: FirebaseAuth.instance,
       firebaseInstance: FirebaseFirestore.instance);
 
-  c_model.CategoryModel emptyCategory = c_model.CategoryModel(
+  c_model.CategoryModel selectedCategory = c_model.CategoryModel(
       categoryID: '', userID: '', name: 'Category', color: 0);
-  c_model.CategoryModel selectedCategory=c_model.CategoryModel(
-    categoryID: 'default',userID: FirebaseAuth.instance.currentUser?.uid,name: 'Category',color: 0xFF808080);
-
-  void _enterTransaction() async {
+    
+  //Transactions
+  void _enterExpense() async {
     if (textcontrollerADDRESS.text != '' && position == null) {
       await getGeoPointFromAddress(textcontrollerADDRESS.text);
     }
 
-    t_model.TransactionModel transaction = t_model.TransactionModel(
+    ExpenseModel expense = ExpenseModel(
         userID: FirebaseAuth.instance.currentUser!.uid,
         categoryID: selectedCategory.categoryID,
         name: textcontrollerNAME.text.isEmpty
-            ? "Transaction"
+            ? "Expense"
             : textcontrollerNAME.text,
-        expense: _isIncome ? 0 : 1,
         total: num.parse(textcontrollerTOTAL.text),
         date: textcontrollerDATE.text.isEmpty
             ? DateTime.now()
             : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
-        location: _isIncome ? null : position,
+        location: position,
         categoryColor: selectedCategory.color,
         notes: textcontrollerNOTES.text);
 
-    remoteDBHelper.addTransaction(transaction).then((transac) {
-      if (!_isIncome) {
-        remoteDBHelper.updateBudgetBarValOnChangedTransaction(
-            transac.transactionID!, true);
-      }
-    });
+        remoteDBHelper.addTransaction(expense).then((transac) {
+            remoteDBHelper.updateBudgetBarValOnChangedTransaction(
+                transac.transactionID!, true);
+        });
 
     textcontrollerNAME.clear();
     textcontrollerTOTAL.clear();
@@ -67,7 +63,32 @@ class NewTransactionController {
     position = null;
   }
 
+  void _enterIncome() {
+    IncomeModel income = IncomeModel(
+        userID: FirebaseAuth.instance.currentUser!.uid,
+        categoryID: selectedCategory.categoryID,
+        name: textcontrollerNAME.text.isEmpty
+            ? "Income"
+            : textcontrollerNAME.text,
+        total: num.parse(textcontrollerTOTAL.text),
+        date: textcontrollerDATE.text.isEmpty
+            ? DateTime.now()
+            : DateFormat('dd-MM-yyyy').parse(textcontrollerDATE.text),
+        categoryColor: selectedCategory.color,
+        notes: textcontrollerNOTES.text);
+
+     remoteDBHelper.addTransaction(income);
+
+    textcontrollerNAME.clear();
+    textcontrollerTOTAL.clear();
+    textcontrollerDATE.clear();
+    textcontrollerNOTES.clear();
+    position = null;
+  }
+
+
   void newTransaction(BuildContext context) {
+    setSelectedCategory();
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -299,7 +320,7 @@ class NewTransactionController {
                                   child: TextField(
                                     decoration: const InputDecoration(
                                       labelText:
-                                          'Address (Street, Number, City, State, Country)',
+                                          'Address',
                                     ),
                                     controller: textcontrollerADDRESS,
                                   ),
@@ -329,7 +350,7 @@ class NewTransactionController {
                             style: TextStyle(color: Colors.white)),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _enterTransaction();
+                            _isIncome ? _enterIncome() : _enterExpense();
                             Navigator.of(context).pop();
                           }
                         },
@@ -368,9 +389,6 @@ class NewTransactionController {
               ],
             );
           } else {
-            if (selectedCategory.name != emptyCategory.name) {
-              categories.add(emptyCategory);
-            }
             for (var element in snapshot.data!) {
               if (element.name != selectedCategory.name) {
                 categories.add(element);
@@ -442,9 +460,9 @@ class NewTransactionController {
   }
 
   void showTransaction(
-      BuildContext context, t_model.TransactionModel transac) async {
+      BuildContext context, TransactionModel transac) async {
     c_model.CategoryModel category =
-        await remoteDBHelper.getCategory(transac.categoryID!);
+        await remoteDBHelper.getCategoryById(transac.categoryID!);
 
     showDialog(
         barrierDismissible: true,
@@ -521,7 +539,7 @@ class NewTransactionController {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                (transac.expense == 1)
+                                (transac is ExpenseModel)
                                     ? const Text('Expense:',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -597,7 +615,7 @@ class NewTransactionController {
                                     ],
                                   ),
                                 ),
-                          (transac.location != null)
+                          (transac is ExpenseModel && transac.location != null)
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -677,5 +695,9 @@ class NewTransactionController {
       return address;
     }
     return '';
+  }
+
+  void setSelectedCategory() async {
+    selectedCategory = await remoteDBHelper.getCategoryByName('Default');
   }
 }

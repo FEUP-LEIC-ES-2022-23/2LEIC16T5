@@ -1,42 +1,51 @@
-import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/IncomeModel.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-    TransactionModel object = TransactionModel(
+    IncomeModel object = IncomeModel(
+      transactionID: '0',
       userID: '1',
       categoryID: '2',
-      expense: 1,
-      name: 'Joe',
+      name: 'Expense',
       total: 200,
-      date: DateTime(2020, 10, 1));
+      date: DateTime(2020, 10, 1),
+      notes: 'some notes',
+      categoryColor: 111111,
+      );
   Map<String, dynamic> json = {
+    'transactionID' : '0',
     'userID': '1',
     'categoryID': '2',
-    'expense': 1,
-    'name': 'Joe',
+    'name': 'Expense',
     'total': 200,
-    'date': DateTime(2020, 10, 1).millisecondsSinceEpoch
+    'date': DateTime(2020, 10, 1).millisecondsSinceEpoch,
+    'notes': 'some notes',
+    'categoryColor': 111111,
   };
 
-  group('Transaction model tests', () {
+  group('Income model tests', () {
     test('Deserialize from JSON', () {
-      TransactionModel temp = TransactionModel.fromMap(json);
+      IncomeModel temp = IncomeModel.fromMap(json);
+      expect(temp.transactionID, json['transactionID']);
       expect(temp.userID, json['userID']);
       expect(temp.categoryID, json['categoryID']);
-      expect(temp.expense, json['expense']);
       expect(temp.name, json['name']);
       expect(temp.total, json['total']);
       expect(temp.date.millisecondsSinceEpoch, json['date']);
+      expect(temp.notes, json['notes']);
+      expect(temp.categoryColor, json['categoryColor']);
     });
 
     test('Serialize to JSON', () {
       Map<String, dynamic> serializedMap = object.toMap();
+      expect(serializedMap['transactionID'], json['transactionID']);
       expect(serializedMap['userID'], json['userID']);
       expect(serializedMap['categoryID'], json['categoryID']);
-      expect(serializedMap['expense'], json['expense']);
       expect(serializedMap['name'], json['name']);
       expect(serializedMap['total'], json['total']);
       expect(serializedMap['date'], json['date']);
+      expect(serializedMap['notes'], json['notes']);
+      expect(serializedMap['categoryColor'], json['categoryColor']);
     });
   });
 }

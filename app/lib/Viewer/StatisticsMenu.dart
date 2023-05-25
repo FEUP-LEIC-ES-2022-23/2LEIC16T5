@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../Model/BudgetBarModel.dart';
-import '../database/RemoteDBHelper.dart';
+import '../Database/RemoteDBHelper.dart';
 import 'Elements/PieChart.dart';
 
 class StatiscticsMenu extends StatefulWidget {

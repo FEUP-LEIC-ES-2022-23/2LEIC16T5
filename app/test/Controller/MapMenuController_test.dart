@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Controller/MapMenuController.dart';
 
@@ -17,12 +17,11 @@ void main() {
   test('addMarker should add a marker to the markers list', () {
     MapMenuController mapUtils = MapMenuController();
     // Arrange
-    final transaction = TransactionModel(
+    final transaction = ExpenseModel(
         userID: '1',
         categoryID: null,
         transactionID: '1',
         name: 'Test Transaction',
-        expense: 0,
         date: DateTime(0),
         location: GeoPoint(37.4220, -122.0841),
         total: 100,

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Model/SettingModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
+import 'package:es/Model/ExpenseModel.dart';
+import 'package:es/Model/IncomeModel.dart';
 import 'package:es/Model/SavingsModel.dart';
 import 'package:es/Model/UserModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,59 +21,88 @@ class RemoteDBHelper {
         .collection('Users')
         .doc(userModel.uid)
         .set(userModel.toMap());
+    CategoryModel defaultCategory = CategoryModel(
+      userID: userModel.uid,
+      name: 'Default',
+      color: 0xFF808080,
+    );
+    await addCategory(defaultCategory);
+    await addEmptyBudgetBar(defaultCategory);
   }
 
   //Section for Transactions
   Future<TransactionModel> addTransaction(TransactionModel transaction) async {
-    await firebaseInstance
+    UserModel user = UserModel(uid: userInstance!.currentUser!.uid);
+    DocumentReference transactionRef = await firebaseInstance
         .collection('Transactions')
-        .add(transaction.toMap())
-        .then((value) {
-      transaction.transactionID = value.id;
-    });
+        .add(transaction.toMap());
+
+    transaction.transactionID = transactionRef.id;
 
     await firebaseInstance
         .collection('Transactions')
         .doc(transaction.transactionID)
-        .update({
-      'transactionID': transaction.transactionID,
-      'userID': userInstance.currentUser!.uid,
-      'categoryID': transaction.categoryID,
-      'expense': transaction.expense,
-      'name': transaction.name,
-      'total': transaction.total,
-      'date': transaction.date.millisecondsSinceEpoch,
-      'notes': transaction.notes,
-      'location': transaction.location,
-      'categoryColor': transaction.categoryColor,
-    });
+        .update(transaction.toMap());
+
     return transaction;
   }
 
-  Future removeTransaction(TransactionModel transaction) async {
+  Future<void> removeTransaction(TransactionModel transaction) async {
     await firebaseInstance
         .collection('Transactions')
         .doc(transaction.transactionID)
         .delete();
   }
 
+  Future removeCategory(CategoryModel category) async {
+    UserModel user = UserModel(uid: userInstance.currentUser!.uid);
+
+    await FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('userID', isEqualTo: user.uid)
+        .where('categoryID', isEqualTo: category.categoryID)
+        .get()
+        .then((value) {
+      value.docs.forEach((doc) {
+        doc.reference.update({
+          'categoryID': "default",
+          'categoryColor': 0xFF808080,
+        });
+      });
+    });
+
+    await FirebaseFirestore.instance
+        .collection('Categories')
+        .doc(category.categoryID)
+        .delete();
+  }
+
+
   Stream<List<TransactionModel>> readTransactions() {
-    User? usr = userInstance.currentUser;
+    User? usr = FirebaseAuth.instance.currentUser;
     var transactions = firebaseInstance
         .collection('Transactions')
         .where('userID', isEqualTo: usr!.uid)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => TransactionModel.fromMap(doc.data()))
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) {
+              final data = doc.data();
+              if (data.containsKey('location')) {
+                return ExpenseModel.fromMap(data);
+              } else {
+                return IncomeModel.fromMap(data);
+              }
+            }).toList()..sort((a, b) => b.date!.compareTo(a.date!)));
 
     transactions.listen((list) {
       list.forEach((transaction) {
-        if (transaction.transactionID != null && transaction.location != null) {
+        if (transaction.transactionID != null &&
+            transaction is ExpenseModel &&
+            transaction.location != null) {
           MapMenuController().addMarker(transaction);
         }
       });
     });
+
     return transactions;
   }
 
@@ -141,38 +172,6 @@ class RemoteDBHelper {
     });
   }
 
-  Future removeCategory(CategoryModel category) async {
-    UserModel user = UserModel(uid: userInstance.currentUser!.uid);
-
-    await FirebaseFirestore.instance
-        .collection('Transactions')
-        .where('userID', isEqualTo: user.uid)
-        .where('categoryID', isEqualTo: category.categoryID)
-        .get()
-        .then((value) {
-      for (var doc in value.docs) {
-        doc.reference.update({
-          'categoryID': null,
-          'categoryColor': 0xFF808080,
-        });
-      }
-    });
-    await firebaseInstance
-        .collection('BudgetBars')
-        .where('userID', isEqualTo: user.uid)
-        .where('categoryID', isEqualTo: category.categoryID)
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        element.reference.delete();
-      });
-    });
-    await FirebaseFirestore.instance
-        .collection('Categories')
-        .doc(category.categoryID)
-        .delete();
-  }
-
   Future<bool> hasCategories() async {
     User? usr = FirebaseAuth.instance.currentUser;
     var categories = firebaseInstance
@@ -202,7 +201,7 @@ class RemoteDBHelper {
             .toList());
   }
 
-  Future<CategoryModel> getCategory(String catID) async {
+  Future<CategoryModel> getCategoryById(String catID) async {
     User? usr = FirebaseAuth.instance.currentUser;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('Categories')
@@ -215,7 +214,24 @@ class RemoteDBHelper {
       final categoryMap = docSnapshot.data();
       return CategoryModel.fromMap(categoryMap);
     } else {
-      return CategoryModel(userID: usr.uid, name: "Default", color: 0xFF808080);
+      throw Exception('Category not found');
+    }
+  }
+
+  Future<CategoryModel> getCategoryByName(String name) async {
+    User? usr = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Categories')
+        .where('userID', isEqualTo: usr!.uid)
+        .where('name', isEqualTo: name)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = querySnapshot.docs.first;
+      final categoryMap = docSnapshot.data();
+      return CategoryModel.fromMap(categoryMap);
+    } else {
+      throw Exception('Category not found');
     }
   }
 

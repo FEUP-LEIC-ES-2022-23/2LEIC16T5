@@ -1,3 +1,4 @@
+import 'package:es/Model/ExpenseModel.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
@@ -50,7 +51,8 @@ class MapMenuController {
   }
 
   void addMarker(TransactionModel t) {
-    Marker marker = Marker(
+    if(t is ExpenseModel){
+      Marker marker = Marker(
         markerId: MarkerId(t.transactionID!),
         position: LatLng(t.location!.latitude, t.location!.longitude),
         icon: BitmapDescriptor.defaultMarkerWithHue(
@@ -62,6 +64,7 @@ class MapMenuController {
         )
     );
     _markers.add(marker);
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/NewCategoryController.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:es/Model/CategoryModel.dart' as c_model;
@@ -94,6 +94,14 @@ class _CategoriesMenuState extends State<CategoriesMenu> {
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                   onLongPress: () {
+                                    (categor.name == 'Default')?
+                                    QuickAlert.show(
+                                      context: context,
+                                      type: QuickAlertType.error,
+                                      title: 'Miau...',
+                                      text: 'The Default category can\'t be deleted',
+                                      confirmBtnColor: Colors.lightBlue
+                                    ) :
                                     QuickAlert.show(
                                       context: context,
                                       type: QuickAlertType.warning,

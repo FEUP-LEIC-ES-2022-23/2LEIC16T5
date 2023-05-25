@@ -4,7 +4,7 @@ import 'package:es/Controller/BudgetMenuController.dart';
 import 'package:es/Controller/SavingsMenuController.dart';
 import 'package:es/Model/BudgetBarModel.dart';
 import 'package:es/Model/TransactionsModel.dart';
-import 'package:es/database/RemoteDBHelper.dart';
+import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';

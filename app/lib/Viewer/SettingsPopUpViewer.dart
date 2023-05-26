@@ -5,8 +5,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:es/Controller/LoginScreenController.dart';
+import 'package:collection/collection.dart';
 
 class SettingsPopUpViewer {
+  SettingsPopUpViewer(
+      {this.refreshState});
+
+  final Function? refreshState;
+  LocalDBHelper localDBHelper = LocalDBHelper();
   void resetData(BuildContext context) {
     QuickAlert.show(
         context: context,
@@ -26,7 +32,8 @@ class SettingsPopUpViewer {
               !(await RemoteDBHelper(
                       userInstance: FirebaseAuth.instance,
                       firebaseInstance: FirebaseFirestore.instance)
-                  .hasCategories())) {
+                  .hasCategories()) &&
+              ListEquality().equals(localDBHelper.getCurrencies(), localDBHelper.getDefaultCurrencies())) {
             Navigator.of(context).pop();
             errorDeleteData(context, 'No data has been inserted into the app');
           } else {
@@ -35,7 +42,8 @@ class SettingsPopUpViewer {
                       userInstance: FirebaseAuth.instance,
                       firebaseInstance: FirebaseFirestore.instance)
                   .userResetData();
-              LocalDBHelper().reset();
+              localDBHelper.reset();
+              refreshState!(localDBHelper.getCurrencies());
               Navigator.of(context).pop();
               deletedData(context);
             } catch (e) {

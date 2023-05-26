@@ -143,4 +143,4 @@ flutter:
   assets:
     - assets/img/
     - assets/fortuneko.csv
-    - lib/LocalStorage/CurrencyStorage.json
+    

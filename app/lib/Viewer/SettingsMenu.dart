@@ -9,6 +9,7 @@ import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 class SettingsMenu extends StatefulWidget {
   const SettingsMenu({super.key, required this.title});
@@ -50,24 +51,15 @@ class _SettingsMenuState extends State<SettingsMenu> {
   }
 
   initialize() async {
-    localStorage.setDefaultCurrencyValues();
     setState(() {
       listItems = localStorage.getCurrencies();
-      selVal = listItems.first;
+      selVal = localStorage.getCurrentCurrency();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!initialized) {
-      initialize();
-      setState(() {
-        initialized = true;
-      });
-    }
-    setState(() {
-      listItems = localStorage.getCurrencies();
-    });
+    initialize();
     return Scaffold(
         key: const Key("Settings"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
@@ -166,58 +158,83 @@ class _SettingsMenuState extends State<SettingsMenu> {
 
   Widget buildCurrencyOption(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("Currency",
-                style: TextStyle(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: IconButton(
+                    onPressed: () {
+                      SettingsMenuController(
+                        addCurrency: addCurrency,
+                        localStorage: localStorage,
+                      ).newCurrency(context);
+                    },
+                    icon: const Icon(
+                      Icons.add_circle_outline,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const Text(
+                  "Currency",
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 40,
-                    fontWeight: FontWeight.bold)),
-            Transform.scale(
-              scale: 1.3,
-              child: DropdownButton(
-                key: const Key('DropDown'),
-                underline: const SizedBox(),
-                borderRadius: BorderRadius.circular(12),
-                value: selVal,
-                dropdownColor: Colors.lightBlue,
-                iconEnabledColor: Colors.white,
-                onChanged: (newValue) {
-                  setState(() {
-                    selVal = newValue as String;
-                  });
-                },
-                items: listItems.map((dynamic valueItem) {
-                  return DropdownMenuItem(
-                    key: Key(valueItem),
-                    value: valueItem,
-                    child: valueItem == selVal
-                        ? Text(
-                            valueItem,
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.white),
-                          )
-                        : Text(
-                            valueItem,
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.black),
-                          ),
-                  );
-                }).toList(),
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-                onPressed: () {
-                  SettingsMenuController(
-                          addCurrency: addCurrency, localStorage: localStorage)
-                      .newCurrency(context);
-                },
-                icon: const Icon(Icons.add_circle_outline)),
-            IconButton(
-                onPressed: () {}, icon: Icon(Icons.delete_outline_rounded)),
-          ],
-        ));
+          ),
+          Transform.scale(
+            scale: 1.3,
+            child: DropdownButton(
+              key: const Key('DropDown'),
+              underline: const SizedBox(),
+              borderRadius: BorderRadius.circular(12),
+              value: selVal,
+              dropdownColor: Colors.lightBlue,
+              iconEnabledColor: Colors.white,
+              onChanged: (newValue) {
+                setState(() {
+                  selVal = newValue as String;
+                });
+                localStorage.setCurrentCurrency(newValue as String);
+
+                QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.warning,
+                    text: 'Please restart to take effect!');
+              },
+              items: listItems.map((dynamic valueItem) {
+                return DropdownMenuItem(
+                  key: Key(valueItem),
+                  value: valueItem,
+                  child: valueItem == selVal
+                      ? Text(
+                          valueItem,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          valueItem,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:es/LocalStorage/LocalStorage.dart';
 import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
@@ -23,11 +24,12 @@ class _MainMenuState extends State<MainMenu> {
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
       userInstance: FirebaseAuth.instance,
       firebaseInstance: FirebaseFirestore.instance);
+  LocalStorage localStorage = LocalStorage();
   static String _currency = '';
 
   @override
   Widget build(BuildContext context) {
-    setSettings(remoteDBHelper.getCurrency(), setState);
+    setSettings(setState);
     return Scaffold(
         key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
@@ -103,20 +105,22 @@ class _MainMenuState extends State<MainMenu> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => SwipableCharts(
-                            title: 'Statistics',
-                            currency: _currency,
-                          )),
+                                title: 'Statistics',
+                                currency: _currency,
+                              )),
                     );
                   },
                   child:
-                  const Text('Statistics', style: TextStyle(fontSize: 20))),
+                      const Text('Statistics', style: TextStyle(fontSize: 20))),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            BudgetMenu(title: 'Budget', currency: _currency,)),
+                        builder: (context) => BudgetMenu(
+                              title: 'Budget',
+                              currency: _currency,
+                            )),
                   );
                 },
                 style:
@@ -150,23 +154,18 @@ class _MainMenuState extends State<MainMenu> {
                               )),
                     );
                   },
-              child: const Text('National Comparison', style: TextStyle(fontSize: 20)))
+                  child: const Text('National Comparison',
+                      style: TextStyle(fontSize: 20)))
             ],
           ),
         ));
   }
 
-  void setSettings(Stream<String> stream, Function? callback) {
-    stream.listen((event) {
-      if (mounted) {
-        callback!(() {
-          if (event.isNotEmpty) {
-            _currency = event.toString();
-          } else {
-            _currency = '';
-          }
-        });
-      }
-    });
+  void setSettings(Function? callback) {
+    if (mounted) {
+      callback!(() {
+        _currency = localStorage.getCurrentCurrency();
+      });
+    }
   }
 }

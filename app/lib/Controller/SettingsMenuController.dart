@@ -77,7 +77,12 @@ class SettingsMenuController {
                           ),
                         ],
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      
                     ],
+                    
                   ),
                 ),
                 actions: <Widget>[

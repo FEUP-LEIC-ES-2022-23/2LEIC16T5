@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../LocalStorage/LocalStorage.dart';
+import 'package:es/Database/LocalDBHelper.dart';
 
 class SettingsMenuController {
   SettingsMenuController(
       {required this.addCurrency, required this.localStorage});
-  final LocalStorage localStorage;
+  final LocalDBHelper localStorage;
   final Function addCurrency;
   static final currencyTextController = TextEditingController();
 

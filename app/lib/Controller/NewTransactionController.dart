@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
-import 'package:es/LocalStorage/LocalStorage.dart';
+import 'package:es/Database/LocalDBHelper.dart';
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();

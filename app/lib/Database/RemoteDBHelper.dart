@@ -499,43 +499,4 @@ class RemoteDBHelper {
       }
     });
   }
-
-  Stream<String> getCurrency() {
-    User? usr = FirebaseAuth.instance.currentUser;
-    return FirebaseFirestore.instance
-        .collection('Settings')
-        .where('userID', isEqualTo: usr!.uid)
-        .snapshots()
-        .map((snapshot) {
-      if (snapshot.docs.isNotEmpty) {
-        final doc = snapshot.docs.first;
-        final settings = SettingsModel.fromMap(doc.data());
-        return settings.currency;
-      } else {
-        return '€';
-      }
-    });
-  }
-
-  Future<void> changeCurrency(Object? newCurrency) async {
-    final userId = userInstance.currentUser!.uid;
-    final settingsQuery = FirebaseFirestore.instance
-        .collection('Settings')
-        .where('userId', isEqualTo: userId);
-    final settingsQueryResult = await settingsQuery.get();
-
-    if (settingsQueryResult.docs.isNotEmpty) {
-      // Update existing settings document
-      final settingsDocRef = settingsQueryResult.docs.first.reference;
-      await settingsDocRef.update({"currency": newCurrency.toString()});
-    } else {
-      // Create new settings document
-      final newSettings =
-          SettingsModel(userID: userId, currency: newCurrency.toString());
-      await FirebaseFirestore.instance
-          .collection('Settings')
-          .doc(userId)
-          .set(newSettings.toMap());
-    }
-  }
 }

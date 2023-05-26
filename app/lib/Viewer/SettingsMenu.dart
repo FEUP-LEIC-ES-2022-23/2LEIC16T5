@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:es/Controller/LoginScreenController.dart';
 import 'package:es/Controller/SettingsMenuController.dart';
-import 'package:es/LocalStorage/LocalStorage.dart';
+import 'package:es/Database/LocalDBHelper.dart';
 import 'package:es/Viewer/SettingsPopUpViewer.dart';
 import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +23,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
       userInstance: FirebaseAuth.instance,
       firebaseInstance: FirebaseFirestore.instance);
-  LocalStorage localStorage = LocalStorage();
+  LocalDBHelper localStorage = LocalDBHelper();
   LoginScreenController loginController = LoginScreenController();
 
   List listItems = [];
@@ -202,13 +202,8 @@ class _SettingsMenuState extends State<SettingsMenu> {
               onChanged: (newValue) {
                 setState(() {
                   selVal = newValue as String;
+                  localStorage.setCurrentCurrency(newValue as String);
                 });
-                localStorage.setCurrentCurrency(newValue as String);
-
-                QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.warning,
-                    text: 'Please restart to take effect!');
               },
               items: listItems.map((dynamic valueItem) {
                 return DropdownMenuItem(
@@ -226,7 +221,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                           valueItem,
                           style: const TextStyle(
                             fontSize: 20,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                 );

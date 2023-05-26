@@ -1,6 +1,6 @@
 import 'package:es/Database/RemoteDBHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/LocalStorage/LocalStorage.dart';
+import 'package:es/Database/LocalDBHelper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
@@ -35,7 +35,7 @@ class SettingsPopUpViewer {
                       userInstance: FirebaseAuth.instance,
                       firebaseInstance: FirebaseFirestore.instance)
                   .userResetData();
-              LocalStorage().reset();
+              LocalDBHelper().reset();
               Navigator.of(context).pop();
               deletedData(context);
             } catch (e) {

@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:es/Database/LocalDBHelper.dart';
 
 class NewTransactionController {
   static final textcontrollerNAME = TextEditingController();
@@ -22,7 +23,7 @@ class NewTransactionController {
   final _formKey = GlobalKey<FormState>();
   bool _isIncome = false;
   bool _initState = true;
-  NumberFormat euro = NumberFormat.currency(locale: 'pt_PT', name: "€");
+  NumberFormat coin = NumberFormat.currency(locale: 'pt_PT', name: "€");
 
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
       userInstance: FirebaseAuth.instance,
@@ -461,7 +462,7 @@ class NewTransactionController {
   }
 
   void showTransaction(
-      BuildContext context, TransactionModel transac) async {
+      BuildContext context, TransactionModel transac, String currency) async {
     c_model.CategoryModel category =
         await remoteDBHelper.getCategoryById(transac.categoryID!);
 
@@ -553,7 +554,7 @@ class NewTransactionController {
                                   flex: 1,
                                   child: Center(
                                     child: Text(
-                                      euro.format(transac.total),
+                                      NumberFormat.currency(locale: 'pt_PT', name: currency).format(transac.total),
                                       key: const Key("Total"),
                                       style: const TextStyle(fontSize: 20),
                                     ),

@@ -16,7 +16,8 @@
   - Settings - Modify some presets such as default currency and dark/light mode
 
  ### Assumptions and dependencies
- 
-  - [Firebase](https://firebase.google.com)
+
+  - [Firestore](https://firebase.google.com/docs/firestore)
+  - [Firebase Authentication](https://firebase.google.com/docs/auth)
   - [Google Maps API](https://developers.google.com/maps)
   - [PORDATA database](https://www.pordata.pt/db/portugal/ambiente+de+consulta/tabela)

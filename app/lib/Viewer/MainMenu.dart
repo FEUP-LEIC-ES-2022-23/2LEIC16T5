@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:es/LocalStorage/LocalStorage.dart';
+import 'package:es/Database/LocalDBHelper.dart';
 import 'package:es/Viewer/NationalMenu.dart';
 import 'package:es/Viewer/BugetMenu.dart';
 import 'package:es/Viewer/SavingsMenu.dart';
@@ -24,12 +24,10 @@ class _MainMenuState extends State<MainMenu> {
   RemoteDBHelper remoteDBHelper = RemoteDBHelper(
       userInstance: FirebaseAuth.instance,
       firebaseInstance: FirebaseFirestore.instance);
-  LocalStorage localStorage = LocalStorage();
-  static String _currency = '';
+  LocalDBHelper localStorage = LocalDBHelper();
 
   @override
   Widget build(BuildContext context) {
-    setSettings(setState);
     return Scaffold(
         key: const Key("Main"),
         backgroundColor: const Color.fromARGB(255, 12, 18, 50),
@@ -77,7 +75,7 @@ class _MainMenuState extends State<MainMenu> {
                       MaterialPageRoute(
                           builder: (context) => TransactionsMenu(
                                 title: 'Transactions',
-                                currency: _currency,
+                                currency: localStorage.getCurrentCurrency(),
                               )),
                     );
                   },
@@ -106,7 +104,7 @@ class _MainMenuState extends State<MainMenu> {
                       MaterialPageRoute(
                           builder: (context) => SwipableCharts(
                                 title: 'Statistics',
-                                currency: _currency,
+                                currency: localStorage.getCurrentCurrency(),
                               )),
                     );
                   },
@@ -119,7 +117,7 @@ class _MainMenuState extends State<MainMenu> {
                     MaterialPageRoute(
                         builder: (context) => BudgetMenu(
                               title: 'Budget',
-                              currency: _currency,
+                              currency: localStorage.getCurrentCurrency(),
                             )),
                   );
                 },
@@ -136,7 +134,7 @@ class _MainMenuState extends State<MainMenu> {
                       MaterialPageRoute(
                           builder: (context) => SavingsMenu(
                                 title: 'Savings',
-                                currency: _currency,
+                                currency: localStorage.getCurrentCurrency(),
                               )),
                     );
                   },
@@ -150,7 +148,7 @@ class _MainMenuState extends State<MainMenu> {
                       MaterialPageRoute(
                           builder: (context) => NationalMenu(
                                 title: 'National Comparison',
-                                currency: _currency,
+                                currency: localStorage.getCurrentCurrency(),
                               )),
                     );
                   },
@@ -159,13 +157,5 @@ class _MainMenuState extends State<MainMenu> {
             ],
           ),
         ));
-  }
-
-  void setSettings(Function? callback) {
-    if (mounted) {
-      callback!(() {
-        _currency = localStorage.getCurrentCurrency();
-      });
-    }
   }
 }

@@ -99,6 +99,7 @@ class SettingsMenuController {
                       temp.add(currencyTextController.text);
                       addCurrency(temp);
                       localStorage.setCurrency(temp);
+                      currencyTextController.clear();
                       if (Navigator.canPop(context)) {
                         Navigator.pop(context);
                       }

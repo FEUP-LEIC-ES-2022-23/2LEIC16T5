@@ -16,6 +16,10 @@ class LocalDBHelper {
     prefs!.setStringList('currencies', currencyList);
   }
 
+  List<String> getDefaultCurrencies(){
+    return ["€", "\$", "£", "₣", "¥", "₽", "₹"];
+  }
+
   setDefaultCurrencyValues() async {
     List<String> currencies = ["€", "\$", "£", "₣", "¥", "₽", "₹"];
     if (prefs!.getStringList('currencies') == null) {

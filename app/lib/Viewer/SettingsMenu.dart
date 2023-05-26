@@ -117,7 +117,7 @@ class _SettingsMenuState extends State<SettingsMenu> {
                         borderRadius: BorderRadius.circular(10),
                       )),
                   onPressed: () {
-                    SettingsPopUpViewer().resetData(context);
+                    SettingsPopUpViewer(refreshState: refreshList).resetData(context);
                   },
                   child: const Text(
                     "Reset Data",
@@ -231,5 +231,11 @@ class _SettingsMenuState extends State<SettingsMenu> {
         ],
       ),
     );
+  }
+
+  void refreshList(List<String> list){
+    setState(() {
+      listItems = list;
+    });
   }
 }
